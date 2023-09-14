@@ -14,7 +14,7 @@ public class mysqlConnection {
     
     public mysqlConnection(){
         
-        String url ="jdbc:mysql://localhost/uniqclearDB";
+        String url ="jdbc:mysql://localhost/uniqclear";
         String user="root";
         String pass="uniqclearDB";
         
