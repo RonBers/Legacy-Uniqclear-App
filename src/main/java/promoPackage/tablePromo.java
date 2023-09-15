@@ -199,8 +199,8 @@ public class tablePromo extends javax.swing.JFrame {
 
     private void ViewPromoRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewPromoRecordActionPerformed
             // Trigger viewPromo (to edit)
-            //viewPromo view = new viewPromo();
-            //view.setVisible(true);  // Display the new frame
+           // viewPromo view = new viewPromo();
+           // view.setVisible(true);  // Display the new frame
     }//GEN-LAST:event_ViewPromoRecordActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
