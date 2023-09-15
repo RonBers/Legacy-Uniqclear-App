@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -40,6 +41,7 @@ public class newOrderPage extends javax.swing.JFrame {
     /**
      * Creates new form newOrderPage
      */
+    
     public double price, subtotal, total,fees,discount, deliveryFee,customFee,customDiscount;
     public int newBottlesQuantity;
     public String itemOne, itemTwo, itemThree;
@@ -53,6 +55,7 @@ public class newOrderPage extends javax.swing.JFrame {
     
     public newOrderPage() {
         initComponents();
+        tableDesign();
         getContentPane().setBackground(Color.white);
         this.setTitle("New Order");
         getItemList();
@@ -126,13 +129,12 @@ public class newOrderPage extends javax.swing.JFrame {
         searchCustomer = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        addPayment = new javax.swing.JButton();
         logo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Order");
         setMinimumSize(new java.awt.Dimension(1026, 826));
-        setPreferredSize(new java.awt.Dimension(1026, 826));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -278,11 +280,21 @@ public class newOrderPage extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jLabel14.setText("Total Amount:");
 
+        subTotalDisplay.setEditable(false);
+        subTotalDisplay.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+
+        feesTotal.setEditable(false);
+        feesTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         feesTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 feesTotalActionPerformed(evt);
             }
         });
+
+        discountsTotal.setEditable(false);
+        discountsTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        totalAmount.setEditable(false);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Php");
@@ -355,7 +367,7 @@ public class newOrderPage extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel9)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButton5.setBackground(new java.awt.Color(40, 75, 135));
@@ -512,9 +524,15 @@ public class newOrderPage extends javax.swing.JFrame {
 
         jLabel4.setText("Quantity:");
 
-        jButton1.setBackground(new java.awt.Color(40, 75, 135));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Pay");
+        addPayment.setBackground(new java.awt.Color(40, 75, 135));
+        addPayment.setForeground(new java.awt.Color(255, 255, 255));
+        addPayment.setText("Pay");
+        addPayment.setEnabled(false);
+        addPayment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addPaymentActionPerformed(evt);
+            }
+        });
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo.png"))); // NOI18N
 
@@ -535,7 +553,7 @@ public class newOrderPage extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addPayment, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(383, 383, 383))
                             .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -600,7 +618,7 @@ public class newOrderPage extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE))
+                        .addComponent(addPayment, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
@@ -633,6 +651,7 @@ public class newOrderPage extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     public void getItemList(){
@@ -665,32 +684,21 @@ public class newOrderPage extends javax.swing.JFrame {
         if (customFee > 0){
             discAddFee.custFee = customFee;
         }
-        System.out.println(tenPlusOne);
+        
         discAddFee.tenPlusOne = this.tenPlusOne;
         
         discAddFee.setVisible(true);
         discAddFee.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)
             {
-            //  model.setRowCount(0);
-                if (discAddFee.feesTotal > 0){
-                    fees=discAddFee.feesTotal;
-                    customFee = discAddFee.custFee;
-                }
-                
-                if (discAddFee.discountsTotal > 0){
-                    discount = discAddFee.discountsTotal;
-                    customDiscount = discAddFee.custDisc;
-                }
-                System.out.println("Adjust close: "+ discAddFee.tenPlusOne);
                 tenPlusOne = discAddFee.tenPlusOne;
-                
-                System.out.println("New order: "+"Fees:"+fees+"Discount:" +discount);
+                fees=discAddFee.feesTotal;
+                customFee = discAddFee.custFee;
+                discount = discAddFee.discountsTotal;
+                customDiscount = discAddFee.custDisc;
                 subTotalCalc();
             }
           });
-       // System.out.println("Order: "+fees);
-       // System.out.println(discount +"= "+discAddFee.discountsTotal);
         
     }//GEN-LAST:event_adjustmentsActionPerformed
 
@@ -743,6 +751,10 @@ public class newOrderPage extends javax.swing.JFrame {
               customerIDLabel.setText(searchCust.custID);
             }
           });
+        
+        if (itemsTable.getRowCount() != 0){
+            addPayment.setEnabled(true);
+        }
     }//GEN-LAST:event_searchCustomerActionPerformed
     
     public double getPrice(String item){
@@ -801,18 +813,7 @@ public class newOrderPage extends javax.swing.JFrame {
         }catch(Exception ex){
             System.out.println("Error: "+ ex.getMessage());
         }
-        /*
-        itemsTable.getTableHeader().setOpaque(false);
-        itemsTable.getTableHeader().setBackground(new Color(255,192,0));
-        */
         
-        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setBackground(new Color(255,192,0));
-
-        for (int i = 0; i < itemsTable.getModel().getColumnCount(); i++) {
-               itemsTable.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
-        }
-        //*/
         DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
        
         forDeliveryButton.addItemListener(new ItemListener() {
@@ -830,7 +831,6 @@ public class newOrderPage extends javax.swing.JFrame {
                                 }
                         }
                         deliveryFee = quantity*numDeli;
-                        System.out.println(deliveryFee);
                         fees = fees +deliveryFee;
                     }else{
                         fees -= deliveryFee;
@@ -886,8 +886,11 @@ public class newOrderPage extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(this, "Item "+ itemName+" already exists!", "Warning!", JOptionPane.INFORMATION_MESSAGE);
         }
+        
+        alignValues();
+        
+        
        
-      
     }//GEN-LAST:event_addItemActionPerformed
 
     private void removeItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeItemActionPerformed
@@ -899,16 +902,25 @@ public class newOrderPage extends javax.swing.JFrame {
             int itemQuantity = Integer.parseInt(model.getValueAt(row, 1).toString());
             if (item.equalsIgnoreCase("refill") || item.equalsIgnoreCase("new water bottle")){
                 double tempDelivery = itemQuantity * 5;
-                System.out.println("Temp Delivery: " +tempDelivery);
+                //System.out.println("Temp Delivery: " +tempDelivery);
                 deliveryFee -= tempDelivery;
                 fees -= tempDelivery;
                 if (model.getRowCount() == 0){
                      forDeliveryButton.setSelected(false);
                 }
-                subTotalCalc();
             }
             
             model.removeRow(row);
+        }
+        
+        if (itemsTable.getRowCount()==0){
+            addPayment.setEnabled(false);
+            fees = 0;
+            subtotal = 0;
+            discount = 0;
+            total = 0;
+            deliveryFee = 0;
+            forDeliveryButton.setSelected(false);
         }
         subTotalCalc();
     }//GEN-LAST:event_removeItemActionPerformed
@@ -920,6 +932,32 @@ public class newOrderPage extends javax.swing.JFrame {
     private void feesTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_feesTotalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_feesTotalActionPerformed
+
+    private void addPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPaymentActionPerformed
+        // TODO add your handling code here:
+        paymentWindow addPayment = new paymentWindow(this, true);
+        DefaultTableModel items= (DefaultTableModel)itemsTable.getModel(); 
+        DefaultTableModel invoiceTable = (DefaultTableModel)addPayment.invoice.getModel();
+         for (int row = 0; row < items.getRowCount(); row++) {
+            Object rowItem = items.getValueAt(row, 0);
+            Object rowQuantity = items.getValueAt(row, 1);
+            Object rowAmount = items.getValueAt(row,3);
+            
+            invoiceTable.addRow(new Object[]{rowItem,rowQuantity,rowAmount});
+            
+        }
+         
+         //subtotal, total,fees,discount, deliveryFee,customFee,customDiscount;
+       
+        addPayment.total = total;
+        addPayment.subtotalAmount.setText(String.format("%.2f", subtotal));
+        addPayment.discountAmount.setText(String.format("%.2f", discount));
+        addPayment.feesAmount.setText(String.format("%.2f", fees));
+        addPayment.totalAmount.setText(String.format("%.2f", total));
+        addPayment.customerName.setText(custName.getText());  
+        addPayment.setVisible(true);
+        
+    }//GEN-LAST:event_addPaymentActionPerformed
     public void subTotalCalc(){
         DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
         subtotal = 0;
@@ -929,11 +967,33 @@ public class newOrderPage extends javax.swing.JFrame {
             
             subtotal= subtotal + Double.parseDouble(rowData.toString());
         }
-        subTotalDisplay.setText(Double.toString(subtotal));
-        //fees = 0;     
-        feesTotal.setText(Double.toString(fees));
-        discountsTotal.setText(Double.toString(discount));
-        totalAmount.setText(Double.toString((subtotal+fees)- Double.parseDouble(discountsTotal.getText())));
+        subTotalDisplay.setText(String.format("%.2f", subtotal));   
+        feesTotal.setText(String.format("%.2f",fees));
+        discountsTotal.setText(String.format("%.2f", discount));
+        total = (subtotal+fees)-discount;
+        totalAmount.setText(String.format("%.2f",(subtotal+fees)- Double.parseDouble(discountsTotal.getText())));
+    }
+    
+    
+    public void alignValues(){
+        DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
+        
+        
+        
+        centerAlign.setHorizontalAlignment(JLabel.CENTER);
+        itemsTable.getColumnModel().getColumn(1).setCellRenderer(centerAlign);
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        for (int i = 2; i<= 3;i++)
+        {
+            itemsTable.getColumnModel().getColumn(i).setCellRenderer(rightAlign);
+        }
+    }
+    
+    public void tableDesign(){
+        itemsTable.getTableHeader().setOpaque(false);
+        itemsTable.getTableHeader().setBackground(new Color(255,192,0));
     }
     /**
      * @param args the command line arguments
@@ -972,6 +1032,7 @@ public class newOrderPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addItem;
+    private javax.swing.JButton addPayment;
     private javax.swing.JButton adjustments;
     private javax.swing.JButton confirmButton;
     private javax.swing.JLabel contactNum;
@@ -984,7 +1045,6 @@ public class newOrderPage extends javax.swing.JFrame {
     private javax.swing.JCheckBox forDeliveryButton;
     private javax.swing.JComboBox<String> item1;
     private javax.swing.JTable itemsTable;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

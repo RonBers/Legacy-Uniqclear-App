@@ -15,10 +15,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -29,6 +31,10 @@ public class orderAdjustments extends javax.swing.JDialog {
      */
     Connection con = new mysqlConnection().getCon();
     public ArrayList<String>promoList =new ArrayList();
+    
+    HashMap<String,Integer> feesTableValues = new HashMap<String,Integer>();
+    HashMap<String,Integer> dscountTableValues = new HashMap<String, Integer>();
+    
     //public boolean forDelivery;
     public boolean addedCustomDisc = false, addedCustomFee = false, tenPlusOne;
     public double custFee, custDisc;
@@ -376,6 +382,7 @@ public class orderAdjustments extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -414,7 +421,7 @@ public class orderAdjustments extends javax.swing.JDialog {
          if (deliveryFee!=0){
              feeTable.addRow(new String[]{"Delivery Fee per Bottle", Double.toString(deliveryFee)});     
          }
-         System.out.println(custDisc);
+      
          if(custDisc >0){
              discountTable.addRow(new String[]{"Custom", Double.toString(custDisc)});
              addedCustomDisc = true;
@@ -553,6 +560,9 @@ public class orderAdjustments extends javax.swing.JDialog {
             model.removeRow(activeDiscounts.getSelectedRow());
             if (data.equals("Custom")){
                 addedCustomDisc = false;
+                custDisc=0;
+            }else if (data.equals("10+1")){
+                tenPlusOne = false;
             }
         }
     }//GEN-LAST:event_removeDiscountActionPerformed
@@ -565,11 +575,12 @@ public class orderAdjustments extends javax.swing.JDialog {
             // remove selected row from the mode
             String data = model.getValueAt(feesTable.getSelectedRow() , 0).toString();
             if (data.equals("Delivery Fee per Bottle")){
-                
+               JOptionPane.showMessageDialog(this, "Error! Delivery fee cannot be removed. Please uncheck the 'for delivery' button in the order page first.", "Error", JOptionPane.INFORMATION_MESSAGE);
             }else{
                 model.removeRow(feesTable.getSelectedRow());
                 if (data.equals("Custom")){
                     addedCustomFee = false;
+                    custFee = 0;
                 } 
             } 
         }
@@ -590,7 +601,6 @@ public class orderAdjustments extends javax.swing.JDialog {
             Object rowData2 = fees.getValueAt(row, 1);
             feesTotal = feesTotal + Double.parseDouble(rowData2.toString());
         }
-        System.out.println("Order Adjust: "+"Discount: "+discountsTotal+"\nFees:"+feesTotal);
         this.dispose();
         
     }//GEN-LAST:event_applyButtonActionPerformed
