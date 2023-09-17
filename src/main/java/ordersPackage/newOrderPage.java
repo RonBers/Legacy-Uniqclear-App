@@ -21,6 +21,9 @@ import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
@@ -42,14 +45,15 @@ public class newOrderPage extends javax.swing.JFrame {
      * Creates new form newOrderPage
      */
     
-    public double price, subtotal, total,fees,discount, deliveryFee,customFee,customDiscount;
+    public double price = 0, subtotal = 0, total = 0,fees=0,discount=0, deliveryFee=0;
     public int newBottlesQuantity;
-    public String itemOne, itemTwo, itemThree;
+    public String itemOne;
     public String customerID, customerName, customerContact, points;
     //public String items [] = {"Refill", "New Water Bottle", "Bottle Cap"};
     ArrayList<String> itemsList = new ArrayList();
-    public boolean adjustedOpened, tenPlusOne = false;
-    
+    public boolean adjustedOpened;//tenPlusOne = false;
+    public HashMap<String, Double> feesTable = new HashMap<String, Double>(); 
+    public HashMap<String, Double> discountsTable = new HashMap<String,Double>();
     
     Connection con = new mysqlConnection().getCon();
     
@@ -677,25 +681,38 @@ public class newOrderPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         orderAdjustments discAddFee = new orderAdjustments(this,true);
         discAddFee.deliveryFee = this.deliveryFee;
-        if(customDiscount > 0 ){
+        /*if(customDiscount > 0 ){
             discAddFee.custDisc = customDiscount;
         }
         
         if (customFee > 0){
             discAddFee.custFee = customFee;
+        }*/
+     //   discAddFee.tenPlusOne = this.tenPlusOne;
+        
+        if (!feesTable.isEmpty()){
+            discAddFee.setActives(feesTable, null); 
         }
         
-        discAddFee.tenPlusOne = this.tenPlusOne;
+        if (!discountsTable.isEmpty()){
+            discAddFee.setActives(null, discountsTable);
+        }
+        
+        
         
         discAddFee.setVisible(true);
         discAddFee.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)
             {
-                tenPlusOne = discAddFee.tenPlusOne;
+               // tenPlusOne = discAddFee.tenPlusOne;
                 fees=discAddFee.feesTotal;
-                customFee = discAddFee.custFee;
+                //customFee = discAddFee.custFee;
                 discount = discAddFee.discountsTotal;
-                customDiscount = discAddFee.custDisc;
+                //customDiscount = discAddFee.custDisc;
+                feesTable.clear();
+                discountsTable.clear();
+                feesTable.putAll(discAddFee.feesTableValues);
+                discountsTable.putAll(discAddFee.discountTableValues);
                 subTotalCalc();
             }
           });
@@ -729,7 +746,8 @@ public class newOrderPage extends javax.swing.JFrame {
             }
         
         
-        
+        feesTable.clear();
+        discountsTable.clear();    
         JOptionPane.showMessageDialog(this, "Added a new Order", "Message", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
         
