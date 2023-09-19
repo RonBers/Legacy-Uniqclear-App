@@ -55,10 +55,18 @@ public class expenseItem extends javax.swing.JFrame {
         expenseAmount = new javax.swing.JSpinner();
         jButton1 = new javax.swing.JButton();
         saveExpenseItem = new javax.swing.JButton();
+        date = new com.toedter.calendar.JDateChooser();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        expensesTable = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        addButton = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Expense Item");
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 192, 0));
 
@@ -70,9 +78,9 @@ public class expenseItem extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(138, 138, 138)
+                .addGap(180, 180, 180)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(264, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -82,18 +90,25 @@ public class expenseItem extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 566, -1));
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setText("Expense Description:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, -1, -1));
 
         expenseDescription.setColumns(20);
         expenseDescription.setRows(5);
         expenseDescription.setToolTipText("Write description here...");
         jScrollPane1.setViewportView(expenseDescription);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 380, 29));
+
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setText("Total Amount in Peso:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, -1));
 
         expenseAmount.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+        getContentPane().add(expenseAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 121, 30));
 
         jButton1.setBackground(new java.awt.Color(255, 0, 0));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -104,6 +119,7 @@ public class expenseItem extends javax.swing.JFrame {
                 jButton1MouseClicked(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, -1, -1));
 
         saveExpenseItem.setBackground(new java.awt.Color(40, 75, 135));
         saveExpenseItem.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,47 +129,42 @@ public class expenseItem extends javax.swing.JFrame {
                 saveExpenseItemMouseClicked(evt);
             }
         });
+        getContentPane().add(saveExpenseItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(392, 443, 90, 30));
+        getContentPane().add(date, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, -1, 30));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(33, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(expenseAmount, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(saveExpenseItem)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addGap(43, 43, 43))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveExpenseItem)
-                    .addComponent(jButton1))
-                .addContainerGap(48, Short.MAX_VALUE))
-        );
+        expensesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Date", "Description", "Amount"
+            }
+        ));
+        jScrollPane2.setViewportView(expensesTable);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 444, 230));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setText("Date:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 370, -1, -1));
+
+        addButton.setBackground(new java.awt.Color(40, 75, 135));
+        addButton.setForeground(new java.awt.Color(255, 255, 255));
+        addButton.setText("Add");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 390, -1, 30));
+
+        jButton3.setText("Edit");
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 390, -1, 30));
+
+        jButton4.setBackground(new java.awt.Color(240, 0, 0));
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Remove");
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 290, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -195,6 +206,21 @@ public class expenseItem extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveExpenseItemMouseClicked
 
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        // TODO add your handling code here:
+        String description = expenseDescription.getText();
+        //double amount = (Double)expenseAmount.getValue();
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String expenseDate =dateFormat.format(date.getDate());
+        //String date = date.getDate().toString();
+        
+        DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
+        
+        model.addRow(new String []{expenseDate, description, expenseAmount.getValue().toString()});
+        
+    }//GEN-LAST:event_addButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -231,14 +257,21 @@ public class expenseItem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
+    private com.toedter.calendar.JDateChooser date;
     private javax.swing.JSpinner expenseAmount;
     private javax.swing.JTextArea expenseDescription;
+    private javax.swing.JTable expensesTable;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton saveExpenseItem;
     // End of variables declaration//GEN-END:variables
 }

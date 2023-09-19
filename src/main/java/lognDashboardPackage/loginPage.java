@@ -93,7 +93,7 @@ public class loginPage extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setText("Username");
+        jTextField1.setText("admin");
         jTextField1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTextField1MouseClicked(evt);
@@ -146,7 +146,7 @@ public class loginPage extends javax.swing.JFrame {
             .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        jPasswordField1.setText("Password");
+        jPasswordField1.setText("123123");
         jPasswordField1.setToolTipText("");
         jPasswordField1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -217,6 +217,7 @@ public class loginPage extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed

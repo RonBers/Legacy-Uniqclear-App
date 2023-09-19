@@ -139,6 +139,7 @@ public class newOrderPage extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Order");
         setMinimumSize(new java.awt.Dimension(1026, 826));
+        setPreferredSize(new java.awt.Dimension(1026, 826));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -459,7 +460,6 @@ public class newOrderPage extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 192, 0));
 
-        title.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         title.setText("Customer");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);

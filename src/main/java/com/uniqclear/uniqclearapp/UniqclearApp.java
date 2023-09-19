@@ -11,7 +11,7 @@ import lognDashboardPackage.loginPage;
 public class UniqclearApp {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+       
         loginPage login =  new loginPage();
         login.setVisible(true);
     }
