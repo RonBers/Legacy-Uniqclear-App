@@ -37,7 +37,7 @@ public class orderAdjustments extends javax.swing.JDialog {
     HashMap<String,Double> discountTableValues = new HashMap<String, Double>();
     
     //public boolean forDelivery;
-    public boolean addedCustomDisc = false, addedCustomFee = false;// tenPlusOne;
+    public boolean addedCustomDisc = false, addedCustomFee = false, cancelPressed;// tenPlusOne;
     public double custFee, custDisc;
     public double feesTotal, discountsTotal, deliveryFee;
     
@@ -409,7 +409,6 @@ public class orderAdjustments extends javax.swing.JDialog {
          }
          
         
-         
          caEnable.setEnabled(false);
          cdEnable.setEnabled(false);
          customDiscount.setEnabled(false);
@@ -432,12 +431,31 @@ public class orderAdjustments extends javax.swing.JDialog {
          }
          
          
+         //This line needs work
          
-         if (deliveryFee!=0){
-             feeTable.addRow(new String[]{"Delivery Fee per Bottle", Double.toString(deliveryFee)});     
+         if (deliveryFee >0 ){
+             if (feesTable.getRowCount() > 0){
+                 for(int i =0; i<feeTable.getRowCount();i++){
+                    if (feesTable.getValueAt(i, 0).toString().equalsIgnoreCase("Delivery Fee per Bottle")){
+                        double tempDeliveryPrice = Double.parseDouble(feesTable.getValueAt(i, 1).toString());
+                        if(deliveryFee != tempDeliveryPrice){
+                            feeTable.removeRow(i);
+                            feeTable.addRow(new String[]{"Delivery Fee per Bottle", String.format("%.2f",deliveryFee)});    
+                        }
+                    }
+             }
+             }else{
+                  feeTable.addRow(new String[]{"Delivery Fee per Bottle", String.format("%.2f", deliveryFee)});   
+             }
+         }else{
+             for(int i =0; i<feeTable.getRowCount();i++){
+                if (feesTable.getValueAt(i, 0).toString().equalsIgnoreCase("Delivery Fee per Bottle")){
+                    feeTable.removeRow(i);
+                }
+            }
          }
-      
          
+   
         /*for (Map.Entry<String,Double> set: discountTableValues.entrySet()){
             if (set.getKey().equals("10+1")){
                 String sql3 = "SELECT promo_description, promo_discount_amount FROM promo WHERE promo_description LIKE ('10+1');";
@@ -475,14 +493,16 @@ public class orderAdjustments extends javax.swing.JDialog {
         });
         
     }//GEN-LAST:event_formWindowOpened
-
+   
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here:
         calculateAll(true);
+        cancelPressed=true;
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void addToActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToActiveActionPerformed
+        // TODO add your handling code here:
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)activeDiscounts.getModel();
         String promo = existingPromos.getSelectedItem().toString().trim();
@@ -532,8 +552,7 @@ public class orderAdjustments extends javax.swing.JDialog {
     }//GEN-LAST:event_customMouseClicked
 
     private void cdEnableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cdEnableMouseClicked
-        // TODO add your handling code here:          
-        if (cdEnable.isSelected()){
+         if (cdEnable.isSelected()){
             customDiscount.setEnabled(true);
         }else{
             customDiscount.setEnabled(false);
@@ -604,10 +623,9 @@ public class orderAdjustments extends javax.swing.JDialog {
             } 
         }
     }//GEN-LAST:event_removeFeesActionPerformed
-    
-   
+
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        // TODO add your handling code here:
+         // TODO add your handling code here:
         DefaultTableModel discounts = (DefaultTableModel)activeDiscounts.getModel();
         DefaultTableModel fees = (DefaultTableModel)feesTable.getModel();
         feesTableValues.clear();
@@ -620,6 +638,7 @@ public class orderAdjustments extends javax.swing.JDialog {
             feesTableValues.put(fees.getValueAt(row, 0).toString(),Double.valueOf(fees.getValueAt(row, 1).toString()));
         }
         calculateAll(false);
+        cancelPressed = false;
         this.dispose();
         
     }//GEN-LAST:event_applyButtonActionPerformed
@@ -640,7 +659,7 @@ public class orderAdjustments extends javax.swing.JDialog {
         }else{
             if (!feesTableValues.isEmpty()){
                 for(Map.Entry<String,Double> set : feesTableValues.entrySet()){
-                    feesTotal = feesTotal + set.getValue();
+                   feesTotal = feesTotal + set.getValue();
                 }
             }
             

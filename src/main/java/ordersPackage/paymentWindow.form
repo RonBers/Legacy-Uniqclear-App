@@ -84,14 +84,14 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" pref="661" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jPanel3" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <EmptySpace min="0" pref="291" max="32767" attributes="0"/>
                               <Component id="confirmPayment" min="-2" pref="128" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                              <Component id="cancel" min="-2" pref="108" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="cancel" min="-2" pref="117" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -166,11 +166,6 @@
                                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
-                                          <Component id="changeAmount" min="-2" pref="185" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -181,21 +176,25 @@
                                           </Group>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="discountAmount" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="totalAmount" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="feesAmount" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="subtotalAmount" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="customerName" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" attributes="0">
                                                   <EmptySpace min="-2" pref="227" max="-2" attributes="0"/>
                                                   <Component id="paymentAmount" pref="185" max="32767" attributes="0"/>
                                               </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="totalAmount" alignment="1" max="32767" attributes="0"/>
+                                                      <Component id="discountAmount" alignment="1" pref="185" max="32767" attributes="0"/>
+                                                      <Component id="feesAmount" max="32767" attributes="0"/>
+                                                      <Component id="subtotalAmount" max="32767" attributes="0"/>
+                                                      <Component id="customerName" max="32767" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                           </Group>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
+                                          <Component id="changeAmount" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -228,9 +227,9 @@
                               <Component id="discountAmount" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="totalAmount" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                              <Component id="totalAmount" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
@@ -242,12 +241,12 @@
                                   <Component id="paymentAmount" min="-2" pref="40" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="changeAmount" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
                                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="changeAmount" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="34" max="32767" attributes="0"/>
+                          <EmptySpace pref="51" max="32767" attributes="0"/>
                           <Component id="jButton1" min="-2" pref="49" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                       </Group>
@@ -274,8 +273,6 @@
                     <Property name="text" type="java.lang.String" value="Customer:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="changeAmount">
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -294,6 +291,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="customerName">
                   <Properties>
+                    <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" value="customerName"/>
                   </Properties>
                   <AuxValues>
@@ -305,6 +303,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Helvetica Neue" size="12" style="0"/>
                     </Property>
+                    <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" value="totalAmount"/>
                   </Properties>
                   <AuxValues>
@@ -348,6 +347,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Helvetica Neue" size="12" style="0"/>
                     </Property>
+                    <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" value="discountAmount"/>
                   </Properties>
                   <AuxValues>
@@ -359,6 +359,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Helvetica Neue" size="12" style="0"/>
                     </Property>
+                    <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" value="fees"/>
                   </Properties>
                   <AuxValues>
@@ -370,6 +371,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Helvetica Neue" size="12" style="0"/>
                     </Property>
+                    <Property name="horizontalAlignment" type="int" value="11"/>
                     <Property name="text" type="java.lang.String" value="subtotal"/>
                   </Properties>
                   <AuxValues>
@@ -386,6 +388,14 @@
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="paymentAmountStateChanged"/>
                   </Events>
                 </Component>
+                <Component class="javax.swing.JLabel" name="changeAmount">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Helvetica Neue" size="18" style="1"/>
+                    </Property>
+                    <Property name="horizontalAlignment" type="int" value="11"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JButton" name="confirmPayment">
@@ -396,7 +406,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Add payment"/>
+                <Property name="text" type="java.lang.String" value="Confirm"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="cancel">
