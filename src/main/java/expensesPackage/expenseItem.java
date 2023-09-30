@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -120,9 +122,9 @@ public class expenseItem extends javax.swing.JFrame {
         saveExpenseItem.setBackground(new java.awt.Color(40, 75, 135));
         saveExpenseItem.setForeground(new java.awt.Color(255, 255, 255));
         saveExpenseItem.setText("Save");
-        saveExpenseItem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                saveExpenseItemMouseClicked(evt);
+        saveExpenseItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveExpenseItemActionPerformed(evt);
             }
         });
 
@@ -241,38 +243,6 @@ public class expenseItem extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
-    private void saveExpenseItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveExpenseItemMouseClicked
-        // TODO add your handling code here:
-        double totalAmount = (double)expenseAmount.getValue();
-        String expenseDesc = expenseDescription.getText();
-        String expAmount = expenseAmount.getValue().toString();
-        
-        
-        //Get DateTime
-        Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateTime = dateFormat.format(currentDate);
-        
-        if (totalAmount <= 0 || expenseDescription.getText().trim().equals("")){
-            if (expenseDescription.getText().trim().equals("")){
-                JOptionPane.showMessageDialog(this,"Please input expense description!","Warning", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                JOptionPane.showMessageDialog(this,"Please input the amount!","Warning", JOptionPane.INFORMATION_MESSAGE);
-            }
-        }else{
-                String sql = "INSERT INTO expense(expense_amount,expense_description,expense_date_time,branch_id) VALUES("+expAmount+", '"+expenseDesc+ "','"+dateTime+"', 3);";
-                try{
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    pst.executeUpdate();
-                    //ResultSet rs = pst.executeQuery();
-                }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-                }      
-            this.dispose();
-            JOptionPane.showMessageDialog(this,"New Expense Item Added!","Message", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_saveExpenseItemMouseClicked
-
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         String description = expenseDescription.getText();
@@ -289,18 +259,13 @@ public class expenseItem extends javax.swing.JFrame {
             System.out.println(date.getDate());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String expenseDate =dateFormat.format(date.getDate());
-            model.addRow(new String []{expenseDate, description, expenseAmount.getValue().toString()});
+            model.addRow(new String []{expenseDate, description, String.format("%.2f",expenseAmount.getValue())});
             expenseDescription.setText("");
             expenseAmount.setValue(0);
         }else{
             JOptionPane.showMessageDialog(this,"Please input COMPLETE expense information!","Error", JOptionPane.INFORMATION_MESSAGE);
         }
-       
-        
-        
-        
-        
-        
+       alignValues();
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
@@ -330,6 +295,44 @@ public class expenseItem extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void saveExpenseItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveExpenseItemActionPerformed
+        // TODO add your handling code here:
+        if (expensesTable.getRowCount()>0){
+            for (int i = 0; i < expensesTable.getRowCount();i++){
+                double expAmount = Double.parseDouble(expensesTable.getValueAt(i, 2).toString());
+                String expenseDesc = expensesTable.getValueAt(i,1).toString();
+                String dateTime = expensesTable.getValueAt(i,0).toString();
+                
+                
+                String sql = "INSERT INTO expense(expense_amount,expense_description,expense_date_time,branch_id) VALUES("+expAmount+", '"+expenseDesc+ "','"+dateTime+"', 3);";
+                try{
+                    PreparedStatement pst = con.prepareStatement(sql);
+                    pst.executeUpdate();
+                 
+                }catch(Exception ex){
+                    System.out.println("Error: "+ex.getMessage());
+                }    
+            } 
+        }
+        
+       this.dispose();
+    }//GEN-LAST:event_saveExpenseItemActionPerformed
+
+    public void alignValues(){
+        DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
+        
+        
+        
+        centerAlign.setHorizontalAlignment(JLabel.CENTER);
+        expensesTable.getColumnModel().getColumn(2).setCellRenderer(centerAlign);
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        for (int i = 2; i< 3;i++)
+        {
+            expensesTable.getColumnModel().getColumn(i).setCellRenderer(rightAlign);
+        }
+    }
     /**
      * @param args the command line arguments
      */

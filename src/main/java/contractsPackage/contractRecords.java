@@ -249,6 +249,7 @@ public class contractRecords extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void searchContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchContractActionPerformed
