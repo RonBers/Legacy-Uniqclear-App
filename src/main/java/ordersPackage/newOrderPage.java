@@ -960,7 +960,7 @@ public class newOrderPage extends javax.swing.JFrame {
     
     
     public void alignValues(){
-        DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
+        //DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
         DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
         DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
         
