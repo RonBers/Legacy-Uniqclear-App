@@ -564,7 +564,7 @@ public class newOrderPage extends javax.swing.JFrame {
 
         addPayment.setBackground(new java.awt.Color(40, 75, 135));
         addPayment.setForeground(new java.awt.Color(255, 255, 255));
-        addPayment.setText("Pay");
+        addPayment.setText("Payment");
         addPayment.setEnabled(false);
         addPayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

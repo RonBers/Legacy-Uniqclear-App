@@ -113,7 +113,7 @@ public class loginPage extends javax.swing.JFrame {
             }
         });
 
-        loginButton.setText("LOGIN");
+        loginButton.setText("Login");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
