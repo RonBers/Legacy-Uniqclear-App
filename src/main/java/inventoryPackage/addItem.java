@@ -251,19 +251,17 @@ Connection con = new mysqlConnection().getCon();
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
         // Getting the VALUES
         String nameItem = itemName.getText();
+        // int quantItem = (int)itemQuantity.getValue();
         int priceItem = (int) itemPrice.getValue();
-        String nameValidation = "[A-Za-z0-9_]";
-        String priceValidation = "^[0-9]{1,10}(\\.[0-9]{1,2})?$";
-        
+        String nameValidation = "[A-Za-z0-9_]+$";
         
         try{
             if(nonRentalType.isSelected()==true){
                 String priceString = Double.toString(priceItem);
-                if(nameItem.matches(nameValidation) && priceString.matches(priceValidation)){
+                if(nameItem.matches(nameValidation)){
                     String sql = "INSERT into non_rental_item(non_rental_item_name, non_rental_item_price, branch_id) VALUES('"+nameItem+"','"+priceItem+"','"+3+"')";
                     PreparedStatement pst = con.prepareStatement(sql);
                     pst.executeUpdate();
-                    // String sqlRental="INSERT into rental_item(item_id) VALUES(Select item_id from item where item_name='"+nameItem+"')";
                }
                     else{
                         JOptionPane.showMessageDialog(null, "Please enter valid input");
