@@ -197,7 +197,7 @@ public class customerOrder extends javax.swing.JDialog {
 
     private void custSearchBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custSearchBoxKeyTyped
         // TODO add your handling code here:
-         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) customerTable.getModel()));
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) customerTable.getModel()));
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + custSearchBox.getText()));
         customerTable.setRowSorter(sorter);
     }//GEN-LAST:event_custSearchBoxKeyTyped
