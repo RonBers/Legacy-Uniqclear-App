@@ -835,9 +835,19 @@ public class newOrderPage extends javax.swing.JFrame {
         addPayment.totalAmount.setText(String.format("%.2f", total));
         addPayment.customerName.setText(custName.getText());  
         addPayment.setVisible(true);
-        
+        addPayment.addWindowListener(new WindowAdapter(){
+            public void windowClosed(WindowEvent e)
+            {
+                if (addPayment.paymentSuccess){
+                    exitPage();
+                }
+            }
+          });
     }//GEN-LAST:event_addPaymentActionPerformed
 
+    public void exitPage(){
+        this.dispose();
+    }
     private void forDeliveryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forDeliveryButtonActionPerformed
         if(forDeliveryButton.isSelected()){
             subTotalCalc();  

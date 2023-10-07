@@ -25,7 +25,8 @@ public class paymentWindow extends javax.swing.JDialog {
      * Creates new form paymentWindow
      */
     Connection con = new mysqlConnection().getCon();
-    public double total; 
+    public double total;
+    public boolean paymentSuccess;
     public String orderType, customerID;
     public paymentWindow(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -381,7 +382,7 @@ public class paymentWindow extends javax.swing.JDialog {
     }//GEN-LAST:event_genReceiptActionPerformed
 
     private void confirmPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPaymentActionPerformed
-
+        paymentSuccess= true;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
         LocalDateTime now = LocalDateTime.now();  
         String date = "'"+dtf.format(now)+"'";
