@@ -4,8 +4,16 @@
  */
 package ordersPackage;
 
+import connectionSql.mysqlConnection;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,10 +24,13 @@ public class paymentWindow extends javax.swing.JDialog {
     /**
      * Creates new form paymentWindow
      */
+    Connection con = new mysqlConnection().getCon();
     public double total; 
+    public String orderType, customerID;
     public paymentWindow(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        alignValues();
     }
     
     /**
@@ -37,7 +48,7 @@ public class paymentWindow extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         invoice = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        confirmButton = new javax.swing.JButton();
+        genReceipt = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -83,12 +94,13 @@ public class paymentWindow extends javax.swing.JDialog {
 
         jPanel3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 204, 204), 1, true));
 
-        confirmButton.setBackground(new java.awt.Color(40, 75, 135));
-        confirmButton.setForeground(new java.awt.Color(255, 255, 255));
-        confirmButton.setText("Generate Receipt");
-        confirmButton.addActionListener(new java.awt.event.ActionListener() {
+        genReceipt.setBackground(new java.awt.Color(40, 75, 135));
+        genReceipt.setForeground(new java.awt.Color(255, 255, 255));
+        genReceipt.setText("Generate Receipt");
+        genReceipt.setEnabled(false);
+        genReceipt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmButtonActionPerformed(evt);
+                genReceiptActionPerformed(evt);
             }
         });
 
@@ -150,7 +162,7 @@ public class paymentWindow extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(confirmButton, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(genReceipt, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,13 +224,19 @@ public class paymentWindow extends javax.swing.JDialog {
                             .addComponent(jLabel3)
                             .addComponent(changeAmount))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addComponent(confirmButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(genReceipt, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
 
         confirmPayment.setBackground(new java.awt.Color(40, 75, 135));
         confirmPayment.setForeground(new java.awt.Color(255, 255, 255));
         confirmPayment.setText("Confirm");
+        confirmPayment.setEnabled(false);
+        confirmPayment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmPaymentActionPerformed(evt);
+            }
+        });
 
         cancel.setText("Cancel");
         cancel.addActionListener(new java.awt.event.ActionListener() {
@@ -296,8 +314,7 @@ public class paymentWindow extends javax.swing.JDialog {
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here:
-       
-        
+      
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
@@ -313,13 +330,19 @@ public class paymentWindow extends javax.swing.JDialog {
         if (change > 0){
            changeAmount.setForeground(new Color(0,150,0));
            changeAmount.setText(changeValue);
+           genReceipt.setEnabled(true);
+           confirmPayment.setEnabled(true);
         }else if(change == 0){
            changeAmount.setForeground(Color.GRAY); 
            changeAmount.setText(changeValue);
+           genReceipt.setEnabled(true);
+           confirmPayment.setEnabled(true);
         }else{
            changeAmount.setForeground(Color.RED);
            changeAmount.setText(changeValue);
            JOptionPane.showMessageDialog(this, "Insufficient payment amount!", "Error", JOptionPane.INFORMATION_MESSAGE);
+           genReceipt.setEnabled(false);
+           confirmPayment.setEnabled(false);
         }
         
         
@@ -328,14 +351,64 @@ public class paymentWindow extends javax.swing.JDialog {
         
     }//GEN-LAST:event_paymentAmountStateChanged
 
-    private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
+    private void genReceiptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genReceiptActionPerformed
         // TODO add your handling code here:
         
         receipt generateReceipt = new receipt(new javax.swing.JFrame(), true);
+        generateReceipt.customerName.setText(this.customerName.getText());
+        generateReceipt.orderType.setText(this.orderType);
         
+        DefaultTableModel paymentWindowTable = (DefaultTableModel)invoice.getModel();
+        DefaultTableModel receiptTable = (DefaultTableModel)generateReceipt.itemsTable.getModel();
+        
+        
+        for (int row = 0; row < paymentWindowTable.getRowCount(); row++)
+        {
+            Object itemName = paymentWindowTable.getValueAt(row, 0);
+            Object itemQuantity = paymentWindowTable.getValueAt(row, 1);
+            Object itemAmount = paymentWindowTable.getValueAt(row, 2);
+            Double itemPrice = Double.parseDouble(itemAmount.toString())/Double.parseDouble(itemQuantity.toString());
+            receiptTable.addRow(new Object[]{itemName, itemQuantity, String.format("%.2f", itemPrice), itemAmount});
+        }
+        
+        generateReceipt.subtotalDisplay.setText(subtotalAmount.getText());
+        generateReceipt.discountDisplay.setText(discountAmount.getText());
+        generateReceipt.feesDisplay.setText(feesAmount.getText());
+        generateReceipt.paymentDisplay.setText(String.format("%.2f", paymentAmount.getValue()));
+        generateReceipt.changeAmount.setText(this.changeAmount.getText());
+        generateReceipt.totalAmount.setText(this.totalAmount.getText());
         generateReceipt.setVisible(true);
-    }//GEN-LAST:event_confirmButtonActionPerformed
+    }//GEN-LAST:event_genReceiptActionPerformed
 
+    private void confirmPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmPaymentActionPerformed
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        String date = "'"+dtf.format(now)+"'";
+        
+        String sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time, branch_id, amount) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+",3, "+total+");";  
+        
+        try{
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.executeUpdate();
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+           
+        JOptionPane.showMessageDialog(this, "Added a new Order", "Message", JOptionPane.INFORMATION_MESSAGE);
+        this.dispose();
+        
+    }//GEN-LAST:event_confirmPaymentActionPerformed
+
+    public void alignValues(){
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        centerAlign.setHorizontalAlignment(JLabel.CENTER);
+        
+        invoice.getColumnModel().getColumn(1).setCellRenderer(centerAlign);
+        invoice.getColumnModel().getColumn(2).setCellRenderer(rightAlign);
+    }
     /**
      * @param args the command line arguments
      */
@@ -381,11 +454,11 @@ public class paymentWindow extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancel;
     private javax.swing.JLabel changeAmount;
-    private javax.swing.JButton confirmButton;
     private javax.swing.JButton confirmPayment;
     public javax.swing.JLabel customerName;
     public javax.swing.JLabel discountAmount;
     public javax.swing.JLabel feesAmount;
+    private javax.swing.JButton genReceipt;
     public javax.swing.JTable invoice;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

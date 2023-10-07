@@ -24,6 +24,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -43,17 +45,7 @@ public class dashboardPage extends javax.swing.JFrame {
         getContentPane().setBackground(Color.white);
         //ImageScaler();
         this.setTitle("Dashboard");
-        //this.setLayout(new FlowLayout(FlowLayout.CENTER));
-       /* String url ="jdbc:mysql://localhost/uniqclearDB";
-        String user="root";
-        String pass="uniqclearDB";
-        
-        
-        try{
-            con = DriverManager.getConnection(url,user,pass);
-        }catch(Exception ex){
-            System.out.println("Error: " + ex.getMessage());
-        }*/
+        alignValues();
        
     }
  
@@ -125,7 +117,7 @@ public class dashboardPage extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order No.", "Customer", "Total Amount", "Status", "For Delivery", "Contact Number"
+                "Order No.", "Customer", "Total Amount", "Status", "Order Type", "Contact Number"
             }
         ) {
             Class[] types = new Class [] {
@@ -370,7 +362,7 @@ public class dashboardPage extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
+        String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
                 try{
                     DefaultTableModel model = (DefaultTableModel)orderList.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);
@@ -384,7 +376,8 @@ public class dashboardPage extends javax.swing.JFrame {
                         String name = rs.getString("customer_name");
                         String orderstatus = rs.getString("order_status");
                         String amount = rs.getString("amount");
-                       model.addRow(new String[]{orderId,name,amount, orderstatus, "Delivery", contactNum});
+                        String orderType = rs.getString("order_type");
+                       model.addRow(new String[]{orderId,name,amount, orderstatus, orderType, contactNum});
                    
                     }
                     
@@ -464,7 +457,14 @@ public class dashboardPage extends javax.swing.JFrame {
         new loginPage().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_logoutButtonActionPerformed
-
+    
+    public void alignValues(){
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        orderList.getColumnModel().getColumn(2).setCellRenderer(rightAlign);
+        orderList.getColumnModel().getColumn(5).setCellRenderer(rightAlign); 
+    }
     /**
      * @param args the command line arguments
      */

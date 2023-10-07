@@ -174,7 +174,7 @@
                             <Column editable="false" title="Customer" type="java.lang.String"/>
                             <Column editable="false" title="Total Amount" type="java.lang.String"/>
                             <Column editable="false" title="Status" type="java.lang.String"/>
-                            <Column editable="false" title="For Delivery" type="java.lang.String"/>
+                            <Column editable="false" title="Order Type" type="java.lang.String"/>
                             <Column editable="false" title="Contact Number" type="java.lang.String"/>
                           </Table>
                         </Property>

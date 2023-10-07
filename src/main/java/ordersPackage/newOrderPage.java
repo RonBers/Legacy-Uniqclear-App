@@ -127,7 +127,6 @@ public class newOrderPage extends javax.swing.JFrame {
         adjustments = new javax.swing.JButton();
         forDeliveryButton = new javax.swing.JRadioButton();
         forWalkInButton = new javax.swing.JRadioButton();
-        confirmButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         title = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -471,16 +470,6 @@ public class newOrderPage extends javax.swing.JFrame {
 
         jPanel5.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 198, 600, -1));
 
-        confirmButton.setBackground(new java.awt.Color(40, 75, 135));
-        confirmButton.setForeground(new java.awt.Color(255, 255, 255));
-        confirmButton.setText("Confirm");
-        confirmButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmButtonActionPerformed(evt);
-            }
-        });
-        jPanel5.add(confirmButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 510, 150, 51));
-
         jPanel2.setBackground(new java.awt.Color(255, 192, 0));
 
         title.setText("Customer");
@@ -564,14 +553,14 @@ public class newOrderPage extends javax.swing.JFrame {
 
         addPayment.setBackground(new java.awt.Color(40, 75, 135));
         addPayment.setForeground(new java.awt.Color(255, 255, 255));
-        addPayment.setText("Payment");
+        addPayment.setText("Proceed to payment");
         addPayment.setEnabled(false);
         addPayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addPaymentActionPerformed(evt);
             }
         });
-        jPanel5.add(addPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 510, 130, 51));
+        jPanel5.add(addPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 510, 230, 51));
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo.png"))); // NOI18N
         jPanel5.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(869, 15, -1, -1));
@@ -661,35 +650,6 @@ public class newOrderPage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_homeButtonActionPerformed
 
-    private void confirmButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmButtonActionPerformed
-        // TODO add your handling code here:
-        //perform save of form content/input
-        String orderType = (forDeliveryButton.isSelected())?"'Delivery'":"'Walk-in'";
-        String orderStatus = "'Pending'";
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-        LocalDateTime now = LocalDateTime.now();  
-        String cTempId = "'"+customerIDLabel.getText().trim()+"'";
-        String date = "'"+dtf.format(now)+"'";
-        String amount = "'"+totalAmount.getText().trim()+"'";
-        
-        
-        String sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time, branch_id, amount) VALUES ("+cTempId+","+orderType+","+orderStatus+","+date+",3, "+amount+");";  
-        
-        try{
-                PreparedStatement pst = con.prepareStatement(sql);
-                pst.executeUpdate();
-            }catch(Exception ex){
-                System.out.println("Error: "+ex.getMessage());
-            }
-        
-        
-        feesTable.clear();
-        discountsTable.clear();    
-        JOptionPane.showMessageDialog(this, "Added a new Order", "Message", JOptionPane.INFORMATION_MESSAGE);
-        this.dispose();
-        
-    }//GEN-LAST:event_confirmButtonActionPerformed
-
     private void searchCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchCustomerActionPerformed
         // TODO add your handling code here:
         
@@ -704,12 +664,13 @@ public class newOrderPage extends javax.swing.JFrame {
               custName.setText(customerName);
               contactNum.setText(customerContact);
               customerIDLabel.setText(searchCust.custID);
+              if (itemsTable.getRowCount() != 0 && customerName != null){
+                    addPayment.setEnabled(true);
+              }else{
+                    addPayment.setEnabled(false);
+              }
             }
           });
-        
-        if (itemsTable.getRowCount() != 0){
-            addPayment.setEnabled(true);
-        }
     }//GEN-LAST:event_searchCustomerActionPerformed
     
     public double getPrice(String item){
@@ -768,35 +729,6 @@ public class newOrderPage extends javax.swing.JFrame {
         }catch(Exception ex){
             System.out.println("Error: "+ ex.getMessage());
         }
-        
-        DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
-       
-        /*forDeliveryButton.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    if (deliveryFee == 0){
-                        int numDeli = 5;
-                        int quantity = 0;
-                        for (int row = 0; row < model.getRowCount(); row++) {
-                            String item = model.getValueAt(row, 0).toString();
-                                if (item.equalsIgnoreCase("refill")||item.equalsIgnoreCase("new water bottle")){
-                                    quantity += Integer.parseInt(model.getValueAt(row, 1).toString());
-                                }
-                        }
-                        deliveryFee = quantity*numDeli;
-                        fees = fees +deliveryFee;
-                    }else{
-                        fees -= deliveryFee;
-                    }
-                } else if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    fees -= deliveryFee;
-                    deliveryFee = 0;
-                    subTotalCalc();
-                }
-            }
-        });*/
     }//GEN-LAST:event_formWindowOpened
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
@@ -844,8 +776,6 @@ public class newOrderPage extends javax.swing.JFrame {
         
         alignValues();
         
-        
-       
     }//GEN-LAST:event_addItemActionPerformed
 
     private void removeItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeItemActionPerformed
@@ -882,8 +812,11 @@ public class newOrderPage extends javax.swing.JFrame {
     private void addPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPaymentActionPerformed
         // TODO add your handling code here:
         paymentWindow addPayment = new paymentWindow(this, true);
+        addPayment.orderType = (forDeliveryButton.isSelected()) ? "For Delivery" : "Walk-in";
+        addPayment.customerID = customerIDLabel.getText().trim();
         DefaultTableModel items= (DefaultTableModel)itemsTable.getModel(); 
         DefaultTableModel invoiceTable = (DefaultTableModel)addPayment.invoice.getModel();
+        
          for (int row = 0; row < items.getRowCount(); row++) {
             Object rowItem = items.getValueAt(row, 0);
             Object rowQuantity = items.getValueAt(row, 1);
@@ -1018,7 +951,6 @@ public class newOrderPage extends javax.swing.JFrame {
     private javax.swing.JButton addItem;
     private javax.swing.JButton addPayment;
     private javax.swing.JButton adjustments;
-    private javax.swing.JButton confirmButton;
     private javax.swing.JLabel contactNum;
     private javax.swing.JLabel custName;
     private javax.swing.JLabel custPoints;
