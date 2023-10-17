@@ -4,6 +4,7 @@
  */
 package inventoryPackage;
 import connectionSql.mysqlConnection;
+import customerPackage.editCustomerPage;
 /**
  *
  * @author rjber
@@ -14,6 +15,7 @@ import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -173,6 +175,11 @@ public class inventory extends javax.swing.JFrame {
         editNonRentalItem.setBackground(new java.awt.Color(40, 75, 135));
         editNonRentalItem.setForeground(new java.awt.Color(255, 255, 255));
         editNonRentalItem.setText("Edit Item");
+        editNonRentalItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editNonRentalItemActionPerformed(evt);
+            }
+        });
         jPanel1.add(editNonRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 290, -1, -1));
 
         editRentalItem.setBackground(new java.awt.Color(40, 75, 135));
@@ -312,6 +319,74 @@ public class inventory extends javax.swing.JFrame {
 
         
     }//GEN-LAST:event_delNonRentalItemActionPerformed
+
+    private void editNonRentalItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editNonRentalItemActionPerformed
+        // TODO add your handling code here:
+       
+         DefaultTableModel model = (DefaultTableModel)nonRentalTable.getModel();
+        int idColumn = 0;
+        int idRow = nonRentalTable.getSelectedRow();
+        
+       
+        String selectedID = nonRentalTable.getModel().getValueAt(idRow,idColumn).toString();
+       
+       
+        String toeditItemName = nonRentalTable.getModel().getValueAt(idRow,1).toString();
+        String toeditQuantity = nonRentalTable.getModel().getValueAt(idRow,2).toString();
+        String toeditItemPrice = nonRentalTable.getModel().getValueAt(idRow,3).toString();
+        
+        
+        
+        editItem editRental = new editItem(this, true);
+        
+        /*
+         editRental.selectedID = selectedID;
+         editRental.editFirstName.setText(toeditFirstName);
+         editRental.editLastName.setText(toeditLastName);
+         editCustomer.editMiddleName.setText(toeditMiddleName);
+         editCustomer.editContactNumber.setText(toeditContact);
+         editCustomer.editCustomerType.setSelectedItem(toeditCType);*/
+         
+          String sql = "SELECT customer_address,birthdate,sex FROM customer WHERE "
+                  + "customer_id =" +selectedID+";";
+        //try{
+            //PreparedStatement pst = con.prepareStatement(sql);
+           // ResultSet rs = pst.executeQuery();
+            //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
+            /*
+            while(rs.next()){
+                String address = rs.getString("customer_address");
+                String address2[] = address.split(",");
+                String findAddressLine[] = address.split(address2[address2.length-3].trim());
+                editCustomer.editBarangay.setSelectedItem(address2[address2.length-3].trim());                
+                String adl1 = findAddressLine[0].trim();
+                String oldAddress1 = adl1;
+                if (oldAddress1.endsWith(",")) {
+                    oldAddress1 = oldAddress1.substring(0, oldAddress1.length() - 1);
+                }
+               
+                editCustomer.editLine1Address.setText(oldAddress1);
+     
+                char sex = rs.getString( "sex").charAt(0);
+              
+                switch (sex) {
+                    case 'M' -> editCustomer.editSM.setSelected(true);
+                    case 'F' -> editCustomer.editSF.setSelected(true);
+                    default -> editCustomer.editSO.setSelected(true);
+                }
+                String birthdate = rs.getString("birthdate");
+                SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date edDate = formatDate.parse(birthdate);
+                editCustomer.editBdate.setDate(edDate);
+            }
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+        }*/
+        
+        
+        
+        editRental.setVisible(true);
+    }//GEN-LAST:event_editNonRentalItemActionPerformed
 
     /**
      * @param args the command line arguments

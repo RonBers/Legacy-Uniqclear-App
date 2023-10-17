@@ -12,14 +12,14 @@ import java.sql.PreparedStatement;
  */
 
 
-public class addItem extends javax.swing.JDialog {
+public class editItem extends javax.swing.JDialog {
 
     /**
      * Creates new form addItem
      */
     
     Connection con = new mysqlConnection().getCon();
-    public addItem(java.awt.Frame parent, boolean modal) {
+    public editItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -55,6 +55,7 @@ public class addItem extends javax.swing.JDialog {
         itemNameLabel2 = new javax.swing.JLabel();
         itemAvailability = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
+        cancelButton = new javax.swing.JButton();
 
         title1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         title1.setText("Create New Order");
@@ -113,7 +114,10 @@ public class addItem extends javax.swing.JDialog {
         ItemInformationLabel1.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         ItemInformationLabel1.setText("Item Details");
 
-        addItemBTN.setText("Add Item");
+        addItemBTN.setBackground(new java.awt.Color(40, 75, 135));
+        addItemBTN.setForeground(new java.awt.Color(255, 255, 255));
+        addItemBTN.setText("Save");
+        addItemBTN.setToolTipText("");
         addItemBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addItemBTNActionPerformed(evt);
@@ -190,6 +194,15 @@ public class addItem extends javax.swing.JDialog {
         itemAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         itemAvailability.setEnabled(false);
 
+        cancelButton.setBackground(new java.awt.Color(200, 0, 0));
+        cancelButton.setForeground(new java.awt.Color(255, 255, 255));
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -205,10 +218,6 @@ public class addItem extends javax.swing.JDialog {
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton5))))
                 .addContainerGap(26, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,6 +233,12 @@ public class addItem extends javax.swing.JDialog {
                         .addGap(16, 16, 16)
                         .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(70, 70, 70))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cancelButton)
+                .addGap(44, 44, 44))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,17 +258,18 @@ public class addItem extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(itemNameLabel3)
                         .addGap(18, 18, 18)
-                        .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(addItemBTN)
-                        .addGap(32, 32, 32))
+                        .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(ItemInformationLabel)
                         .addGap(18, 18, 18)
                         .addComponent(typeRental)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nonRentalType)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(nonRentalType)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addItemBTN)
+                    .addComponent(cancelButton))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -317,7 +333,7 @@ public class addItem extends javax.swing.JDialog {
         }catch(Exception e){
             System.out.println("Error: "+e.getMessage());
         }
-            
+        
        this.dispose();
     }//GEN-LAST:event_addItemBTNActionPerformed
 
@@ -339,6 +355,11 @@ public class addItem extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_nonRentalTypeActionPerformed
 
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -356,20 +377,21 @@ public class addItem extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                addItem dialog = new addItem(new javax.swing.JFrame(), true);
+                editItem dialog = new editItem(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -387,22 +409,23 @@ public class addItem extends javax.swing.JDialog {
     private javax.swing.JPanel NonRentalPanel;
     private javax.swing.JButton addItemBTN;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JComboBox<String> itemAvailability;
-    private javax.swing.JTextField itemName;
+    public javax.swing.JTextField itemName;
     private javax.swing.JLabel itemNameLabel;
     private javax.swing.JLabel itemNameLabel1;
     private javax.swing.JLabel itemNameLabel2;
     private javax.swing.JLabel itemNameLabel3;
-    private javax.swing.JSpinner itemPrice;
-    private javax.swing.JSpinner itemQuantity;
+    public javax.swing.JSpinner itemPrice;
+    public javax.swing.JSpinner itemQuantity;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JRadioButton nonRentalType;
+    public javax.swing.JRadioButton nonRentalType;
     private javax.swing.JLabel title1;
     private javax.swing.JLabel title2;
-    private javax.swing.JRadioButton typeRental;
+    public javax.swing.JRadioButton typeRental;
     // End of variables declaration//GEN-END:variables
 }
