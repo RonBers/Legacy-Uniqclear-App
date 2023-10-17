@@ -3,16 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package inventoryPackage;
-
+import connectionSql.mysqlConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 /**
  *
  * @author User
  */
+
+
 public class addItem extends javax.swing.JDialog {
 
     /**
      * Creates new form addItem
      */
+    
+    Connection con = new mysqlConnection().getCon();
     public addItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -266,6 +272,7 @@ public class addItem extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -279,16 +286,39 @@ public class addItem extends javax.swing.JDialog {
 
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
         // Getting the VALUES
-        String nameItem = itemName.getText();
-        int quantItem = (int)itemQuantity.getValue();
-        double priceItem = (double)itemPrice.getValue();
+        String nameItem ="'"+itemName.getText()+"'";
+        String quantItem ="'"+itemQuantity.getValue().toString()+"'";
+        String priceItem ="'"+itemPrice.getValue().toString()+"'";
         
-        
+        String sql = "INSERT INTO item (item_name,item_price,branch_id) values (" +nameItem +", "+priceItem+",3);";
         try{
-         
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.executeUpdate();
         }catch(Exception e){
             System.out.println("Error: "+e.getMessage());
         }
+        
+        String sql2= "";
+        int min = 50; // Minimum value of range
+        int max = 100; // Maximum value of range
+        int random_int = (int)Math.floor(Math.random() * (max - min + 1) + min);
+        String iCode = "'"+random_int+"'";
+        
+        
+        if (typeRental.isSelected()){
+            sql2= "INSERT INTO rental_item (item_code, item_id) VALUES ("+iCode+", (SELECT item_id FROM item WHERE item_name = "+nameItem+"));";
+        }else{
+            sql2 = "INSERT INTO non_rental_item VALUES ((SELECT item_id FROM item WHERE item_name = "+nameItem+"), "+quantItem+");";
+        }
+        
+        try{    
+            PreparedStatement pst = con.prepareStatement(sql2);
+            pst.executeUpdate();
+        }catch(Exception e){
+            System.out.println("Error: "+e.getMessage());
+        }
+        
+       this.dispose();
     }//GEN-LAST:event_addItemBTNActionPerformed
 
     private void typeRentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeRentalActionPerformed

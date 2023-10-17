@@ -9,13 +9,19 @@ import customerPackage.createCustomerPage;
 
 //import java.awt.Color;
 import connectionSql.mysqlConnection;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -37,6 +43,7 @@ public class customerOrder extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.parentName = parentName;
+        createKeybindings(customerTable);
     }
     
     
@@ -110,6 +117,11 @@ public class customerOrder extends javax.swing.JDialog {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        customerTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                customerTableKeyTyped(evt);
             }
         });
         jScrollPane1.setViewportView(customerTable);
@@ -265,6 +277,51 @@ public class customerOrder extends javax.swing.JDialog {
        
     }//GEN-LAST:event_addNewActionPerformed
 
+    private void customerTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerTableKeyTyped
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_customerTableKeyTyped
+
+    
+    
+     private void createKeybindings(JTable table) {
+        table.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        table.getActionMap().put("Enter", new AbstractAction() {
+        @Override
+            public void actionPerformed(ActionEvent ae) {
+            if (parentName.equals("orders")){
+            int idColumn = 0;
+            int idRow = customerTable.getSelectedRow();
+
+
+            
+            String custFirstName = customerTable.getModel().getValueAt(idRow,2).toString();
+            String custLastName = customerTable.getModel().getValueAt(idRow,1).toString();
+            String custMiddleName = customerTable.getModel().getValueAt(idRow,3).toString();
+            String custContact = customerTable.getModel().getValueAt(idRow,4).toString();
+
+            customerName = custLastName+", "+custFirstName+" "+custMiddleName;
+            customerContact = custContact; 
+            custID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
+            
+            
+       }else if(parentName.equals("contracts")){
+           int idColumn = 0;
+           int idRow = customerTable.getSelectedRow();
+           custID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
+           //customerName = 
+       }
+       
+                //order.revalidate();
+       
+            exitFrame();
+        }
+        });
+     }
+     
+     public void exitFrame(){
+         this.dispose();
+     }
     /**
      * @param args the command line arguments
      */

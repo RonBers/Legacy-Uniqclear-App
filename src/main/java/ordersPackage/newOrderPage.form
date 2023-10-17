@@ -673,7 +673,12 @@
             <Component class="javax.swing.JComboBox" name="item1">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
+                  <StringArray count="4">
+                    <StringItem index="0" value="Refill"/>
+                    <StringItem index="1" value="New Water Bottle"/>
+                    <StringItem index="2" value="Bottle Cap"/>
+                    <StringItem index="3" value=" "/>
+                  </StringArray>
                 </Property>
               </Properties>
               <Events>

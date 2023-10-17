@@ -127,6 +127,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="customerTableKeyTyped"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

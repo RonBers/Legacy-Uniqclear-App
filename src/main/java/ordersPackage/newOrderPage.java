@@ -64,7 +64,7 @@ public class newOrderPage extends javax.swing.JFrame {
         tableDesign();
         getContentPane().setBackground(Color.white);
         this.setTitle("New Order");
-        getItemList();
+       // getItemList();
     }
     //boolean clicked = false;
     
@@ -500,6 +500,7 @@ public class newOrderPage extends javax.swing.JFrame {
         newBottles.setText("n");
         jPanel5.add(newBottles, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 490, 219, -1));
 
+        item1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Refill", "New Water Bottle", "Bottle Cap", " " }));
         item1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 item1ActionPerformed(evt);
@@ -590,7 +591,7 @@ public class newOrderPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void getItemList(){
-        String sql = "SELECT item_name FROM item ORDER BY item_id LIMIT 3;";
+        /*String sql = "SELECT item_name FROM item ORDER BY item_id LIMIT 3;";
          try{
                     //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);
@@ -606,7 +607,7 @@ public class newOrderPage extends javax.swing.JFrame {
      
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
-                }
+                }*/
     }
     private void adjustmentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adjustmentsActionPerformed
         // TODO add your handling code here:
@@ -713,7 +714,7 @@ public class newOrderPage extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT non_rental_item.item_quantity FROM non_rental_item JOIN item ON item.item_id=non_rental_item.item_id WHERE item.item_name LIKE ('New Water Bottle');";
+       String sql = "SELECT non_rental_item.item_quantity FROM non_rental_item JOIN item ON item.item_id=non_rental_item.item_id WHERE item.item_name LIKE ('New Water Bottle');";
         
         try{
             PreparedStatement pst = con.prepareStatement(sql);
@@ -922,6 +923,8 @@ public class newOrderPage extends javax.swing.JFrame {
         itemsTable.getTableHeader().setOpaque(false);
         itemsTable.getTableHeader().setBackground(new Color(255,192,0));
     }
+    
+   
     /**
      * @param args the command line arguments
      */

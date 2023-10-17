@@ -9,6 +9,8 @@ import connectionSql.mysqlConnection;
  * @author rjber
  */
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
@@ -17,6 +19,8 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 public class inventory extends javax.swing.JFrame {
@@ -48,9 +52,13 @@ public class inventory extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        rentalTable = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         logo = new javax.swing.JLabel();
+        delNonRentalItem = new javax.swing.JButton();
+        editNonRentalItem = new javax.swing.JButton();
+        editRentalItem = new javax.swing.JButton();
+        delRentalItem = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         headerlogo = new javax.swing.JLabel();
 
@@ -68,9 +76,11 @@ public class inventory extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setToolTipText("");
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Non-Rental Items");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 124, -1, -1));
 
         nonRentalTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -90,6 +100,8 @@ public class inventory extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(nonRentalTable);
 
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 152, 846, 137));
+
         addItemBTN.setBackground(new java.awt.Color(40, 75, 135));
         addItemBTN.setForeground(new java.awt.Color(255, 255, 255));
         addItemBTN.setText("Add new item");
@@ -98,36 +110,42 @@ public class inventory extends javax.swing.JFrame {
                 addItemBTNActionPerformed(evt);
             }
         });
+        jPanel1.add(addItemBTN, new org.netbeans.lib.awtextra.AbsoluteConstraints(864, 191, 267, 35));
 
         jTextField1.setToolTipText("Search");
+        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(864, 152, 267, 33));
 
         jButton2.setBackground(new java.awt.Color(40, 75, 135));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Restock");
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(864, 232, 267, 32));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Rental Items");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 307, -1, -1));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        rentalTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "CODE", "RENTAL TYPE", "ITEM STATUS", "CONDITION", "BRAND", "PRICE"
+                "CODE", "ITEM NAME", "ITEM AVAILABILITY", "CONDITION"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Double.class
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(rentalTable);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 335, 929, 240));
 
         jButton3.setBackground(new java.awt.Color(40, 75, 135));
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
@@ -137,65 +155,35 @@ public class inventory extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, -1, -1));
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo.png"))); // NOI18N
+        jPanel1.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(861, 6, -1, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton3)
-                                .addGap(779, 779, 779)
-                                .addComponent(logo)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(addItemBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                                    .addComponent(jTextField1))
-                                .addGap(22, 22, 22)))
-                        .addGap(71, 71, 71))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 929, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(logo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(136, Short.MAX_VALUE))
-        );
+        delNonRentalItem.setBackground(new java.awt.Color(200, 0, 0));
+        delNonRentalItem.setForeground(new java.awt.Color(255, 255, 255));
+        delNonRentalItem.setText("Delete");
+        delNonRentalItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delNonRentalItemActionPerformed(evt);
+            }
+        });
+        jPanel1.add(delNonRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 290, -1, -1));
+
+        editNonRentalItem.setBackground(new java.awt.Color(40, 75, 135));
+        editNonRentalItem.setForeground(new java.awt.Color(255, 255, 255));
+        editNonRentalItem.setText("Edit Item");
+        jPanel1.add(editNonRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 290, -1, -1));
+
+        editRentalItem.setBackground(new java.awt.Color(40, 75, 135));
+        editRentalItem.setForeground(new java.awt.Color(255, 255, 255));
+        editRentalItem.setText("Edit item");
+        jPanel1.add(editRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(765, 581, -1, -1));
+
+        delRentalItem.setBackground(new java.awt.Color(200, 0, 0));
+        delRentalItem.setForeground(new java.awt.Color(255, 255, 255));
+        delRentalItem.setText("Delete");
+        jPanel1.add(delRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(853, 581, -1, -1));
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -225,7 +213,7 @@ public class inventory extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1165, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,6 +231,14 @@ public class inventory extends javax.swing.JFrame {
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
         addItem addItemWindow = new addItem(this, true);
         addItemWindow.setVisible(true);
+        addItemWindow.addWindowListener(new WindowAdapter(){
+            public void windowClosed(WindowEvent e)
+            {  
+               itemsList();
+                    
+            }
+          });
+        
     }//GEN-LAST:event_addItemBTNActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -250,21 +246,72 @@ public class inventory extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
+    public void itemsList(){
         String sql = "SELECT item.item_id, item_name, non_rental_item.item_quantity, item_price FROM item JOIN non_rental_item WHERE item.item_id = non_rental_item.item_id;";
         DefaultTableModel nonRental = (DefaultTableModel)nonRentalTable.getModel();
-        try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            while(rs.next()){
-                nonRental.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});
+        nonRental.setRowCount(0);
+ 
+            try{
+                PreparedStatement pst = con.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery();
+                while(rs.next()){
+                 nonRental.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});}
+            }catch(Exception ex){
+                 System.out.println("Error: "+ ex.getMessage());
             }
             
-        }catch(Exception ex){
-            System.out.println("Error: "+ ex.getMessage());
-        }
+            
+        String sql2 = "SELECT rental_item.item_code, item_name, rental_item.item_availability, rental_item.item_condition FROM item JOIN rental_item WHERE item.item_id = rental_item.item_id;";
+        DefaultTableModel rental = (DefaultTableModel)rentalTable.getModel();
+        rental.setRowCount(0);
+            try{
+                PreparedStatement pst = con.prepareStatement(sql2);
+                ResultSet rs = pst.executeQuery();
+                while(rs.next()){
+                 rental.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});}
+            }catch(Exception ex){
+                 System.out.println("Error: "+ ex.getMessage());
+            }
+        
+       alignValues();
+    }
+    
+    public void alignValues(){
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        nonRentalTable.getColumnModel().getColumn(3).setCellRenderer(rightAlign); 
+    }
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        itemsList();
     }//GEN-LAST:event_formWindowOpened
+
+    private void delNonRentalItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delNonRentalItemActionPerformed
+        // TODO add your handling code here:
+         DefaultTableModel model = (DefaultTableModel)nonRentalTable.getModel();
+        int idColumn = 0;
+        int idRow = nonRentalTable.getSelectedRow();
+        String selectedID = nonRentalTable.getModel().getValueAt(idRow,idColumn).toString();
+        String sql = "DELETE FROM non_rental_item WHERE item_id='"+selectedID + "';"; 
+        String sql2 = "DELETE FROM item WHERE item_id='"+selectedID +"';";
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.executeUpdate();
+            
+            PreparedStatement pst2 = con.prepareStatement(sql2);
+            pst2.executeUpdate();
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+        }
+        
+        if (nonRentalTable.getSelectedRow() != -1) {
+            // remove selected row from the model
+            model.removeRow(nonRentalTable.getSelectedRow());
+        }
+
+        
+    }//GEN-LAST:event_delNonRentalItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -303,6 +350,10 @@ public class inventory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addItemBTN;
+    private javax.swing.JButton delNonRentalItem;
+    private javax.swing.JButton delRentalItem;
+    private javax.swing.JButton editNonRentalItem;
+    private javax.swing.JButton editRentalItem;
     private javax.swing.JLabel headerlogo;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -313,9 +364,9 @@ public class inventory extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel logo;
     private javax.swing.JTable nonRentalTable;
+    private javax.swing.JTable rentalTable;
     // End of variables declaration//GEN-END:variables
 }
