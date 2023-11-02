@@ -78,11 +78,9 @@ public class inventory extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setToolTipText("");
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Non-Rental Items");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 124, -1, -1));
 
         nonRentalTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -102,8 +100,6 @@ public class inventory extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(nonRentalTable);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 152, 846, 137));
-
         addItemBTN.setBackground(new java.awt.Color(40, 75, 135));
         addItemBTN.setForeground(new java.awt.Color(255, 255, 255));
         addItemBTN.setText("Add new item");
@@ -112,19 +108,15 @@ public class inventory extends javax.swing.JFrame {
                 addItemBTNActionPerformed(evt);
             }
         });
-        jPanel1.add(addItemBTN, new org.netbeans.lib.awtextra.AbsoluteConstraints(864, 191, 267, 35));
 
         jTextField1.setToolTipText("Search");
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(864, 152, 267, 33));
 
         jButton2.setBackground(new java.awt.Color(40, 75, 135));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Restock");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(864, 232, 267, 32));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Rental Items");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 307, -1, -1));
 
         rentalTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -147,8 +139,6 @@ public class inventory extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(rentalTable);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 335, 929, 240));
-
         jButton3.setBackground(new java.awt.Color(40, 75, 135));
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Home");
@@ -157,10 +147,8 @@ public class inventory extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, -1, -1));
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo.png"))); // NOI18N
-        jPanel1.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(861, 6, -1, -1));
 
         delNonRentalItem.setBackground(new java.awt.Color(200, 0, 0));
         delNonRentalItem.setForeground(new java.awt.Color(255, 255, 255));
@@ -170,7 +158,6 @@ public class inventory extends javax.swing.JFrame {
                 delNonRentalItemActionPerformed(evt);
             }
         });
-        jPanel1.add(delNonRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 290, -1, -1));
 
         editNonRentalItem.setBackground(new java.awt.Color(40, 75, 135));
         editNonRentalItem.setForeground(new java.awt.Color(255, 255, 255));
@@ -180,17 +167,92 @@ public class inventory extends javax.swing.JFrame {
                 editNonRentalItemActionPerformed(evt);
             }
         });
-        jPanel1.add(editNonRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 290, -1, -1));
 
         editRentalItem.setBackground(new java.awt.Color(40, 75, 135));
         editRentalItem.setForeground(new java.awt.Color(255, 255, 255));
         editRentalItem.setText("Edit item");
-        jPanel1.add(editRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(765, 581, -1, -1));
 
         delRentalItem.setBackground(new java.awt.Color(200, 0, 0));
         delRentalItem.setForeground(new java.awt.Color(255, 255, 255));
         delRentalItem.setText("Delete");
-        jPanel1.add(delRentalItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(853, 581, -1, -1));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel3)
+                        .addGap(546, 546, 546)
+                        .addComponent(editNonRentalItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(delNonRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(addItemBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(779, 779, 779)
+                        .addComponent(logo))
+                    .addComponent(jLabel2))
+                .addGap(6, 6, 6))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(editRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(delRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane3)))
+                .addGap(218, 218, 218))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3)
+                    .addComponent(logo))
+                .addGap(6, 6, 6)
+                .addComponent(jLabel2)
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)))
+                .addGap(1, 1, 1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel3))
+                    .addComponent(editNonRentalItem)
+                    .addComponent(delNonRentalItem))
+                .addGap(6, 6, 6)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                .addGap(6, 6, 6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(delRentalItem)
+                    .addComponent(editRentalItem))
+                .addGap(14, 14, 14))
+        );
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -227,7 +289,7 @@ public class inventory extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
 
@@ -338,6 +400,11 @@ public class inventory extends javax.swing.JFrame {
         
         
         editItem editRental = new editItem(this, true);
+        
+        editRental.editItemName.setText(toeditItemName);
+        editRental.editItemPrice.setValue(Integer.parseInt(toeditQuantity));
+        editRental.editItemQuantity.setValue(Double.parseDouble(toeditItemPrice));
+        
         
         /*
          editRental.selectedID = selectedID;

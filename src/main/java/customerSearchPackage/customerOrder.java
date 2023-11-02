@@ -39,6 +39,7 @@ public class customerOrder extends javax.swing.JDialog {
     Connection con = new mysqlConnection().getCon(); 
     public String parentName,custID;
     public String customerName, customerContact;
+    public String customerType, customerAddress;
     public customerOrder(java.awt.Frame parent, boolean modal, String parentName) {
         super(parent, modal);
         initComponents();
@@ -217,8 +218,10 @@ public class customerOrder extends javax.swing.JDialog {
 
     private void selectCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCustomerActionPerformed
         // TODO add your handling code here:
-        
-       if (parentName.equals("orders")){
+        selectCustomer();
+    }//GEN-LAST:event_selectCustomerActionPerformed
+    public void selectCustomer(){
+        if (parentName.equals("orders")){
             int idColumn = 0;
             int idRow = customerTable.getSelectedRow();
 
@@ -233,6 +236,22 @@ public class customerOrder extends javax.swing.JDialog {
             customerContact = custContact; 
             custID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
             
+            String customerId = "'"+ custID+"'";
+            String sql = "SELECT customer_type, customer_address FROM customer WHERE customer_id = "+customerId+";";
+           
+            try{
+                PreparedStatement pst = con.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery();
+                
+                while(rs.next()){
+                    customerType = rs.getString("customer_type");
+                    customerAddress = rs.getString("customer_address");
+                }
+                
+            }catch(Exception ex){
+                System.out.println("Error: " + ex.getMessage());
+            }
+            
             
        }else if(parentName.equals("contracts")){
            int idColumn = 0;
@@ -241,13 +260,12 @@ public class customerOrder extends javax.swing.JDialog {
            //customerName = 
        }
        
-      //order.revalidate();
-       
+  
        this.dispose();
       
         
-    }//GEN-LAST:event_selectCustomerActionPerformed
-
+    }
+    
     private void addNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
@@ -289,31 +307,7 @@ public class customerOrder extends javax.swing.JDialog {
         table.getActionMap().put("Enter", new AbstractAction() {
         @Override
             public void actionPerformed(ActionEvent ae) {
-            if (parentName.equals("orders")){
-            int idColumn = 0;
-            int idRow = customerTable.getSelectedRow();
-
-
-            
-            String custFirstName = customerTable.getModel().getValueAt(idRow,2).toString();
-            String custLastName = customerTable.getModel().getValueAt(idRow,1).toString();
-            String custMiddleName = customerTable.getModel().getValueAt(idRow,3).toString();
-            String custContact = customerTable.getModel().getValueAt(idRow,4).toString();
-
-            customerName = custLastName+", "+custFirstName+" "+custMiddleName;
-            customerContact = custContact; 
-            custID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
-            
-            
-       }else if(parentName.equals("contracts")){
-           int idColumn = 0;
-           int idRow = customerTable.getSelectedRow();
-           custID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
-           //customerName = 
-       }
-       
-                //order.revalidate();
-       
+            selectCustomer();
             exitFrame();
         }
         });

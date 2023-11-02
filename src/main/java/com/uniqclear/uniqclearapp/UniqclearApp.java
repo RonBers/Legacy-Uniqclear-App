@@ -3,6 +3,7 @@
  */
 
 package com.uniqclear.uniqclearapp;
+import javax.swing.UIManager;
 import lognDashboardPackage.loginPage;
 /**
  *
@@ -11,8 +12,8 @@ import lognDashboardPackage.loginPage;
 public class UniqclearApp {
 
     public static void main(String[] args) {
-       
         loginPage login =  new loginPage();
         login.setVisible(true);
+        
     }
 }
