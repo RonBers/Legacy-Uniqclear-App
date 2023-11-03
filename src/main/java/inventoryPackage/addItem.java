@@ -6,10 +6,12 @@ package inventoryPackage;
 import connectionSql.mysqlConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 /**
  *
  * @author User
  */
+
 
 
 public class addItem extends javax.swing.JDialog {
@@ -22,6 +24,7 @@ public class addItem extends javax.swing.JDialog {
     public addItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
     }
 
     /**
@@ -54,6 +57,7 @@ public class addItem extends javax.swing.JDialog {
         itemPrice = new javax.swing.JSpinner();
         itemNameLabel2 = new javax.swing.JLabel();
         itemAvailability = new javax.swing.JComboBox<>();
+
         jSeparator1 = new javax.swing.JSeparator();
 
         title1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
@@ -120,6 +124,7 @@ public class addItem extends javax.swing.JDialog {
             }
         });
 
+
         itemNameLabel3.setText("Availability");
 
         NonRentalPanel.setEnabled(false);
@@ -132,6 +137,7 @@ public class addItem extends javax.swing.JDialog {
                 itemNameActionPerformed(evt);
             }
         });
+
 
         itemNameLabel1.setText("Item quantity");
 
@@ -148,6 +154,7 @@ public class addItem extends javax.swing.JDialog {
             .addGroup(NonRentalPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addComponent(itemNameLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -166,11 +173,13 @@ public class addItem extends javax.swing.JDialog {
                                 .addGap(6, 6, 6)
                                 .addComponent(itemQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(90, 90, 90))))
+
         );
         NonRentalPanelLayout.setVerticalGroup(
             NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(NonRentalPanelLayout.createSequentialGroup()
                 .addContainerGap()
+
                 .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addComponent(itemNameLabel)
@@ -189,6 +198,7 @@ public class addItem extends javax.swing.JDialog {
 
         itemAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         itemAvailability.setEnabled(false);
+
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -218,11 +228,13 @@ public class addItem extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ItemInformationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+
                     .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(itemNameLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
+
                 .addGap(70, 70, 70))
         );
         jPanel2Layout.setVerticalGroup(
@@ -240,6 +252,7 @@ public class addItem extends javax.swing.JDialog {
                         .addComponent(ItemInformationLabel1)
                         .addGap(12, 12, 12)
                         .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+
                         .addGap(18, 18, 18)
                         .addComponent(itemNameLabel3)
                         .addGap(18, 18, 18)
@@ -247,13 +260,16 @@ public class addItem extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                         .addComponent(addItemBTN)
                         .addGap(32, 32, 32))
+
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(ItemInformationLabel)
                         .addGap(18, 18, 18)
                         .addComponent(typeRental)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+
                         .addComponent(nonRentalType)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -267,12 +283,16 @@ public class addItem extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
+
         setLocationRelativeTo(null);
+
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -286,6 +306,7 @@ public class addItem extends javax.swing.JDialog {
 
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
         // Getting the VALUES
+
         String nameItem ="'"+itemName.getText()+"'";
         String quantItem ="'"+itemQuantity.getValue().toString()+"'";
         String priceItem ="'"+itemPrice.getValue().toString()+"'";
@@ -319,23 +340,28 @@ public class addItem extends javax.swing.JDialog {
         }
             
        this.dispose();
+
     }//GEN-LAST:event_addItemBTNActionPerformed
 
     private void typeRentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeRentalActionPerformed
         if(typeRental.isSelected()==true){
             itemName.setEnabled(true);
+
             itemQuantity.setEnabled(true);
             itemPrice.setEnabled(true);
             itemAvailability.setEnabled(true);
+
         }
     }//GEN-LAST:event_typeRentalActionPerformed
 
     private void nonRentalTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonRentalTypeActionPerformed
         if(nonRentalType.isSelected()==true){
             itemName.setEnabled(true);
+
             itemQuantity.setEnabled(true);
             itemPrice.setEnabled(true);
             itemAvailability.setEnabled(false);
+
         }
     }//GEN-LAST:event_nonRentalTypeActionPerformed
 
@@ -387,6 +413,7 @@ public class addItem extends javax.swing.JDialog {
     private javax.swing.JPanel NonRentalPanel;
     private javax.swing.JButton addItemBTN;
     private javax.swing.ButtonGroup buttonGroup1;
+
     private javax.swing.JComboBox<String> itemAvailability;
     private javax.swing.JTextField itemName;
     private javax.swing.JLabel itemNameLabel;
@@ -395,6 +422,7 @@ public class addItem extends javax.swing.JDialog {
     private javax.swing.JLabel itemNameLabel3;
     private javax.swing.JSpinner itemPrice;
     private javax.swing.JSpinner itemQuantity;
+
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

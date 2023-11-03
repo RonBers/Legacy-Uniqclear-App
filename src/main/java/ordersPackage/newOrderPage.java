@@ -825,7 +825,7 @@ public class newOrderPage extends javax.swing.JFrame {
         if (!itemExists){
             int itemQuantity = (Integer)quantity1.getValue();
             if (itemQuantity > 0){
-                String sql = "SELECT item_price FROM item WHERE item_name LIKE '"+itemName+"';";
+                String sql = "SELECT non_rental_item_price FROM non_rental_item WHERE non_rental_item_name LIKE '"+itemName+"';";
                 double tempPrice = 0;
                 try{
                     PreparedStatement pst = con.prepareStatement(sql);

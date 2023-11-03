@@ -183,6 +183,7 @@ public class inventory extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+
                         .addGap(6, 6, 6)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -214,6 +215,7 @@ public class inventory extends javax.swing.JFrame {
                         .addComponent(editRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(delRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jScrollPane3)))
@@ -233,6 +235,7 @@ public class inventory extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+
                         .addGap(6, 6, 6)
                         .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
@@ -252,6 +255,7 @@ public class inventory extends javax.swing.JFrame {
                     .addComponent(delRentalItem)
                     .addComponent(editRentalItem))
                 .addGap(14, 14, 14))
+
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -300,6 +304,7 @@ public class inventory extends javax.swing.JFrame {
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
         addItem addItemWindow = new addItem(this, true);
         addItemWindow.setVisible(true);
+
         addItemWindow.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)
             {  
@@ -308,6 +313,7 @@ public class inventory extends javax.swing.JFrame {
             }
           });
         
+
     }//GEN-LAST:event_addItemBTNActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -492,10 +498,12 @@ public class inventory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addItemBTN;
+
     private javax.swing.JButton delNonRentalItem;
     private javax.swing.JButton delRentalItem;
     private javax.swing.JButton editNonRentalItem;
     private javax.swing.JButton editRentalItem;
+
     private javax.swing.JLabel headerlogo;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
