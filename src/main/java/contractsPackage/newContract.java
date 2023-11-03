@@ -5,7 +5,7 @@
 package contractsPackage;
 
 
-import customerSearchPackage.customerOrder;
+import searchPackage.customerSearch;
 import connectionSql.mysqlConnection;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
@@ -194,7 +194,7 @@ public class newContract extends javax.swing.JFrame {
 
     private void selectCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCustomerActionPerformed
         // TODO add your handling code here:
-        customerOrder selectCustomer = new customerOrder(new contractRecords(), true,"contracts");
+        customerSearch selectCustomer = new customerSearch(new contractRecords(), true,"contracts");
         selectCustomer.setVisible(true);
         selectCustomer.addWindowListener(new WindowAdapter(){
          public void windowClosed(WindowEvent e)
