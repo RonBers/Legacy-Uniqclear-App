@@ -9,13 +9,19 @@ import customerPackage.createCustomerPage;
 
 //import java.awt.Color;
 import connectionSql.mysqlConnection;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -33,10 +39,12 @@ public class customerOrder extends javax.swing.JDialog {
     Connection con = new mysqlConnection().getCon(); 
     public String parentName,custID;
     public String customerName, customerContact;
+    public String customerType, customerAddress;
     public customerOrder(java.awt.Frame parent, boolean modal, String parentName) {
         super(parent, modal);
         initComponents();
         this.parentName = parentName;
+        createKeybindings(customerTable);
     }
     
     
@@ -112,6 +120,11 @@ public class customerOrder extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        customerTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                customerTableKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(customerTable);
 
         custSearchBox.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -177,6 +190,7 @@ public class customerOrder extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
@@ -197,15 +211,17 @@ public class customerOrder extends javax.swing.JDialog {
 
     private void custSearchBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custSearchBoxKeyTyped
         // TODO add your handling code here:
-         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) customerTable.getModel()));
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) customerTable.getModel()));
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + custSearchBox.getText()));
         customerTable.setRowSorter(sorter);
     }//GEN-LAST:event_custSearchBoxKeyTyped
 
     private void selectCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCustomerActionPerformed
         // TODO add your handling code here:
-        
-       if (parentName.equals("orders")){
+        selectCustomer();
+    }//GEN-LAST:event_selectCustomerActionPerformed
+    public void selectCustomer(){
+        if (parentName.equals("orders")){
             int idColumn = 0;
             int idRow = customerTable.getSelectedRow();
 
@@ -220,6 +236,22 @@ public class customerOrder extends javax.swing.JDialog {
             customerContact = custContact; 
             custID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
             
+            String customerId = "'"+ custID+"'";
+            String sql = "SELECT customer_type, customer_address FROM customer WHERE customer_id = "+customerId+";";
+           
+            try{
+                PreparedStatement pst = con.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery();
+                
+                while(rs.next()){
+                    customerType = rs.getString("customer_type");
+                    customerAddress = rs.getString("customer_address");
+                }
+                
+            }catch(Exception ex){
+                System.out.println("Error: " + ex.getMessage());
+            }
+            
             
        }else if(parentName.equals("contracts")){
            int idColumn = 0;
@@ -228,13 +260,12 @@ public class customerOrder extends javax.swing.JDialog {
            //customerName = 
        }
        
-      //order.revalidate();
-       
+  
        this.dispose();
       
         
-    }//GEN-LAST:event_selectCustomerActionPerformed
-
+    }
+    
     private void addNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
@@ -264,6 +295,27 @@ public class customerOrder extends javax.swing.JDialog {
        
     }//GEN-LAST:event_addNewActionPerformed
 
+    private void customerTableKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerTableKeyTyped
+        // TODO add your handling code here:
+         
+    }//GEN-LAST:event_customerTableKeyTyped
+
+    
+    
+     private void createKeybindings(JTable table) {
+        table.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Enter");
+        table.getActionMap().put("Enter", new AbstractAction() {
+        @Override
+            public void actionPerformed(ActionEvent ae) {
+            selectCustomer();
+            exitFrame();
+        }
+        });
+     }
+     
+     public void exitFrame(){
+         this.dispose();
+     }
     /**
      * @param args the command line arguments
      */

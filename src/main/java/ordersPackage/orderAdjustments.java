@@ -17,6 +17,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -32,11 +33,11 @@ public class orderAdjustments extends javax.swing.JDialog {
     Connection con = new mysqlConnection().getCon();
     public ArrayList<String>promoList =new ArrayList();
     
-    HashMap<String,Integer> feesTableValues = new HashMap<String,Integer>();
-    HashMap<String,Integer> dscountTableValues = new HashMap<String, Integer>();
+    HashMap<String,Double> feesTableValues = new HashMap<String,Double>();
+    HashMap<String,Double> discountTableValues = new HashMap<String, Double>();
     
     //public boolean forDelivery;
-    public boolean addedCustomDisc = false, addedCustomFee = false, tenPlusOne;
+    public boolean addedCustomDisc = false, addedCustomFee = false, cancelPressed;// tenPlusOne;
     public double custFee, custDisc;
     public double feesTotal, discountsTotal, deliveryFee;
     
@@ -408,7 +409,6 @@ public class orderAdjustments extends javax.swing.JDialog {
          }
          
         
-         
          caEnable.setEnabled(false);
          cdEnable.setEnabled(false);
          customDiscount.setEnabled(false);
@@ -418,34 +418,61 @@ public class orderAdjustments extends javax.swing.JDialog {
          DefaultTableModel feeTable = (DefaultTableModel)feesTable.getModel();
          DefaultTableModel discountTable = (DefaultTableModel)activeDiscounts.getModel();
          
-         if (deliveryFee!=0){
-             feeTable.addRow(new String[]{"Delivery Fee per Bottle", Double.toString(deliveryFee)});     
-         }
-      
-         if(custDisc >0){
-             discountTable.addRow(new String[]{"Custom", Double.toString(custDisc)});
-             addedCustomDisc = true;
+         if(!discountTableValues.isEmpty()){
+             for(Map.Entry<String,Double> set : discountTableValues.entrySet()){
+                 discountTable.addRow(new Object[]{set.getKey(),String.format("%.2f",set.getValue())});
+             }
          }
          
-         if (custFee>0){
-             feeTable.addRow(new String[]{"Custom", Double.toString(custFee)});
-             addedCustomFee = true;
+         if (!feesTableValues.isEmpty()){
+             for(Map.Entry<String,Double> set : feesTableValues.entrySet()){
+                 feeTable.addRow(new Object[]{set.getKey(),String.format("%.2f",set.getValue())});
+             }
          }
          
-         if(tenPlusOne){
-              String sql3 = "SELECT promo_description, promo_discount_amount FROM promo WHERE promo_description LIKE ('10+1');";
-            try{
-                PreparedStatement pst = con.prepareStatement(sql3);
-                ResultSet rs = pst.executeQuery();
-            
-                while(rs.next()){
-                   discountTable.addRow(new String[]{rs.getString(1),rs.getString(2)});
+         
+         //This line needs work
+         
+         if (deliveryFee >0 ){
+             if (feesTable.getRowCount() > 0){
+                 for(int i =0; i<feeTable.getRowCount();i++){
+                    if (feesTable.getValueAt(i, 0).toString().equalsIgnoreCase("Delivery Fee per Bottle")){
+                        double tempDeliveryPrice = Double.parseDouble(feesTable.getValueAt(i, 1).toString());
+                        if(deliveryFee != tempDeliveryPrice){
+                            feeTable.removeRow(i);
+                            feeTable.addRow(new String[]{"Delivery Fee per Bottle", String.format("%.2f",deliveryFee)});    
+                        }
+                    }
+             }
+             }else{
+                  feeTable.addRow(new String[]{"Delivery Fee per Bottle", String.format("%.2f", deliveryFee)});   
+             }
+         }else{
+             for(int i =0; i<feeTable.getRowCount();i++){
+                if (feesTable.getValueAt(i, 0).toString().equalsIgnoreCase("Delivery Fee per Bottle")){
+                    feeTable.removeRow(i);
                 }
-            
-            }catch(Exception ex){
-                System.out.println("Error: " +ex.getMessage());
             }
          }
+         
+   
+        /*for (Map.Entry<String,Double> set: discountTableValues.entrySet()){
+            if (set.getKey().equals("10+1")){
+                String sql3 = "SELECT promo_description, promo_discount_amount FROM promo WHERE promo_description LIKE ('10+1');";
+                try{
+                    PreparedStatement pst = con.prepareStatement(sql3);
+                    ResultSet rs = pst.executeQuery();
+
+                    while(rs.next()){
+                       discountTable.addRow(new String[]{rs.getString(1),rs.getString(2)});
+                    }
+
+                }catch(Exception ex){
+                    System.out.println("Error: " +ex.getMessage());
+                }
+            }
+        }*/
+        
          
          custom.addItemListener(new ItemListener() {
             @Override
@@ -466,33 +493,45 @@ public class orderAdjustments extends javax.swing.JDialog {
         });
         
     }//GEN-LAST:event_formWindowOpened
-
+   
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         // TODO add your handling code here:
+        calculateAll(true);
+        cancelPressed=true;
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
 
     private void addToActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToActiveActionPerformed
         // TODO add your handling code here:
+        // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)activeDiscounts.getModel();
         String promo = existingPromos.getSelectedItem().toString().trim();
-        if (promo.equalsIgnoreCase("10+1")){
-            tenPlusOne = true;
-        }
-        
+        String name = "";
+        double amount = 0;
         String sql = "SELECT promo_description, promo_discount_amount FROM promo WHERE promo_description LIKE ('"+promo+"'); ";
-        try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            
-            while(rs.next()){
-                model.addRow(new String[]{rs.getString(1),rs.getString(2)});
-            }
-            
-        }catch(Exception ex){
-            System.out.println("Error: " +ex.getMessage());
-        }
+                    try{
+                        PreparedStatement pst = con.prepareStatement(sql);
+                        ResultSet rs = pst.executeQuery();
+
+                        while(rs.next()){
+                            name = rs.getString("promo_description");
+                            amount = rs.getDouble("promo_discount_amount");
+                        }
+
+                    }catch(Exception ex){
+                        System.out.println("Error: " +ex.getMessage());
+                    }
+       
+        if (model.getRowCount() != 0){
+            for(int row=0; row<model.getColumnCount();row++){
+                if (model.getValueAt(row, 0).equals(promo)){
+                    JOptionPane.showMessageDialog(this, "The promo already exists in the active discounts table.", "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
         
+            }
+        }else if(model.getRowCount() == 0){
+            model.addRow(new String[]{name,String.format("%.2f", amount)});
+        }
     }//GEN-LAST:event_addToActiveActionPerformed
 
     private void customMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customMouseClicked
@@ -513,8 +552,7 @@ public class orderAdjustments extends javax.swing.JDialog {
     }//GEN-LAST:event_customMouseClicked
 
     private void cdEnableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cdEnableMouseClicked
-        // TODO add your handling code here:          
-        if (cdEnable.isSelected()){
+         if (cdEnable.isSelected()){
             customDiscount.setEnabled(true);
         }else{
             customDiscount.setEnabled(false);
@@ -556,14 +594,14 @@ public class orderAdjustments extends javax.swing.JDialog {
         
         if (activeDiscounts.getSelectedRow() != -1) {
             // remove selected row from the mode
-            String data = model.getValueAt(activeDiscounts.getSelectedRow() , 0).toString();
+           // String data = model.getValueAt(activeDiscounts.getSelectedRow() , 0).toString();
             model.removeRow(activeDiscounts.getSelectedRow());
-            if (data.equals("Custom")){
+            /*if (data.equals("Custom")){
                 addedCustomDisc = false;
                 custDisc=0;
             }else if (data.equals("10+1")){
                 tenPlusOne = false;
-            }
+            }*/
         }
     }//GEN-LAST:event_removeDiscountActionPerformed
 
@@ -578,33 +616,76 @@ public class orderAdjustments extends javax.swing.JDialog {
                JOptionPane.showMessageDialog(this, "Error! Delivery fee cannot be removed. Please uncheck the 'for delivery' button in the order page first.", "Error", JOptionPane.INFORMATION_MESSAGE);
             }else{
                 model.removeRow(feesTable.getSelectedRow());
-                if (data.equals("Custom")){
+               /* if (data.equals("Custom")){
                     addedCustomFee = false;
                     custFee = 0;
-                } 
+                } */
             } 
         }
     }//GEN-LAST:event_removeFeesActionPerformed
-    
-   
+
     private void applyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyButtonActionPerformed
-        // TODO add your handling code here:
+         // TODO add your handling code here:
         DefaultTableModel discounts = (DefaultTableModel)activeDiscounts.getModel();
         DefaultTableModel fees = (DefaultTableModel)feesTable.getModel();
-        
+        feesTableValues.clear();
+        discountTableValues.clear();
         for (int row = 0; row < discounts.getRowCount(); row++) {
-            Object rowData = discounts.getValueAt(row, 1);
-            discountsTotal = discountsTotal + Double.parseDouble(rowData.toString());
+            discountTableValues.put(discounts.getValueAt(row,0).toString(), Double.valueOf(discounts.getValueAt(row, 1).toString()));
         }
         
         for (int row = 0; row < fees.getRowCount(); row++) {
-            Object rowData2 = fees.getValueAt(row, 1);
-            feesTotal = feesTotal + Double.parseDouble(rowData2.toString());
+            feesTableValues.put(fees.getValueAt(row, 0).toString(),Double.valueOf(fees.getValueAt(row, 1).toString()));
         }
+        calculateAll(false);
+        cancelPressed = false;
         this.dispose();
         
     }//GEN-LAST:event_applyButtonActionPerformed
-
+    public void calculateAll(Boolean cancel){
+        DefaultTableModel discounts = (DefaultTableModel)activeDiscounts.getModel();
+        DefaultTableModel fees = (DefaultTableModel)feesTable.getModel();
+        
+        if(!cancel){
+            for (int row = 0; row < discounts.getRowCount(); row++) {
+                Object rowData = discounts.getValueAt(row, 1);
+                discountsTotal = discountsTotal + Double.parseDouble(rowData.toString());
+            }
+        
+            for (int row = 0; row < fees.getRowCount(); row++) {
+                Object rowData2 = fees.getValueAt(row, 1);
+                feesTotal = feesTotal + Double.parseDouble(rowData2.toString());
+            }
+        }else{
+            if (!feesTableValues.isEmpty()){
+                for(Map.Entry<String,Double> set : feesTableValues.entrySet()){
+                   feesTotal = feesTotal + set.getValue();
+                }
+            }
+            
+            if (!discountTableValues.isEmpty()){
+                for(Map.Entry<String,Double>set: discountTableValues.entrySet()){
+                    discountsTotal = discountsTotal+set.getValue();
+                }
+            }
+        }
+           
+    }
+    
+    
+    public void setActives(HashMap<String, Double> fees , HashMap<String, Double> discounts){
+        if (fees != null){
+            for (Map.Entry<String, Double> set : fees.entrySet()){
+                feesTableValues.put(set.getKey(), set.getValue());
+            }
+        }
+        
+        if (discounts != null){
+            for (Map.Entry<String, Double> set: discounts.entrySet()){
+                discountTableValues.put(set.getKey(),set.getValue());
+            }
+        }
+    }
     /**
      * @param args the command line arguments
      */

@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -55,6 +57,13 @@ public class expenseItem extends javax.swing.JFrame {
         expenseAmount = new javax.swing.JSpinner();
         jButton1 = new javax.swing.JButton();
         saveExpenseItem = new javax.swing.JButton();
+        date = new com.toedter.calendar.JDateChooser();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        expensesTable = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        addButton = new javax.swing.JButton();
+        editExpense = new javax.swing.JButton();
+        removeButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Expense Item");
@@ -70,9 +79,9 @@ public class expenseItem extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(138, 138, 138)
+                .addGap(180, 180, 180)
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(254, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,13 +113,56 @@ public class expenseItem extends javax.swing.JFrame {
                 jButton1MouseClicked(evt);
             }
         });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         saveExpenseItem.setBackground(new java.awt.Color(40, 75, 135));
         saveExpenseItem.setForeground(new java.awt.Color(255, 255, 255));
         saveExpenseItem.setText("Save");
-        saveExpenseItem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                saveExpenseItemMouseClicked(evt);
+        saveExpenseItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveExpenseItemActionPerformed(evt);
+            }
+        });
+
+        expensesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Date", "Description", "Amount"
+            }
+        ));
+        jScrollPane2.setViewportView(expensesTable);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setText("Date:");
+
+        addButton.setBackground(new java.awt.Color(40, 75, 135));
+        addButton.setForeground(new java.awt.Color(255, 255, 255));
+        addButton.setText("Add");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+
+        editExpense.setText("Edit");
+        editExpense.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editExpenseActionPerformed(evt);
+            }
+        });
+
+        removeButton.setBackground(new java.awt.Color(240, 0, 0));
+        removeButton.setForeground(new java.awt.Color(255, 255, 255));
+        removeButton.setText("Remove");
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
             }
         });
 
@@ -118,44 +170,72 @@ public class expenseItem extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(saveExpenseItem, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(12, 12, 12))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(33, Short.MAX_VALUE))
+                        .addComponent(jLabel2)
+                        .addGap(310, 310, 310)
+                        .addComponent(removeButton))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(expenseAmount, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel3)
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(saveExpenseItem)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addGap(43, 43, 43))))
+                        .addComponent(addButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(editExpense)
+                        .addGap(80, 80, 80))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel2))
+                    .addComponent(removeButton))
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(editExpense, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveExpenseItem)
-                    .addComponent(jButton1))
-                .addContainerGap(48, Short.MAX_VALUE))
+                    .addComponent(saveExpenseItem, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
@@ -163,38 +243,96 @@ public class expenseItem extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton1MouseClicked
 
-    private void saveExpenseItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveExpenseItemMouseClicked
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
-        double totalAmount = (double)expenseAmount.getValue();
-        String expenseDesc = expenseDescription.getText();
-        String expAmount = expenseAmount.getValue().toString();
+        String description = expenseDescription.getText();
+        
+        DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
+        boolean complete = !expenseDescription.getText().trim().isEmpty() && (double)expenseAmount.getValue() != 0.0 && date.getDate() != null;
+        System.out.println(date.getDate());
+        System.out.println(date.getDate() != null);
         
         
-        //Get DateTime
-        Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateTime = dateFormat.format(currentDate);
         
-        if (totalAmount <= 0 || expenseDescription.getText().trim().equals("")){
-            if (expenseDescription.getText().trim().equals("")){
-                JOptionPane.showMessageDialog(this,"Please input expense description!","Warning", JOptionPane.INFORMATION_MESSAGE);
-            }else{
-                JOptionPane.showMessageDialog(this,"Please input the amount!","Warning", JOptionPane.INFORMATION_MESSAGE);
-            }
+        System.out.println("Complete: " + complete);
+        if (complete){
+            System.out.println(date.getDate());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String expenseDate =dateFormat.format(date.getDate());
+            model.addRow(new String []{expenseDate, description, String.format("%.2f",expenseAmount.getValue())});
+            expenseDescription.setText("");
+            expenseAmount.setValue(0);
         }else{
+            JOptionPane.showMessageDialog(this,"Please input COMPLETE expense information!","Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+       alignValues();
+    }//GEN-LAST:event_addButtonActionPerformed
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel expenses = (DefaultTableModel)expensesTable.getModel();
+         if (expensesTable.getSelectedRow() != -1) {
+            expenses.removeRow(expensesTable.getSelectedRow());
+        }
+        
+        
+    }//GEN-LAST:event_removeButtonActionPerformed
+
+    private void editExpenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editExpenseActionPerformed
+        // TODO add your handling code here:
+      
+        if(expensesTable.getSelectedRow() == -1){
+            JOptionPane.showMessageDialog(this,"Please select/highlight the expense item from the table first!","Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        
+        
+        
+    }//GEN-LAST:event_editExpenseActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void saveExpenseItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveExpenseItemActionPerformed
+        // TODO add your handling code here:
+        if (expensesTable.getRowCount()>0){
+            for (int i = 0; i < expensesTable.getRowCount();i++){
+                double expAmount = Double.parseDouble(expensesTable.getValueAt(i, 2).toString());
+                String expenseDesc = expensesTable.getValueAt(i,1).toString();
+                String dateTime = expensesTable.getValueAt(i,0).toString();
+                
+                
                 String sql = "INSERT INTO expense(expense_amount,expense_description,expense_date_time,branch_id) VALUES("+expAmount+", '"+expenseDesc+ "','"+dateTime+"', 3);";
                 try{
                     PreparedStatement pst = con.prepareStatement(sql);
                     pst.executeUpdate();
-                    //ResultSet rs = pst.executeQuery();
+                 
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
-                }      
-            this.dispose();
-            JOptionPane.showMessageDialog(this,"New Expense Item Added!","Message", JOptionPane.INFORMATION_MESSAGE);
+                }    
+            } 
         }
-    }//GEN-LAST:event_saveExpenseItemMouseClicked
+        
+       this.dispose();
+    }//GEN-LAST:event_saveExpenseItemActionPerformed
 
+    public void alignValues(){
+        DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
+        
+        
+        
+        centerAlign.setHorizontalAlignment(JLabel.CENTER);
+        expensesTable.getColumnModel().getColumn(2).setCellRenderer(centerAlign);
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        for (int i = 2; i< 3;i++)
+        {
+            expensesTable.getColumnModel().getColumn(i).setCellRenderer(rightAlign);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -231,14 +369,21 @@ public class expenseItem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
+    private com.toedter.calendar.JDateChooser date;
+    private javax.swing.JButton editExpense;
     private javax.swing.JSpinner expenseAmount;
     private javax.swing.JTextArea expenseDescription;
+    private javax.swing.JTable expensesTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton removeButton;
     private javax.swing.JButton saveExpenseItem;
     // End of variables declaration//GEN-END:variables
 }

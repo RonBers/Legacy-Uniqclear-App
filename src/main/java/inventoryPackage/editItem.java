@@ -6,25 +6,23 @@ package inventoryPackage;
 import connectionSql.mysqlConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
 /**
  *
  * @author User
  */
 
 
-
-public class addItem extends javax.swing.JDialog {
+public class editItem extends javax.swing.JDialog {
 
     /**
      * Creates new form addItem
      */
     
     Connection con = new mysqlConnection().getCon();
-    public addItem(java.awt.Frame parent, boolean modal) {
+    boolean nonRental = false;
+    public editItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
     }
 
     /**
@@ -51,14 +49,14 @@ public class addItem extends javax.swing.JDialog {
         itemNameLabel3 = new javax.swing.JLabel();
         NonRentalPanel = new javax.swing.JPanel();
         itemNameLabel = new javax.swing.JLabel();
-        itemName = new javax.swing.JTextField();
+        editItemName = new javax.swing.JTextField();
         itemNameLabel1 = new javax.swing.JLabel();
-        itemQuantity = new javax.swing.JSpinner();
-        itemPrice = new javax.swing.JSpinner();
+        editItemQuantity = new javax.swing.JSpinner();
+        editItemPrice = new javax.swing.JSpinner();
         itemNameLabel2 = new javax.swing.JLabel();
         itemAvailability = new javax.swing.JComboBox<>();
-
         jSeparator1 = new javax.swing.JSeparator();
+        cancelButton = new javax.swing.JButton();
 
         title1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         title1.setText("Create New Order");
@@ -117,13 +115,15 @@ public class addItem extends javax.swing.JDialog {
         ItemInformationLabel1.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         ItemInformationLabel1.setText("Item Details");
 
-        addItemBTN.setText("Add Item");
+        addItemBTN.setBackground(new java.awt.Color(40, 75, 135));
+        addItemBTN.setForeground(new java.awt.Color(255, 255, 255));
+        addItemBTN.setText("Save");
+        addItemBTN.setToolTipText("");
         addItemBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addItemBTNActionPerformed(evt);
             }
         });
-
 
         itemNameLabel3.setText("Availability");
 
@@ -131,19 +131,19 @@ public class addItem extends javax.swing.JDialog {
 
         itemNameLabel.setText("Item name");
 
-        itemName.setEnabled(false);
-        itemName.addActionListener(new java.awt.event.ActionListener() {
+        editItemName.setEnabled(false);
+        editItemName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemNameActionPerformed(evt);
+                editItemNameActionPerformed(evt);
             }
         });
 
-
         itemNameLabel1.setText("Item quantity");
 
-        itemQuantity.setEnabled(false);
+        editItemQuantity.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        editItemQuantity.setEnabled(false);
 
-        itemPrice.setEnabled(false);
+        editItemPrice.setEnabled(false);
 
         itemNameLabel2.setText("Item price");
 
@@ -154,51 +154,56 @@ public class addItem extends javax.swing.JDialog {
             .addGroup(NonRentalPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addComponent(itemNameLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editItemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(itemNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(NonRentalPanelLayout.createSequentialGroup()
                                     .addGap(6, 6, 6)
-                                    .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(editItemName, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(itemNameLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(NonRentalPanelLayout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(itemQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(editItemQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(90, 90, 90))))
-
         );
         NonRentalPanelLayout.setVerticalGroup(
             NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(NonRentalPanelLayout.createSequentialGroup()
                 .addContainerGap()
-
                 .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addComponent(itemNameLabel)
                         .addGap(12, 12, 12)
-                        .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(editItemName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addComponent(itemNameLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(itemQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(editItemQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(itemNameLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(itemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(editItemPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         itemAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         itemAvailability.setEnabled(false);
 
+        cancelButton.setBackground(new java.awt.Color(200, 0, 0));
+        cancelButton.setForeground(new java.awt.Color(255, 255, 255));
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -215,10 +220,6 @@ public class addItem extends javax.swing.JDialog {
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton5))))
                 .addContainerGap(26, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,14 +229,18 @@ public class addItem extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ItemInformationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                     .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(itemNameLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-
                 .addGap(70, 70, 70))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cancelButton)
+                .addGap(44, 44, 44))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,24 +257,21 @@ public class addItem extends javax.swing.JDialog {
                         .addComponent(ItemInformationLabel1)
                         .addGap(12, 12, 12)
                         .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                         .addGap(18, 18, 18)
                         .addComponent(itemNameLabel3)
                         .addGap(18, 18, 18)
-                        .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(addItemBTN)
-                        .addGap(32, 32, 32))
-
+                        .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(ItemInformationLabel)
                         .addGap(18, 18, 18)
                         .addComponent(typeRental)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-
-                        .addComponent(nonRentalType)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-
+                        .addComponent(nonRentalType)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addItemBTN)
+                    .addComponent(cancelButton))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -283,16 +285,12 @@ public class addItem extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
-
         setLocationRelativeTo(null);
-
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -300,16 +298,15 @@ public class addItem extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void itemNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNameActionPerformed
+    private void editItemNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editItemNameActionPerformed
        
-    }//GEN-LAST:event_itemNameActionPerformed
+    }//GEN-LAST:event_editItemNameActionPerformed
 
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
         // Getting the VALUES
-
-        String nameItem ="'"+itemName.getText()+"'";
-        String quantItem ="'"+itemQuantity.getValue().toString()+"'";
-        String priceItem ="'"+itemPrice.getValue().toString()+"'";
+        String nameItem ="'"+editItemName.getText()+"'";
+        String quantItem ="'"+editItemQuantity.getValue().toString()+"'";
+        String priceItem ="'"+editItemPrice.getValue().toString()+"'";
         
         String sql = "INSERT INTO item (item_name,item_price,branch_id) values (" +nameItem +", "+priceItem+",3);";
         try{
@@ -338,32 +335,32 @@ public class addItem extends javax.swing.JDialog {
         }catch(Exception e){
             System.out.println("Error: "+e.getMessage());
         }
-            
+        
        this.dispose();
-
     }//GEN-LAST:event_addItemBTNActionPerformed
 
     private void typeRentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeRentalActionPerformed
         if(typeRental.isSelected()==true){
-            itemName.setEnabled(true);
-
-            itemQuantity.setEnabled(true);
-            itemPrice.setEnabled(true);
+            editItemName.setEnabled(true);
+            editItemQuantity.setEnabled(true);
+            editItemPrice.setEnabled(true);
             itemAvailability.setEnabled(true);
-
         }
     }//GEN-LAST:event_typeRentalActionPerformed
 
     private void nonRentalTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonRentalTypeActionPerformed
         if(nonRentalType.isSelected()==true){
-            itemName.setEnabled(true);
-
-            itemQuantity.setEnabled(true);
-            itemPrice.setEnabled(true);
+            editItemName.setEnabled(true);
+            editItemQuantity.setEnabled(true);
+            editItemPrice.setEnabled(true);
             itemAvailability.setEnabled(false);
-
         }
     }//GEN-LAST:event_nonRentalTypeActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -382,20 +379,21 @@ public class addItem extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(addItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(editItem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                addItem dialog = new addItem(new javax.swing.JFrame(), true);
+                editItem dialog = new editItem(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -413,24 +411,23 @@ public class addItem extends javax.swing.JDialog {
     private javax.swing.JPanel NonRentalPanel;
     private javax.swing.JButton addItemBTN;
     private javax.swing.ButtonGroup buttonGroup1;
-
+    private javax.swing.JButton cancelButton;
+    public javax.swing.JTextField editItemName;
+    public javax.swing.JSpinner editItemPrice;
+    public javax.swing.JSpinner editItemQuantity;
     private javax.swing.JComboBox<String> itemAvailability;
-    private javax.swing.JTextField itemName;
     private javax.swing.JLabel itemNameLabel;
     private javax.swing.JLabel itemNameLabel1;
     private javax.swing.JLabel itemNameLabel2;
     private javax.swing.JLabel itemNameLabel3;
-    private javax.swing.JSpinner itemPrice;
-    private javax.swing.JSpinner itemQuantity;
-
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JRadioButton nonRentalType;
+    public javax.swing.JRadioButton nonRentalType;
     private javax.swing.JLabel title1;
     private javax.swing.JLabel title2;
-    private javax.swing.JRadioButton typeRental;
+    public javax.swing.JRadioButton typeRental;
     // End of variables declaration//GEN-END:variables
 }
