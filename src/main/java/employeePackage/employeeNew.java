@@ -5,21 +5,14 @@
 package employeePackage;
 import connectionSql.mysqlConnection;
 import java.awt.Color;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
-
+import java.util.*;
+import javax.swing.*;
+import java.sql.*;
 
 /**
  *
@@ -31,6 +24,7 @@ public class employeeNew extends javax.swing.JDialog {
      * Creates new form employeeNew
      */
     Connection con = new mysqlConnection().getCon();
+    private HashMap<Integer, String> branches = new HashMap<Integer, String>();
     public employeeNew(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -78,8 +72,17 @@ public class employeeNew extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         firstName = new javax.swing.JTextField();
         empRole = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        selectBranch = new javax.swing.JComboBox<>();
+        assignmentDate = new com.toedter.calendar.JDateChooser();
+        jLabel17 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         cancelCreateC.setBackground(new java.awt.Color(255, 0, 0));
         cancelCreateC.setForeground(new java.awt.Color(255, 255, 255));
@@ -194,6 +197,12 @@ public class employeeNew extends javax.swing.JDialog {
             }
         });
 
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel16.setText("Branch:");
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel17.setText("Date of Employment:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -241,17 +250,19 @@ public class employeeNew extends javax.swing.JDialog {
                                             .addComponent(city, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel9))))
                                 .addGap(33, 33, 33))
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(province, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel11)
                                     .addComponent(contactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel13)
-                                    .addComponent(jLabel10))
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel16))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel14)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel17)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel14)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(maleOption)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -259,18 +270,21 @@ public class employeeNew extends javax.swing.JDialog {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(othersOption)
                                             .addGap(13, 13, 13))
-                                        .addComponent(empBirthDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel15))
+                                        .addComponent(empBirthDate, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                                        .addComponent(jLabel15)
+                                        .addComponent(assignmentDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGap(27, 27, 27)))
                         .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(empRole, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(selectBranch, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(empRole, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
+                .addGap(37, 37, 37)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -319,9 +333,17 @@ public class employeeNew extends javax.swing.JDialog {
                     .addComponent(othersOption))
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(empRole, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel17))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(assignmentDate, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(selectBranch))
+                .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addEmloyee, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cancelCreateC, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -346,6 +368,8 @@ public class employeeNew extends javax.swing.JDialog {
         //Submit to database
         //this.dispose();
         //String cType = customerType
+        
+        //Include checker of null dates 
         if (!correctInput()){
             JOptionPane.showMessageDialog(this,"Contact Number is invalid!","Warning", JOptionPane.INFORMATION_MESSAGE);
         }else{
@@ -354,26 +378,57 @@ public class employeeNew extends javax.swing.JDialog {
             String middleNameInput= "'"+middleName.getText()+"'";
             String contactN = "'"+contactNumber.getText()+"'";
             String role = "'"+empRole.getText()+"'";
-            String custSex = "'"+getEmployeeSex(buttonGroup1).charAt(0)+"'";
-            SimpleDateFormat bdate = new SimpleDateFormat("yyyy-MM-dd");
-            String custBdate ="'" +bdate.format(empBirthDate.getDate()) + "'";
+            String empSex = "'"+getEmployeeSex(buttonGroup1).charAt(0)+"'";
+            SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd");
+            String employeeBdate ="'" +dtf.format(empBirthDate.getDate()) + "'";
             String address = "'" + line1Address.getText() + ", "+barangay.getSelectedItem().toString()+", "+city.getSelectedItem().toString()+", "+province.getSelectedItem().toString()+ "'";
-
-            //Connection to database
-
-            if (lastNameInput == null || firstNameInput == null || middleNameInput == null|| contactN== null){
+            String branchName = selectBranch.getSelectedItem().toString().trim();
+            String branchID ="";
+            String employeeAssignmentDate ="'" +dtf.format(assignmentDate.getDate()) + "'";
+      
+    
+            for(Map.Entry m : branches.entrySet()){    
+                if(m.getValue().toString().equalsIgnoreCase(branchName)){
+                    branchID = m.getKey().toString();
+                }    
+            }  
+           
+            
+            if (lastNameInput == null || firstNameInput == null || middleNameInput == null|| contactN== null){//transfer to line 373
                 JOptionPane.showMessageDialog(this,"Please input necessary details!","Warning", JOptionPane.INFORMATION_MESSAGE);
             }else{
-                String sql = "INSERT INTO employee(first_name,middle_name,last_name,contact_num, employee_role, sex, birthdate, employee_address) VALUES("+firstNameInput+","+middleNameInput+","+lastNameInput+","+contactN+","+role+", "+custSex+", " +custBdate+","+address+");";
+               String sql = "INSERT INTO employee(first_name,middle_name,last_name,contact_num, employee_role, sex, birthdate, employee_address, branch_id) VALUES("+firstNameInput+","+middleNameInput+","+lastNameInput+","+contactN+","+role+", "+empSex+", " +employeeBdate+","+address+", "+ branchID+");";
                 try{
                     PreparedStatement pst = con.prepareStatement(sql);
                     pst.executeUpdate();
-                    //ResultSet rs = pst.executeQuery();
+                  
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
                 }
+                
+                
+               String empID = "(SELECT employee_id FROM employee WHERE last_name = "+lastNameInput+" AND first_name= "+firstNameInput+")";
+                
+               String sqlEmployeeBranch = "INSERT INTO employee_branch_history(employee_id, branch_id, assignment_date) VALUES ("+empID+", "+branchID+", "+employeeAssignmentDate+")";
+                
+               try{
+                    PreparedStatement pst = con.prepareStatement(sqlEmployeeBranch);
+                    pst.executeUpdate();
+                    
+                }catch(Exception ex){
+                    System.out.println("Error: "+ex.getMessage());
+                }
+                
+                
+                
+                
+                
+                
+                
                 JOptionPane.showMessageDialog(this, "New Employee Added!", "Message", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
+                
+                
             }
         }
     }//GEN-LAST:event_addEmloyeeActionPerformed
@@ -385,6 +440,28 @@ public class employeeNew extends javax.swing.JDialog {
     private void firstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_firstNameActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        String sql = "SELECT branch_name, branch_id FROM branch";
+       
+        DefaultComboBoxModel model = (DefaultComboBoxModel) selectBranch.getModel();
+        
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                model.addElement(rs.getString("branch_name"));
+                branches.put(Integer.parseInt(rs.getString("branch_id")), rs.getString("branch_name"));
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ ex.getMessage());
+        }
+       
+        selectBranch.setModel(model);
+        
+    }//GEN-LAST:event_formWindowOpened
     public boolean correctInput(){
         boolean valid;
         valid = contactNumber.getText().length() == 11; 
@@ -449,6 +526,7 @@ public class employeeNew extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmloyee;
+    private com.toedter.calendar.JDateChooser assignmentDate;
     private javax.swing.JComboBox<String> barangay;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelCreateC;
@@ -465,6 +543,8 @@ public class employeeNew extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -481,5 +561,6 @@ public class employeeNew extends javax.swing.JDialog {
     private javax.swing.JTextField middleName;
     private javax.swing.JRadioButton othersOption;
     private javax.swing.JComboBox<String> province;
+    private javax.swing.JComboBox<String> selectBranch;
     // End of variables declaration//GEN-END:variables
 }
