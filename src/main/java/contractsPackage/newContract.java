@@ -66,8 +66,8 @@ public class newContract extends javax.swing.JFrame {
         ContractTypeLabel2 = new javax.swing.JLabel();
         refill = new javax.swing.JSpinner();
         ContractTypeLabel3 = new javax.swing.JLabel();
-        discountRate = new javax.swing.JTextField();
-        additionalFee = new javax.swing.JTextField();
+        additionalFee = new javax.swing.JSpinner();
+        discountRate = new javax.swing.JSpinner();
         jPanel1 = new javax.swing.JPanel();
         header = new javax.swing.JLabel();
 
@@ -133,49 +133,24 @@ public class newContract extends javax.swing.JFrame {
         ContractTypeLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         ContractTypeLabel2.setText("Minimum refills");
 
+        refill.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         refill.setEnabled(false);
 
         ContractTypeLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         ContractTypeLabel3.setText("Discount rate");
 
-        discountRate.setEnabled(false);
-        discountRate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                discountRateActionPerformed(evt);
-            }
-        });
-
+        additionalFee.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
         additionalFee.setEnabled(false);
-        additionalFee.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                additionalFeeActionPerformed(evt);
-            }
-        });
+
+        discountRate.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(ContractTypeLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(refill)
-                            .addComponent(ContractTypeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(additionalFee, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ContractTypeLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(discountRate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -186,14 +161,33 @@ public class newContract extends javax.swing.JFrame {
                             .addComponent(ContractTypeLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(contractDate, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(additionalFee, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ContractTypeLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(refill, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                            .addComponent(ContractTypeLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(contractLink, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2)
-                            .addComponent(selectCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(customerContract, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(159, 159, 159))))
+                            .addComponent(ContractTypeLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(discountRate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(136, 136, 136))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(23, 23, 23))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(contractLink, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel2)
+                                    .addComponent(selectCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(customerContract, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(159, 159, 159))))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -217,15 +211,13 @@ public class newContract extends javax.swing.JFrame {
                     .addComponent(typeRentalContract)
                     .addComponent(typeDealerContract))
                 .addGap(43, 43, 43)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(ContractTypeLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(refill, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(ContractTypeLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(discountRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ContractTypeLabel2)
+                    .addComponent(ContractTypeLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(refill, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(discountRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(ContractTypeLabel)
                 .addGap(18, 18, 18)
@@ -314,15 +306,26 @@ public class newContract extends javax.swing.JFrame {
 
     private void addContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractActionPerformed
         // TODO add your handling code here:
-        String conLink = "'"+contractLink.getText()+"'";
+        //String conLink = "'"+contractLink.getText()+"'";
+        String conLink = contractLink.getText();
         SimpleDateFormat cDate = new SimpleDateFormat("yyyy-MM-dd");
-        String conDate ="'" +cDate.format(contractDate.getDate()) + "'";
-        if (conLink == null || contractDate == null){
-                JOptionPane.showMessageDialog(this,"Please input necessary details!","Warning", JOptionPane.INFORMATION_MESSAGE);
-        }else{
-                String sql = "INSERT INTO contract_record (customer_id, contract_link, contract_date) VALUES("+customerID+", "+conLink+"," +conDate+");";
+        // String conDate ="'" +cDate.format(contractDate.getDate()) + "'";
+        String conDate = (contractDate.getDate() != null) ? cDate.format(contractDate.getDate()):null;
         
-                        
+        String conLinkCheck = "^(https?:\\/\\/)?(drive|docs)\\.google\\.com\\/(?:file\\/d\\/|open\\?id=|forms\\/d\\/e\\/)[a-zA-Z0-9_-]+.*";
+        
+        boolean isValid=true;
+            if(!conLink.matches(conLinkCheck) || conLink.isEmpty()){
+                JOptionPane.showMessageDialog(this,"Please input a valid link!","Warning", JOptionPane.INFORMATION_MESSAGE);
+                    isValid=false;
+            }
+            if (conDate==null){
+                JOptionPane.showMessageDialog(this,"Please input date!","Warning", JOptionPane.INFORMATION_MESSAGE);
+                    isValid=false;
+            }
+            // For as long as isValid is false, it will never add to the database
+            if(isValid){ 
+                String sql = "INSERT INTO contract_record (customer_id, contract_link, contract_date) VALUES("+customerID+", "+conLink+"," +conDate+");";                       
             try{
                 PreparedStatement pst = con.prepareStatement(sql);
                 pst.executeUpdate();
@@ -332,7 +335,13 @@ public class newContract extends javax.swing.JFrame {
             }
             JOptionPane.showMessageDialog(this, "New Contract Added!", "Message", JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
-        }
+            }
+            
+            
+  
+        // If inputs are valid, add to the database
+
+        
     }//GEN-LAST:event_addContractActionPerformed
 
     private void typeRentalContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeRentalContractActionPerformed
@@ -350,14 +359,6 @@ public class newContract extends javax.swing.JFrame {
             discountRate.setEnabled(true);
         }
     }//GEN-LAST:event_typeDealerContractActionPerformed
-
-    private void discountRateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discountRateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_discountRateActionPerformed
-
-    private void additionalFeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_additionalFeeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_additionalFeeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -401,13 +402,13 @@ public class newContract extends javax.swing.JFrame {
     private javax.swing.JLabel ContractTypeLabel2;
     private javax.swing.JLabel ContractTypeLabel3;
     private javax.swing.JButton addContract;
-    private javax.swing.JTextField additionalFee;
+    private javax.swing.JSpinner additionalFee;
     private javax.swing.JButton backButton;
     private com.toedter.calendar.JDateChooser contractDate;
     private javax.swing.JTextField contractLink;
     private javax.swing.ButtonGroup contractType;
     private javax.swing.JTextField customerContract;
-    private javax.swing.JTextField discountRate;
+    private javax.swing.JSpinner discountRate;
     private javax.swing.JLabel header;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
