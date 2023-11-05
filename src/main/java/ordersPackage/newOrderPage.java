@@ -4,7 +4,7 @@
  */
 package ordersPackage;
 import connectionSql.mysqlConnection;
-import customerSearchPackage.customerOrder;
+import searchPackage.customerSearch;
 //import com.uniqclear.uniqclearapp.ordersPackage.orderAdjustments;
 import java.awt.Color;
 import java.awt.Image;
@@ -722,7 +722,7 @@ public class newOrderPage extends javax.swing.JFrame {
     private void searchCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchCustomerActionPerformed
         // TODO add your handling code here:
         
-        customerOrder searchCust = new customerOrder (this,true, "orders");
+        customerSearch searchCust = new customerSearch (this,true, "orders");
         searchCust.setVisible(true);
         searchCust.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)
@@ -753,7 +753,7 @@ public class newOrderPage extends javax.swing.JFrame {
     
     public double getPrice(String item){
         double selectedItemPrice = 0;
-        String sql = "SELECT item_price FROM item WHERE item_name LIKE('"+item+"');";
+        String sql = "SELECT non_rental_item_price FROM non_rental_item WHERE item_name LIKE('"+item+"');";
          try{
                     PreparedStatement pst = con.prepareStatement(sql);
                     ResultSet rs = pst.executeQuery();
@@ -773,7 +773,7 @@ public class newOrderPage extends javax.swing.JFrame {
         quantity1.setValue(0);
         itemOne = item1.getSelectedItem().toString();
          if (itemOne.equalsIgnoreCase("new water bottle")){
-           SpinnerModel value =  new SpinnerNumberModel(0,0,Integer.parseInt(newBottles.getText()),1);  
+           SpinnerModel value =  new SpinnerNumberModel(0,0,/*Integer.parseInt(newBottles.getText())*/50,1);  
             quantity1.setModel(value);
         }else{
              SpinnerModel value =  new SpinnerNumberModel(0,0,null,1);  
@@ -784,14 +784,14 @@ public class newOrderPage extends javax.swing.JFrame {
     }//GEN-LAST:event_item1ActionPerformed
 
     private void quantity1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_quantity1StateChanged
-       if ((Integer)quantity1.getValue() > newBottlesQuantity ){
-           quantity1.setValue(newBottlesQuantity);
-       }
+     //  if ((Integer)quantity1.getValue() > newBottlesQuantity ){
+      //     quantity1.setValue(newBottlesQuantity);
+       //}
     }//GEN-LAST:event_quantity1StateChanged
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-       String sql = "SELECT non_rental_item.item_quantity FROM non_rental_item JOIN item ON item.item_id=non_rental_item.item_id WHERE item.item_name LIKE ('New Water Bottle');";
+      /* String sql = "SELECT non_rental_item.item_quantity FROM non_rental_item JOIN item ON item.item_id=non_rental_item.item_id WHERE item.item_name LIKE ('New Water Bottle');";
         
         try{
             PreparedStatement pst = con.prepareStatement(sql);
@@ -806,7 +806,7 @@ public class newOrderPage extends javax.swing.JFrame {
             
         }catch(Exception ex){
             System.out.println("Error: "+ ex.getMessage());
-        }
+        }*/
     }//GEN-LAST:event_formWindowOpened
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
@@ -832,7 +832,7 @@ public class newOrderPage extends javax.swing.JFrame {
                     ResultSet rs = pst.executeQuery();
 
                     while(rs.next()){
-                        tempPrice = rs.getDouble("item_price");
+                        tempPrice = rs.getDouble("non_rental_item_price");
                     }
                 }catch (Exception ex){
                     System.out.println("Error: "+ex.getMessage());

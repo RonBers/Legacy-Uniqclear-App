@@ -5,16 +5,22 @@
 package expensesPackage;
 
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.text.ParseException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
+import searchPackage.employeeSelect;
 
 /**
  *
@@ -26,6 +32,10 @@ public class expenseItem extends javax.swing.JFrame {
      * Creates new form expenseItem
      */
     Connection con;
+    
+    private String employeeName, employeeID;
+    
+   
     public expenseItem() {
         initComponents();
         this.setTitle("Edit Customer");
@@ -64,10 +74,18 @@ public class expenseItem extends javax.swing.JFrame {
         addButton = new javax.swing.JButton();
         editExpense = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
+        selectEmployeeButton = new javax.swing.JButton();
+        employeeField = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Expense Item");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 192, 0));
 
@@ -79,9 +97,9 @@ public class expenseItem extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(180, 180, 180)
+                .addGap(224, 224, 224)
                 .addComponent(jLabel1)
-                .addContainerGap(254, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,9 +151,17 @@ public class expenseItem extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Date", "Description", "Amount"
+                "Date", "Description", "Employee", "Amount"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(expensesTable);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -143,7 +169,7 @@ public class expenseItem extends javax.swing.JFrame {
 
         addButton.setBackground(new java.awt.Color(40, 75, 135));
         addButton.setForeground(new java.awt.Color(255, 255, 255));
-        addButton.setText("Add");
+        addButton.setText("Add Expense Item");
         addButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addButtonActionPerformed(evt);
@@ -166,68 +192,99 @@ public class expenseItem extends javax.swing.JFrame {
             }
         });
 
+        selectEmployeeButton.setBackground(new java.awt.Color(40, 75, 135));
+        selectEmployeeButton.setForeground(new java.awt.Color(255, 255, 255));
+        selectEmployeeButton.setText("Select Employee");
+        selectEmployeeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectEmployeeButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setText("Selected Employee:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(saveExpenseItem, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(12, 12, 12))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(310, 310, 310)
-                        .addComponent(removeButton))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addButton)
+                        .addComponent(saveExpenseItem, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editExpense)
-                        .addGap(80, 80, 80))))
+                        .addComponent(jButton1)
+                        .addGap(12, 12, 12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(editExpense)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(removeButton))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE))
+                        .addGap(16, 16, 16))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addGap(124, 124, 124)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(employeeField, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(selectEmployeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jLabel2))
-                    .addComponent(removeButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(removeButton)
+                        .addComponent(editExpense, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(editExpense, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(5, 5, 5)
+                        .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(5, 5, 5)
+                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(employeeField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectEmployeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(saveExpenseItem, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -248,18 +305,12 @@ public class expenseItem extends javax.swing.JFrame {
         String description = expenseDescription.getText();
         
         DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
-        boolean complete = !expenseDescription.getText().trim().isEmpty() && (double)expenseAmount.getValue() != 0.0 && date.getDate() != null;
-        System.out.println(date.getDate());
-        System.out.println(date.getDate() != null);
-        
-        
-        
-        System.out.println("Complete: " + complete);
+        boolean complete = !expenseDescription.getText().trim().isEmpty() && (double)expenseAmount.getValue() != 0.0 && date.getDate() != null && !employeeField.getText().trim().isEmpty();
+       
         if (complete){
-            System.out.println(date.getDate());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String expenseDate =dateFormat.format(date.getDate());
-            model.addRow(new String []{expenseDate, description, String.format("%.2f",expenseAmount.getValue())});
+            model.addRow(new String []{expenseDate, description,employeeField.getText(), String.format("%.2f",expenseAmount.getValue()), });
             expenseDescription.setText("");
             expenseAmount.setValue(0);
         }else{
@@ -280,10 +331,29 @@ public class expenseItem extends javax.swing.JFrame {
 
     private void editExpenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editExpenseActionPerformed
         // TODO add your handling code here:
-      
+        DefaultTableModel expenses = (DefaultTableModel)expensesTable.getModel();
         if(expensesTable.getSelectedRow() == -1){
             JOptionPane.showMessageDialog(this,"Please select/highlight the expense item from the table first!","Error", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            int row = expensesTable.getSelectedRow();
+            
+            expenseDescription.setText(expensesTable.getValueAt(row, 1).toString());
+            employeeField.setText(expensesTable.getValueAt(row, 2).toString());
+            expenseAmount.setValue(Double.parseDouble(expensesTable.getValueAt(row,3).toString()));
+            
+            
+             try{
+               SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+              String dateInString = expensesTable.getValueAt(row,0).toString();
+              Date date2 = formatter.parse(dateInString);  
+              date.setDate(date2);
+            }catch(Exception ex){
+                System.out.println("Error: " + ex.getMessage());
+            }
+             expenses.removeRow(expensesTable.getSelectedRow());
+           
         }
+        
         
         
         
@@ -299,12 +369,12 @@ public class expenseItem extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (expensesTable.getRowCount()>0){
             for (int i = 0; i < expensesTable.getRowCount();i++){
-                double expAmount = Double.parseDouble(expensesTable.getValueAt(i, 2).toString());
+                double expAmount = Double.parseDouble(expensesTable.getValueAt(i, 3).toString());
                 String expenseDesc = expensesTable.getValueAt(i,1).toString();
                 String dateTime = expensesTable.getValueAt(i,0).toString();
+                //should get the branch id connected to employee as well
                 
-                
-                String sql = "INSERT INTO expense(expense_amount,expense_description,expense_date_time,branch_id) VALUES("+expAmount+", '"+expenseDesc+ "','"+dateTime+"', 3);";
+                String sql = "INSERT INTO expense(expense_amount,expense_description,expense_date_time,branch_id, employee_id) VALUES("+expAmount+", '"+expenseDesc+ "','"+dateTime+"', 3, "+employeeID+");";
                 try{
                     PreparedStatement pst = con.prepareStatement(sql);
                     pst.executeUpdate();
@@ -318,20 +388,42 @@ public class expenseItem extends javax.swing.JFrame {
        this.dispose();
     }//GEN-LAST:event_saveExpenseItemActionPerformed
 
+    private void selectEmployeeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectEmployeeButtonActionPerformed
+        // TODO add your handling code here:
+        employeeSelect empWindow = new employeeSelect(this, true);
+        empWindow.setVisible(true);
+        empWindow.addWindowListener(new WindowAdapter(){
+            public void windowClosed(WindowEvent e)
+            {
+                employeeName = empWindow.getName();
+                employeeID = empWindow.getID();
+                
+                employeeField.setText(employeeName);
+            }
+          });
+       
+ 
+    }//GEN-LAST:event_selectEmployeeButtonActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        employeeField.setEditable(false);
+    }//GEN-LAST:event_formWindowOpened
+
     public void alignValues(){
-        DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
+       // DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
         DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
-        DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
+       // DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
         
         
         
-        centerAlign.setHorizontalAlignment(JLabel.CENTER);
-        expensesTable.getColumnModel().getColumn(2).setCellRenderer(centerAlign);
+        //centerAlign.setHorizontalAlignment(JLabel.CENTER);
+        //expensesTable.getColumnModel().getColumn(2).setCellRenderer(centerAlign);
         rightAlign.setHorizontalAlignment(JLabel.RIGHT);
-        for (int i = 2; i< 3;i++)
+       /* for (int i = 2; i< 3;i++)
         {
             expensesTable.getColumnModel().getColumn(i).setCellRenderer(rightAlign);
-        }
+        }*/
+        expensesTable.getColumnModel().getColumn(3).setCellRenderer(rightAlign);
     }
     /**
      * @param args the command line arguments
@@ -372,6 +464,7 @@ public class expenseItem extends javax.swing.JFrame {
     private javax.swing.JButton addButton;
     private com.toedter.calendar.JDateChooser date;
     private javax.swing.JButton editExpense;
+    private javax.swing.JTextField employeeField;
     private javax.swing.JSpinner expenseAmount;
     private javax.swing.JTextArea expenseDescription;
     private javax.swing.JTable expensesTable;
@@ -380,10 +473,12 @@ public class expenseItem extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeButton;
     private javax.swing.JButton saveExpenseItem;
+    private javax.swing.JButton selectEmployeeButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,6 +9,8 @@ import connectionSql.mysqlConnection;
  * @author ronjoshual.bersabal
  */
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -29,6 +31,7 @@ public class employeeInfo extends javax.swing.JDialog {
      * Creates new form employeeINfo
      */
     public String employeeID;
+    private String branchID;
     Connection con = new mysqlConnection().getCon();
     public employeeInfo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -48,14 +51,23 @@ public class employeeInfo extends javax.swing.JDialog {
         headerlogo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        empName = new javax.swing.JLabel();
+        empID = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        empAddress = new javax.swing.JLabel();
+        empBdate = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         empRole = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        empContact = new javax.swing.JLabel();
+        empBranch = new javax.swing.JLabel();
         backButton = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        transferBranchButton = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        empName = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        empContact = new javax.swing.JLabel();
+        updateInfoButton = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        empAddress = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -86,30 +98,39 @@ public class employeeInfo extends javax.swing.JDialog {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel2.setText("Employee name");
+        jLabel2.setText("Employee Details");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        empName.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        empName.setText("Name");
+        empID.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        empID.setText("ID");
+        jPanel2.add(empID, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 480, -1));
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel3.setText("Employee Address");
+        jLabel3.setText("ID:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
 
-        empAddress.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        empAddress.setText("Address");
+        empBdate.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        empBdate.setText("Date of Birth");
+        jPanel2.add(empBdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 480, -1));
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel4.setText("Contact Number");
+        jLabel4.setText("Branch:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, -1, -1));
 
-        empRole.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        empRole.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         empRole.setText("Role");
+        jPanel2.add(empRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, 480, -1));
 
         jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel5.setText("Employee Role");
+        jLabel5.setText("Role:");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 200, -1, -1));
 
-        empContact.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        empContact.setText("Contact");
+        empBranch.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        empBranch.setText("Branch");
+        jPanel2.add(empBranch, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 480, -1));
 
         backButton.setBackground(new java.awt.Color(40, 75, 135));
         backButton.setForeground(new java.awt.Color(255, 255, 255));
@@ -119,61 +140,52 @@ public class employeeInfo extends javax.swing.JDialog {
                 backButtonActionPerformed(evt);
             }
         });
+        jPanel2.add(backButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 480, 162, 45));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(empContact, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(empRole, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(68, 68, 68)
-                            .addComponent(empName, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(50, 50, 50)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel4)))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGap(69, 69, 69)
-                            .addComponent(empAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(45, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(empName)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(empAddress)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(empRole)
-                .addGap(25, 25, 25)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(empContact)
-                .addGap(18, 18, 18)
-                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
-        );
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel6.setText("DOB:");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, -1, -1));
+
+        transferBranchButton.setText("Transfer Branch");
+        transferBranchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                transferBranchButtonActionPerformed(evt);
+            }
+        });
+        jPanel2.add(transferBranchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 130, 40));
+
+        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel7.setText("Name:");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
+
+        empName.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        empName.setText("Name");
+        jPanel2.add(empName, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 80, 480, -1));
+
+        jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel8.setText("Contact:");
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, -1, -1));
+
+        empContact.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        empContact.setText("Contact");
+        jPanel2.add(empContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 480, -1));
+
+        updateInfoButton.setText("Update Info");
+        jPanel2.add(updateInfoButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 130, 40));
+
+        jLabel9.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel9.setText("Address:");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
+
+        empAddress.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        empAddress.setText("Address");
+        jPanel2.add(empAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 480, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -181,13 +193,13 @@ public class employeeInfo extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(175, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 180, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 389, Short.MAX_VALUE)))
+                    .addGap(0, 556, Short.MAX_VALUE)))
         );
 
         pack();
@@ -196,20 +208,34 @@ public class employeeInfo extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT concat(last_name,', ',first_name,' ', middle_name) as name, contact_num, employee_role, employee_address FROM employee WHERE employee_id = "+employeeID+";";
+        String sql = "SELECT concat(last_name,', ',first_name,' ', middle_name) as name, contact_num, employee_role, employee_address, branch_id, birthdate FROM employee WHERE employee_id = "+employeeID+";";
                 try{
                     PreparedStatement pst = con.prepareStatement(sql);
                     ResultSet rs = pst.executeQuery();
                    
                     while(rs.next()){
+                       empID.setText(employeeID);
                        empName.setText(rs.getString("name"));
                        empAddress.setText(rs.getString("employee_address"));
                        empContact.setText(rs.getString("contact_num"));
                        empRole.setText(rs.getString("employee_role"));
+                       empBdate.setText(rs.getString("birthdate"));
+                       branchID = rs.getString("branch_id");
                     }
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
                 }
+        
+        String getBranchsql = "SELECT branch_name FROM branch WHERE branch_id = " + branchID+";";
+        try{
+            PreparedStatement pst2 = con.prepareStatement(getBranchsql);
+            ResultSet rs2 = pst2.executeQuery();
+            while(rs2.next()){
+                empBranch.setText(rs2.getString("branch_name"));
+            }
+        }catch(Exception ex){
+            System.out.println("Error: " +ex.getMessage());
+        }
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -218,6 +244,28 @@ public class employeeInfo extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
+    private void transferBranchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transferBranchButtonActionPerformed
+        // TODO add your handling code here:
+        transferEmployee transferWindow = new transferEmployee(new javax.swing.JFrame(), true, empName.getText().trim(), empRole.getText().trim(), empBranch.getText().trim(), empID.getText().trim());
+        
+        transferWindow.setVisible(true);
+        
+        transferWindow.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e)
+            {
+              if (!transferWindow.cancelClicked){
+                  exitFrame();
+              }
+            }
+          });
+        
+    }//GEN-LAST:event_transferBranchButtonActionPerformed
+
+    public void exitFrame(){
+        this.dispose();
+    }
+   
     /**
      * @param args the command line arguments
      */
@@ -264,7 +312,10 @@ public class employeeInfo extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
     public javax.swing.JLabel empAddress;
+    public javax.swing.JLabel empBdate;
+    public javax.swing.JLabel empBranch;
     public javax.swing.JLabel empContact;
+    public javax.swing.JLabel empID;
     public javax.swing.JLabel empName;
     public javax.swing.JLabel empRole;
     private javax.swing.JLabel headerlogo;
@@ -272,7 +323,13 @@ public class employeeInfo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton transferBranchButton;
+    private javax.swing.JButton updateInfoButton;
     // End of variables declaration//GEN-END:variables
 }

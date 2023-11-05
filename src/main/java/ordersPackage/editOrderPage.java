@@ -4,7 +4,7 @@
  */
 package ordersPackage;
 import connectionSql.mysqlConnection;
-import customerSearchPackage.customerOrder;
+import searchPackage.customerSearch;
 //import com.uniqclear.uniqclearapp.ordersPackage.orderAdjustments;
 import java.awt.Color;
 import java.awt.Image;
@@ -654,7 +654,7 @@ public class editOrderPage extends javax.swing.JFrame {
     private void searchCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchCustomerActionPerformed
         // TODO add your handling code here:
         
-        customerOrder searchCust = new customerOrder (this,true, "orders");
+        customerSearch searchCust = new customerSearch (this,true, "orders");
         searchCust.setVisible(true);
         searchCust.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)

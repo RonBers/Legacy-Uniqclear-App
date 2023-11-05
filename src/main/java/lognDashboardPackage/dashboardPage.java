@@ -343,7 +343,7 @@ public class dashboardPage extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
+      /*  String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
                 try{
                     DefaultTableModel model = (DefaultTableModel)orderList.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);
@@ -365,7 +365,7 @@ public class dashboardPage extends javax.swing.JFrame {
                         
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
-                }
+                }*/
     }//GEN-LAST:event_formWindowOpened
 
     private void salesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesButtonActionPerformed

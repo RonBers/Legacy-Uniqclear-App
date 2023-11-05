@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -48,6 +49,9 @@ public class employeeProfile extends javax.swing.JFrame {
         deleteEmployee = new javax.swing.JButton();
         home = new javax.swing.JButton();
         searchField = new javax.swing.JTextField();
+        selectBranch = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Employees");
@@ -94,9 +98,16 @@ public class employeeProfile extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(employeeTable);
@@ -143,6 +154,18 @@ public class employeeProfile extends javax.swing.JFrame {
             }
         });
 
+        selectBranch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectBranchActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
+        jLabel1.setText("Select Branch:");
+
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 12)); // NOI18N
+        jLabel2.setText("Search:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -150,18 +173,29 @@ public class employeeProfile extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1023, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(addEmployee)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(viewEmployee)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(deleteEmployee))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1023, Short.MAX_VALUE)
-                    .addComponent(home))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(home))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(selectBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(20, 20, 20))
         );
         jPanel2Layout.setVerticalGroup(
@@ -169,18 +203,24 @@ public class employeeProfile extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
                 .addComponent(home)
+                .addGap(12, 12, 12)
+                .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(2, 2, 2)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
-                .addGap(19, 19, 19)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(deleteEmployee)
                     .addComponent(viewEmployee)
                     .addComponent(addEmployee))
-                .addGap(97, 97, 97))
+                .addGap(43, 43, 43))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -250,8 +290,50 @@ public class employeeProfile extends javax.swing.JFrame {
         }catch(Exception ex){
             System.out.println("Error: "+ex.getMessage());
         }
+        
+        setBranches();
     }//GEN-LAST:event_formWindowOpened
 
+    private void setBranches(){
+        String sql = "SELECT branch_name FROM branch;";
+        DefaultComboBoxModel model = (DefaultComboBoxModel) selectBranch.getModel();
+        //model.removeAllElements();
+
+        /*for (String item : items) {
+            model.addElement(item);
+        }*/
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            
+            while(rs.next()){
+                model.addElement(rs.getString("branch_name"));
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+        }
+
+        // setting model with new data
+        selectBranch.setModel(model);
+        
+        String defaultBranch = "'"+selectBranch.getSelectedItem().toString().trim()+"'";
+        
+        String sql2 = "SELECT branch_id FROM branch WHERE branch_name = "+defaultBranch+";";
+        String branch_id = "";
+        try{
+            PreparedStatement getBranch = con.prepareStatement(sql2);
+            ResultSet set2 = getBranch.executeQuery();
+            while(set2.next()){
+                branch_id = set2.getString("branch_id");
+            }
+        }catch(Exception ex){
+            System.out.println("Error: "+ ex.getMessage());
+        }
+        
+        branchFilterTable(branch_id);
+    }
     private void addEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployeeActionPerformed
         // TODO add your handling code here:
         employeeNew addEmployee = new employeeNew(this,true);
@@ -290,6 +372,49 @@ public class employeeProfile extends javax.swing.JFrame {
         employeeTable.setRowSorter(sorter);
     }//GEN-LAST:event_searchFieldKeyTyped
 
+    private void selectBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectBranchActionPerformed
+       String branch = "'"+selectBranch.getSelectedItem().toString().trim()+"'";
+       
+       String sql = "SELECT branch_id FROM branch WHERE branch_name = "+branch+";";
+       String branchID ="";
+       
+       
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                branchID = rs.getString("branch_id");
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error:" + ex.getMessage());
+        }
+        
+       
+        branchFilterTable(branchID);
+        
+    }//GEN-LAST:event_selectBranchActionPerformed
+
+    private void branchFilterTable(String id){
+        DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
+        
+        model.setRowCount(0);
+        
+        
+        String sql = "SELECT employee_id, concat(last_name,', ',first_name,' ', middle_name), employee_role, contact_num FROM employee WHERE branch_id = "+id+";";
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3), rs.getString(4)});
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+        }
+        
+    }
     /**
      * @param args the command line arguments
      */
@@ -331,11 +456,14 @@ public class employeeProfile extends javax.swing.JFrame {
     private javax.swing.JTable employeeTable;
     private javax.swing.JLabel headerlogo;
     private javax.swing.JButton home;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField searchField;
+    private javax.swing.JComboBox<String> selectBranch;
     private javax.swing.JButton viewEmployee;
     // End of variables declaration//GEN-END:variables
 }

@@ -14,7 +14,9 @@ public class mysqlConnection {
     
     public mysqlConnection(){
         
+
         String url ="jdbc:mysql://localhost/uniqcleardbv9";
+
         String user="root";
         String pass="12345";
         
