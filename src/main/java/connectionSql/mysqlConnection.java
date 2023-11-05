@@ -14,9 +14,11 @@ public class mysqlConnection {
     
     public mysqlConnection(){
         
-        String url ="jdbc:mysql://localhost/uniqcleardb";
+
+        String url ="jdbc:mysql://localhost/uniqcleardbv9";
+
         String user="root";
-        String pass="uniqclearDB";
+        String pass="12345";
         
         try{
             con = DriverManager.getConnection(url,user,pass);
