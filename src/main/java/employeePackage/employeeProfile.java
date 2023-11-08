@@ -246,12 +246,16 @@ public class employeeProfile extends javax.swing.JFrame {
         // TODO add your handling code here:
         //DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
      
-        int idRow = employeeTable.getSelectedRow();
-        String selectedID = employeeTable.getModel().getValueAt(idRow,0).toString();
         
-        employeeInfo viewEmployee = new employeeInfo(this,false);
-        viewEmployee.employeeID = selectedID;
-        viewEmployee.setVisible(true);
+        if (employeeTable.getSelectedRow() > -1){
+            int idRow = employeeTable.getSelectedRow();
+            String selectedID = employeeTable.getModel().getValueAt(idRow,0).toString();
+
+            employeeInfo viewEmployee = new employeeInfo(this,false);
+            viewEmployee.employeeID = selectedID;
+            viewEmployee.setVisible(true);
+        }
+        
         
     }//GEN-LAST:event_viewEmployeeActionPerformed
 
