@@ -384,7 +384,7 @@ public class employeeNew extends javax.swing.JDialog {
             String address = "'" + line1Address.getText() + ", "+barangay.getSelectedItem().toString()+", "+city.getSelectedItem().toString()+", "+province.getSelectedItem().toString()+ "'";
             String branchName = selectBranch.getSelectedItem().toString().trim();
             String branchID ="";
-            String employeeAssignmentDate ="'" +dtf.format(assignmentDate.getDate()) + "'";
+           
       
     
             for(Map.Entry m : branches.entrySet()){    
@@ -406,25 +406,7 @@ public class employeeNew extends javax.swing.JDialog {
                     System.out.println("Error: "+ex.getMessage());
                 }
                 
-                
-               String empID = "(SELECT employee_id FROM employee WHERE last_name = "+lastNameInput+" AND first_name= "+firstNameInput+")";
-                
-               String sqlEmployeeBranch = "INSERT INTO employee_branch_history(employee_id, branch_id, assignment_date) VALUES ("+empID+", "+branchID+", "+employeeAssignmentDate+")";
-                
-               try{
-                    PreparedStatement pst = con.prepareStatement(sqlEmployeeBranch);
-                    pst.executeUpdate();
-                    
-                }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-                }
-                
-                
-                
-                
-                
-                
-                
+          
                 JOptionPane.showMessageDialog(this, "New Employee Added!", "Message", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
                 
