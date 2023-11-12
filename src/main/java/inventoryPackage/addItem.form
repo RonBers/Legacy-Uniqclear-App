@@ -18,11 +18,11 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
-
-
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
-
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -46,9 +46,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-
               <EmptySpace max="32767" attributes="0"/>
-
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -120,18 +118,18 @@
                       <Component id="typeRental" min="-2" pref="100" max="-2" attributes="0"/>
                       <Component id="ItemInformationLabel" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
                       <Component id="nonRentalType" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="ItemInformationLabel2" min="-2" pref="140" max="-2" attributes="0"/>
+                      <Component id="selectBranch" alignment="0" min="-2" pref="170" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="ItemInformationLabel1" alignment="0" min="-2" pref="140" max="-2" attributes="0"/>
-
                       <Component id="NonRentalPanel" alignment="0" min="-2" pref="283" max="-2" attributes="0"/>
                       <Component id="itemNameLabel3" alignment="0" min="-2" pref="69" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                           <Component id="itemAvailability" min="-2" pref="116" max="-2" attributes="0"/>
                       </Group>
-
                   </Group>
                   <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
               </Group>
@@ -152,15 +150,13 @@
                           <Component id="ItemInformationLabel1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                           <Component id="NonRentalPanel" min="-2" max="-2" attributes="0"/>
-
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="itemNameLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="itemAvailability" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="26" max="32767" attributes="0"/>
+                          <EmptySpace pref="36" max="32767" attributes="0"/>
                           <Component id="addItemBTN" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="ItemInformationLabel" min="-2" max="-2" attributes="0"/>
@@ -168,11 +164,13 @@
                           <Component id="typeRental" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="nonRentalType" min="-2" max="-2" attributes="0"/>
-
+                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="ItemInformationLabel2" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="selectBranch" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
-
               </Group>
           </Group>
         </DimensionLayout>
@@ -246,13 +244,11 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addItemBTNActionPerformed"/>
           </Events>
         </Component>
-
         <Component class="javax.swing.JLabel" name="itemNameLabel3">
           <Properties>
             <Property name="text" type="java.lang.String" value="Availability"/>
           </Properties>
         </Component>
-
         <Container class="javax.swing.JPanel" name="NonRentalPanel">
           <Properties>
             <Property name="enabled" type="boolean" value="false"/>
@@ -264,7 +260,6 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="itemNameLabel2" min="-2" pref="79" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
@@ -291,7 +286,6 @@
                               <EmptySpace min="-2" pref="90" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-
                   </Group>
               </Group>
             </DimensionLayout>
@@ -299,7 +293,6 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="itemNameLabel" min="-2" max="-2" attributes="0"/>
@@ -317,7 +310,6 @@
                       <EmptySpace pref="15" max="32767" attributes="0"/>
                       <Component id="itemPrice" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-
                   </Group>
               </Group>
             </DimensionLayout>
@@ -336,7 +328,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemNameActionPerformed"/>
               </Events>
             </Component>
-
             <Component class="javax.swing.JLabel" name="itemNameLabel1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Item quantity"/>
@@ -347,7 +338,6 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
-
             <Component class="javax.swing.JSpinner" name="itemPrice">
               <Properties>
                 <Property name="enabled" type="boolean" value="false"/>
@@ -360,7 +350,6 @@
             </Component>
           </SubComponents>
         </Container>
-
         <Component class="javax.swing.JComboBox" name="itemAvailability">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -377,8 +366,25 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-
         <Component class="javax.swing.JSeparator" name="jSeparator1">
+        </Component>
+        <Component class="javax.swing.JLabel" name="ItemInformationLabel2">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="15" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Select Branch"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="selectBranch">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

@@ -6,6 +6,10 @@ package inventoryPackage;
 import connectionSql.mysqlConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,7 +23,7 @@ public class addItem extends javax.swing.JDialog {
     /**
      * Creates new form addItem
      */
-    
+    public HashMap <String, String> branches = new HashMap<String,String>();
     Connection con = new mysqlConnection().getCon();
     public addItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -57,13 +61,19 @@ public class addItem extends javax.swing.JDialog {
         itemPrice = new javax.swing.JSpinner();
         itemNameLabel2 = new javax.swing.JLabel();
         itemAvailability = new javax.swing.JComboBox<>();
-
         jSeparator1 = new javax.swing.JSeparator();
+        ItemInformationLabel2 = new javax.swing.JLabel();
+        selectBranch = new javax.swing.JComboBox<>();
 
         title1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         title1.setText("Create New Order");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -124,7 +134,6 @@ public class addItem extends javax.swing.JDialog {
             }
         });
 
-
         itemNameLabel3.setText("Availability");
 
         NonRentalPanel.setEnabled(false);
@@ -137,7 +146,6 @@ public class addItem extends javax.swing.JDialog {
                 itemNameActionPerformed(evt);
             }
         });
-
 
         itemNameLabel1.setText("Item quantity");
 
@@ -154,7 +162,6 @@ public class addItem extends javax.swing.JDialog {
             .addGroup(NonRentalPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addComponent(itemNameLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -173,13 +180,11 @@ public class addItem extends javax.swing.JDialog {
                                 .addGap(6, 6, 6)
                                 .addComponent(itemQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(90, 90, 90))))
-
         );
         NonRentalPanelLayout.setVerticalGroup(
             NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(NonRentalPanelLayout.createSequentialGroup()
                 .addContainerGap()
-
                 .addGroup(NonRentalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(NonRentalPanelLayout.createSequentialGroup()
                         .addComponent(itemNameLabel)
@@ -199,6 +204,8 @@ public class addItem extends javax.swing.JDialog {
         itemAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         itemAvailability.setEnabled(false);
 
+        ItemInformationLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        ItemInformationLabel2.setText("Select Branch");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -224,17 +231,17 @@ public class addItem extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(typeRental, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ItemInformationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nonRentalType, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nonRentalType, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ItemInformationLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ItemInformationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                     .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(itemNameLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-
                 .addGap(70, 70, 70))
         );
         jPanel2Layout.setVerticalGroup(
@@ -252,24 +259,24 @@ public class addItem extends javax.swing.JDialog {
                         .addComponent(ItemInformationLabel1)
                         .addGap(12, 12, 12)
                         .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                         .addGap(18, 18, 18)
                         .addComponent(itemNameLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                         .addComponent(addItemBTN)
                         .addGap(32, 32, 32))
-
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(ItemInformationLabel)
                         .addGap(18, 18, 18)
                         .addComponent(typeRental)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-
                         .addComponent(nonRentalType)
+                        .addGap(31, 31, 31)
+                        .addComponent(ItemInformationLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(selectBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -283,16 +290,12 @@ public class addItem extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
-
         setLocationRelativeTo(null);
-
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -308,37 +311,24 @@ public class addItem extends javax.swing.JDialog {
         // Getting the VALUES
 
         String nameItem ="'"+itemName.getText()+"'";
-        String quantItem ="'"+itemQuantity.getValue().toString()+"'";
-        String priceItem ="'"+itemPrice.getValue().toString()+"'";
+        String branchName = selectBranch.getSelectedItem().toString().trim();
+        String branchId = branches.get(branchName);
+        String iPrice = itemPrice.getValue().toString();
+        String sql = "";
         
-        String sql = "INSERT INTO item (item_name,item_price,branch_id) values (" +nameItem +", "+priceItem+",3);";
+        if (typeRental.isSelected()){
+            sql = "INSERT INTO rental_item (rental_item_name, branch_id) VALUES ("+nameItem+", "+branchId+");";
+        }else if (nonRentalType.isSelected()){
+            sql = "INSERT INTO non_rental_item(non_rental_item_name, non_rental_item_price, branch_id) VALUES ("+nameItem+", "+iPrice+", "+branchId+");";
+        }
+        
         try{
             PreparedStatement pst = con.prepareStatement(sql);
             pst.executeUpdate();
-        }catch(Exception e){
-            System.out.println("Error: "+e.getMessage());
+        }catch(Exception ex){
+            System.out.println("Error: "+ ex.getMessage());
         }
-        
-        String sql2= "";
-        int min = 50; // Minimum value of range
-        int max = 100; // Maximum value of range
-        int random_int = (int)Math.floor(Math.random() * (max - min + 1) + min);
-        String iCode = "'"+random_int+"'";
-        
-        
-        if (typeRental.isSelected()){
-            sql2= "INSERT INTO rental_item (item_code, item_id) VALUES ("+iCode+", (SELECT item_id FROM item WHERE item_name = "+nameItem+"));";
-        }else{
-            sql2 = "INSERT INTO non_rental_item VALUES ((SELECT item_id FROM item WHERE item_name = "+nameItem+"), "+quantItem+");";
-        }
-        
-        try{    
-            PreparedStatement pst = con.prepareStatement(sql2);
-            pst.executeUpdate();
-        }catch(Exception e){
-            System.out.println("Error: "+e.getMessage());
-        }
-            
+       JOptionPane.showMessageDialog(this,"Added new Item!","Update", JOptionPane.INFORMATION_MESSAGE);
        this.dispose();
 
     }//GEN-LAST:event_addItemBTNActionPerformed
@@ -364,6 +354,29 @@ public class addItem extends javax.swing.JDialog {
 
         }
     }//GEN-LAST:event_nonRentalTypeActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        String sql = "SELECT branch_name, branch_id FROM branch";
+       
+        DefaultComboBoxModel model = (DefaultComboBoxModel) selectBranch.getModel();
+        
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                String tempName = rs.getString("branch_name");
+                model.addElement(tempName);
+                branches.put(tempName, rs.getString("branch_id"));
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ ex.getMessage());
+        }
+       
+        selectBranch.setModel(model);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -410,10 +423,10 @@ public class addItem extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ItemInformationLabel;
     private javax.swing.JLabel ItemInformationLabel1;
+    private javax.swing.JLabel ItemInformationLabel2;
     private javax.swing.JPanel NonRentalPanel;
     private javax.swing.JButton addItemBTN;
     private javax.swing.ButtonGroup buttonGroup1;
-
     private javax.swing.JComboBox<String> itemAvailability;
     private javax.swing.JTextField itemName;
     private javax.swing.JLabel itemNameLabel;
@@ -422,13 +435,13 @@ public class addItem extends javax.swing.JDialog {
     private javax.swing.JLabel itemNameLabel3;
     private javax.swing.JSpinner itemPrice;
     private javax.swing.JSpinner itemQuantity;
-
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JRadioButton nonRentalType;
+    private javax.swing.JComboBox<String> selectBranch;
     private javax.swing.JLabel title1;
     private javax.swing.JLabel title2;
     private javax.swing.JRadioButton typeRental;

@@ -12,10 +12,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 import java.util.Enumeration;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -34,10 +35,11 @@ DefaultTableModel model;
     /**
      * Creates new form actualnewCustomer
      */
-    
+    public HashMap<String, String> branches = new HashMap<String,String>();
     public createCustomerPage(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+       
     }
   
     /**
@@ -67,7 +69,7 @@ DefaultTableModel model;
         jLabel13 = new javax.swing.JLabel();
         contactNumber = new javax.swing.JTextField();
         addCustomer = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        addContractButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -83,11 +85,18 @@ DefaultTableModel model;
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         line1Address = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        selectBranch = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Customer");
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel7.setText("House no./Purok/Street");
 
@@ -110,6 +119,11 @@ DefaultTableModel model;
         });
 
         customerType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Regular", "Contract", "Dealer" }));
+        customerType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerTypeActionPerformed(evt);
+            }
+        });
 
         middleName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,7 +159,8 @@ DefaultTableModel model;
             }
         });
 
-        jButton2.setText("Add Contract");
+        addContractButton.setText("Add Contract");
+        addContractButton.setEnabled(false);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Customer Name:");
@@ -208,21 +223,18 @@ DefaultTableModel model;
         jLabel15.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jLabel15.setText("Sex:");
 
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel16.setText("Select Branch:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 745, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(addCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cancelCreateC, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46))
             .addGroup(layout.createSequentialGroup()
                 .addGap(67, 67, 67)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
+                    .addComponent(addContractButton)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -281,6 +293,16 @@ DefaultTableModel model;
                         .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel12))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cancelCreateC, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectBranch, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,12 +355,16 @@ DefaultTableModel model;
                     .addComponent(maleOption)
                     .addComponent(femaleOption)
                     .addComponent(othersOption))
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(customerType, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(customerType, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(addContractButton)
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -379,14 +405,15 @@ DefaultTableModel model;
             SimpleDateFormat bdate = new SimpleDateFormat("yyyy-MM-dd");
             String custBdate ="'" +bdate.format(custBirthDate.getDate()) + "'";
             String address = "'" + line1Address.getText() + ", "+barangay.getSelectedItem().toString()+", "+city.getSelectedItem().toString()+", "+province.getSelectedItem().toString()+ "'";
+            String selectedBranch = selectBranch.getSelectedItem().toString().trim();
+            String branchId =  branches.get(selectedBranch);
             
            
-        //Connection to database
 
         if (lastNameInput == null || firstNameInput == null || middleNameInput == null|| contactN== null){
             JOptionPane.showMessageDialog(this,"Please input necessary details!","Warning", JOptionPane.INFORMATION_MESSAGE);
         }else{
-            String sql = "INSERT INTO customer(first_name,middle_name,last_name,contact_num, customer_type, sex, branch_id, birthdate, customer_address) VALUES("+firstNameInput+","+middleNameInput+","+lastNameInput+","+contactN+","+cType+", "+custSex+", 3," +custBdate+","+address+");";
+            String sql = "INSERT INTO customer(first_name,middle_name,last_name,contact_num, customer_type, sex, branch_id, birthdate, customer_address) VALUES("+firstNameInput+","+middleNameInput+","+lastNameInput+","+contactN+","+cType+", "+custSex+"," +branchId+" ," +custBdate+","+address+");";
             try{
                 PreparedStatement pst = con.prepareStatement(sql);
                 pst.executeUpdate();
@@ -404,6 +431,44 @@ DefaultTableModel model;
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_cancelCreateCActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        setBranches();
+    
+    }//GEN-LAST:event_formWindowOpened
+
+    private void customerTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerTypeActionPerformed
+        // TODO add your handling code here:
+        String type = customerType.getSelectedItem().toString().trim();
+        if (type.equalsIgnoreCase("contract")){
+            addContractButton.setEnabled(true);
+        }
+    }//GEN-LAST:event_customerTypeActionPerformed
+    
+    private void setBranches(){
+        String sql = "SELECT branch_name,branch_id FROM branch;";
+        DefaultComboBoxModel model = (DefaultComboBoxModel) selectBranch.getModel();
+        
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            
+            while(rs.next()){
+                String tempName = rs.getString("branch_name");
+                model.addElement(tempName);
+                branches.put(tempName, rs.getString("branch_id"));
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+        }
+        
+        selectBranch.setModel(model);
+       
+    }
+    
     public boolean correctInput(){
         boolean valid = false;
         
@@ -470,6 +535,7 @@ DefaultTableModel model;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addContractButton;
     private javax.swing.JButton addCustomer;
     private javax.swing.JComboBox<String> barangay;
     private javax.swing.ButtonGroup buttonGroup3;
@@ -481,13 +547,13 @@ DefaultTableModel model;
     private javax.swing.JRadioButton femaleOption;
     private javax.swing.JTextField firstName;
     private javax.swing.JLabel headerlogo;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -504,5 +570,6 @@ DefaultTableModel model;
     private javax.swing.JTextField middleName;
     private javax.swing.JRadioButton othersOption;
     private javax.swing.JComboBox<String> province;
+    private javax.swing.JComboBox<String> selectBranch;
     // End of variables declaration//GEN-END:variables
 }

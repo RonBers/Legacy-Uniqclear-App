@@ -61,6 +61,7 @@ public class inventory extends javax.swing.JFrame {
         editNonRentalItem = new javax.swing.JButton();
         editRentalItem = new javax.swing.JButton();
         delRentalItem = new javax.swing.JButton();
+        rentalDispenserButton = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         headerlogo = new javax.swing.JLabel();
 
@@ -176,6 +177,13 @@ public class inventory extends javax.swing.JFrame {
         delRentalItem.setForeground(new java.awt.Color(255, 255, 255));
         delRentalItem.setText("Delete");
 
+        rentalDispenserButton.setText("Dispenser");
+        rentalDispenserButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rentalDispenserButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -183,7 +191,6 @@ public class inventory extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-
                         .addGap(6, 6, 6)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -197,7 +204,8 @@ public class inventory extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(addItemBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rentalDispenserButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -215,7 +223,6 @@ public class inventory extends javax.swing.JFrame {
                         .addComponent(editRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(delRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jScrollPane3)))
@@ -232,30 +239,31 @@ public class inventory extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jLabel3))
+                            .addComponent(editNonRentalItem)
+                            .addComponent(delNonRentalItem))
+                        .addGap(6, 6, 6))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                         .addGap(6, 6, 6)
                         .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)))
-                .addGap(1, 1, 1)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jLabel3))
-                    .addComponent(editNonRentalItem)
-                    .addComponent(delNonRentalItem))
-                .addGap(6, 6, 6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rentalDispenserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)))
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(delRentalItem)
                     .addComponent(editRentalItem))
                 .addGap(14, 14, 14))
-
         );
 
         jScrollPane1.setViewportView(jPanel1);
@@ -322,32 +330,7 @@ public class inventory extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     public void itemsList(){
-        String sql = "SELECT item.item_id, item_name, non_rental_item.item_quantity, item_price FROM item JOIN non_rental_item WHERE item.item_id = non_rental_item.item_id;";
-        DefaultTableModel nonRental = (DefaultTableModel)nonRentalTable.getModel();
-        nonRental.setRowCount(0);
- 
-            try{
-                PreparedStatement pst = con.prepareStatement(sql);
-                ResultSet rs = pst.executeQuery();
-                while(rs.next()){
-                 nonRental.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});}
-            }catch(Exception ex){
-                 System.out.println("Error: "+ ex.getMessage());
-            }
-            
-            
-        String sql2 = "SELECT rental_item.item_code, item_name, rental_item.item_availability, rental_item.item_condition FROM item JOIN rental_item WHERE item.item_id = rental_item.item_id;";
-        DefaultTableModel rental = (DefaultTableModel)rentalTable.getModel();
-        rental.setRowCount(0);
-            try{
-                PreparedStatement pst = con.prepareStatement(sql2);
-                ResultSet rs = pst.executeQuery();
-                while(rs.next()){
-                 rental.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)});}
-            }catch(Exception ex){
-                 System.out.println("Error: "+ ex.getMessage());
-            }
-        
+   
        alignValues();
     }
     
@@ -363,28 +346,6 @@ public class inventory extends javax.swing.JFrame {
 
     private void delNonRentalItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delNonRentalItemActionPerformed
         // TODO add your handling code here:
-         DefaultTableModel model = (DefaultTableModel)nonRentalTable.getModel();
-        int idColumn = 0;
-        int idRow = nonRentalTable.getSelectedRow();
-        String selectedID = nonRentalTable.getModel().getValueAt(idRow,idColumn).toString();
-        String sql = "DELETE FROM non_rental_item WHERE item_id='"+selectedID + "';"; 
-        String sql2 = "DELETE FROM item WHERE item_id='"+selectedID +"';";
-        try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.executeUpdate();
-            
-            PreparedStatement pst2 = con.prepareStatement(sql2);
-            pst2.executeUpdate();
-            
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }
-        
-        if (nonRentalTable.getSelectedRow() != -1) {
-            // remove selected row from the model
-            model.removeRow(nonRentalTable.getSelectedRow());
-        }
-
         
     }//GEN-LAST:event_delNonRentalItemActionPerformed
 
@@ -461,6 +422,14 @@ public class inventory extends javax.swing.JFrame {
         editRental.setVisible(true);
     }//GEN-LAST:event_editNonRentalItemActionPerformed
 
+    private void rentalDispenserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentalDispenserButtonActionPerformed
+        // TODO add your handling code here:
+        rentDispenser rentDispenser = new rentDispenser(new javax.swing.JFrame(), true);
+        
+        rentDispenser.setVisible(true);
+        
+    }//GEN-LAST:event_rentalDispenserButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -498,12 +467,10 @@ public class inventory extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addItemBTN;
-
     private javax.swing.JButton delNonRentalItem;
     private javax.swing.JButton delRentalItem;
     private javax.swing.JButton editNonRentalItem;
     private javax.swing.JButton editRentalItem;
-
     private javax.swing.JLabel headerlogo;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -517,6 +484,7 @@ public class inventory extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel logo;
     private javax.swing.JTable nonRentalTable;
+    private javax.swing.JButton rentalDispenserButton;
     private javax.swing.JTable rentalTable;
     // End of variables declaration//GEN-END:variables
 }
