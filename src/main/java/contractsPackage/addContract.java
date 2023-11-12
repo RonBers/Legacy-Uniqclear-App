@@ -350,7 +350,7 @@ public class addContract extends javax.swing.JFrame {
                     pst.executeUpdate();
                } else if (typeDealerContract.isSelected()) {
                         // Dealer: Minimum refills, discount
-                        String sql = "INSERT INTO dealer_contract (customer_id, dealer_contract_link, contract_date, discount_rate) VALUES(" + customerID + ", " + conLink + "," + conDate + "," + dscount + ");";
+                        String sql = "INSERT INTO dealer_contract (customer_id, dealer_contract_link, contract_date, discount_rate) VALUES(" + customerID + ", " + conLink + "," + conDate + "," + discount + ");";
                         System.out.println("Dealer is selected");
                         System.out.println(minimumRefills + ", " + conLink);
                         PreparedStatement pst = con.prepareStatement(sql);
