@@ -171,6 +171,11 @@ public class employeeInfo extends javax.swing.JDialog {
         jPanel2.add(empContact, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 480, -1));
 
         updateInfoButton.setText("Update Info");
+        updateInfoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateInfoButtonActionPerformed(evt);
+            }
+        });
         jPanel2.add(updateInfoButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 130, 40));
 
         jLabel9.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
@@ -261,6 +266,13 @@ public class employeeInfo extends javax.swing.JDialog {
           });
         
     }//GEN-LAST:event_transferBranchButtonActionPerformed
+
+    private void updateInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateInfoButtonActionPerformed
+        // TODO add your handling code here:
+        updateEmployeeInfo updateInfo = new updateEmployeeInfo(new javax.swing.JFrame(), true, this.employeeID);
+        
+        updateInfo.setVisible(true);
+    }//GEN-LAST:event_updateInfoButtonActionPerformed
 
     public void exitFrame(){
         this.dispose();

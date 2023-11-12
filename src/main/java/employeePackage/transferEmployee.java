@@ -6,6 +6,8 @@ package employeePackage;
 import connectionSql.mysqlConnection;
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.swing.*;
 /**
@@ -296,18 +298,46 @@ public class transferEmployee extends javax.swing.JDialog {
         }catch (Exception ex){
             System.out.println("Error: "+ ex.getMessage());
         }
-        
         SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd");
-        String date ="'" +dtf.format(assignmentDate.getDate()) + "'";
         
-        String addToEmployeeHistory = "INSERT INTO employee_branch_history (employee_id, branch_id, assignment_date) VALUES ("+empID+", "+branchID+","+date+");";
-       
+        DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+        
+        LocalDate today = LocalDate.now();
+        
+        String dateInHistory = "'"+dtf3.format(today)+"'";
+        String sqlHistoryRecord = "SELECT employee_branch_id, employee_id, branch_id FROM employee_branch_history WHERE assignment_date = " +dateInHistory+" AND employee_id = "+empID+";";
+        String currentHistoryRecord[] = new String[3];
+        
         try{
-            PreparedStatement pst2 = con.prepareStatement(addToEmployeeHistory);
-            pst2.executeUpdate(); 
+            PreparedStatement pst = con.prepareStatement(sqlHistoryRecord);
+            ResultSet rs = pst.executeQuery();
+            
+           
+            while(rs.next()){
+                currentHistoryRecord[0] = rs.getString("employee_branch_id");
+                currentHistoryRecord[1] = rs.getString("employee_id");
+                currentHistoryRecord[2] = rs.getString("branch_id");
+            }
         }catch(Exception ex){
-            System.out.println("Error: "+ ex.getMessage());
+            System.out.println("Error:" + ex.getMessage());
         }
+        
+        
+        if (assignmentDate.getDate() != null){
+            
+            String date ="'" +dtf.format(assignmentDate.getDate()) + "'";
+            
+            String addToEmployeeHistory = "UPDATE employee_branch_history SET assignment_date =  "+date+" WHERE employee_branch_id = "+currentHistoryRecord[0]+";";
+      
+           
+            try{
+                PreparedStatement pst2 = con.prepareStatement(addToEmployeeHistory);
+                pst2.executeUpdate(); 
+            }catch(Exception ex){
+                System.out.println("Error: "+ ex.getMessage());
+            }
+        }
+       
         this.dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
 

@@ -246,12 +246,24 @@ public class employeeProfile extends javax.swing.JFrame {
         // TODO add your handling code here:
         //DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
      
-        int idRow = employeeTable.getSelectedRow();
-        String selectedID = employeeTable.getModel().getValueAt(idRow,0).toString();
         
-        employeeInfo viewEmployee = new employeeInfo(this,false);
-        viewEmployee.employeeID = selectedID;
-        viewEmployee.setVisible(true);
+        if (employeeTable.getSelectedRow() > -1){
+            int idRow = employeeTable.getSelectedRow();
+            String selectedID = employeeTable.getModel().getValueAt(idRow,0).toString();
+
+            employeeInfo viewEmployee = new employeeInfo(this,false);
+            viewEmployee.employeeID = selectedID;
+            viewEmployee.setVisible(true);
+            
+            viewEmployee.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e)
+            {
+             loadBranch();
+            }
+          });
+        }
+        
         
     }//GEN-LAST:event_viewEmployeeActionPerformed
 
@@ -274,34 +286,20 @@ public class employeeProfile extends javax.swing.JFrame {
             // remove selected row from the model
             model.removeRow(employeeTable.getSelectedRow());
         }
+        
     }//GEN-LAST:event_deleteEmployeeActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-        String sql = "SELECT employee_id, concat(last_name,', ',first_name,' ', middle_name), employee_role, contact_num FROM employee";
-        try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
-            
-            while(rs.next()){
-                model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3), rs.getString(4)});
-            }
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }
+        // TODO add your handling code here:     
         
         setBranches();
+        loadBranch();
     }//GEN-LAST:event_formWindowOpened
 
+   
     private void setBranches(){
         String sql = "SELECT branch_name FROM branch;";
         DefaultComboBoxModel model = (DefaultComboBoxModel) selectBranch.getModel();
-        //model.removeAllElements();
-
-        /*for (String item : items) {
-            model.addElement(item);
-        }*/
         
         try{
             PreparedStatement pst = con.prepareStatement(sql);
@@ -314,9 +312,13 @@ public class employeeProfile extends javax.swing.JFrame {
         }catch(Exception ex){
             System.out.println("Error: "+ex.getMessage());
         }
-
-        // setting model with new data
+        
         selectBranch.setModel(model);
+        // setting model with new data
+       loadBranch();
+    }
+    
+    private void loadBranch(){
         
         String defaultBranch = "'"+selectBranch.getSelectedItem().toString().trim()+"'";
         
@@ -342,19 +344,7 @@ public class employeeProfile extends javax.swing.JFrame {
             @Override
             public void windowClosed(WindowEvent e)
             {
-             String sql = "SELECT employee_id, concat(last_name,', ',first_name,' ', middle_name), employee_role, contact_num FROM employee";
-                try{
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    ResultSet rs = pst.executeQuery();
-                    DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
-                    model.setRowCount(0);
-
-                    while(rs.next()){
-                        model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3), rs.getString(4)});
-                    }
-                }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-                }
+             loadBranch();
             }
           });
         
@@ -399,8 +389,6 @@ public class employeeProfile extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel)employeeTable.getModel();
         
         model.setRowCount(0);
-        
-        
         String sql = "SELECT employee_id, concat(last_name,', ',first_name,' ', middle_name), employee_role, contact_num FROM employee WHERE branch_id = "+id+";";
         
         try{
