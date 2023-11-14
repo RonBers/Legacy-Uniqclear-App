@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package contractsPackage;
 
@@ -16,17 +16,17 @@ import searchPackage.customerSearch;
 
 /**
  *
- * @author User
+ * @author ronjoshual.bersabal
  */
-public class addContract extends javax.swing.JFrame {
+public class addContract extends javax.swing.JDialog {
 
     /**
-     * Creates new form addContract
+     * Creates new form tempAdd
      */
     Connection con = new mysqlConnection().getCon();
     public String customerID;
-    public addContract() {
-        
+    public addContract(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
@@ -39,105 +39,42 @@ public class addContract extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        header = new javax.swing.JLabel();
-        selectCustomer = new javax.swing.JButton();
-        customerName = new javax.swing.JTextField();
+        ContractTypeLabel = new javax.swing.JLabel();
         contractLink = new javax.swing.JTextField();
+        addFee = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
+        discount = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
+        addContract = new javax.swing.JButton();
         contractDate = new com.toedter.calendar.JDateChooser();
+        backButton = new javax.swing.JButton();
         ContractTypeLabel1 = new javax.swing.JLabel();
         typeRentalContract = new javax.swing.JRadioButton();
         typeDealerContract = new javax.swing.JRadioButton();
+        jPanel1 = new javax.swing.JPanel();
+        header = new javax.swing.JLabel();
         ContractTypeLabel2 = new javax.swing.JLabel();
         minRefills = new javax.swing.JSpinner();
+        selectCustomer = new javax.swing.JButton();
         ContractTypeLabel3 = new javax.swing.JLabel();
-        ContractTypeLabel = new javax.swing.JLabel();
-        addFee = new javax.swing.JSpinner();
-        discount = new javax.swing.JSpinner();
-        addContract = new javax.swing.JButton();
-        backButton = new javax.swing.JButton();
+        customerName = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel1.setPreferredSize(new java.awt.Dimension(310, 100));
-
-        header.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo(header).png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(header)
-                .addGap(0, 61, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(header)
-                .addGap(0, 6, Short.MAX_VALUE))
-        );
-
-        selectCustomer.setBackground(new java.awt.Color(40, 75, 135));
-        selectCustomer.setForeground(new java.awt.Color(255, 255, 255));
-        selectCustomer.setText("Select Customer");
-        selectCustomer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectCustomerActionPerformed(evt);
-            }
-        });
-
-        customerName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customerNameActionPerformed(evt);
-            }
-        });
-
-        contractLink.setMaximumSize(new java.awt.Dimension(68, 26));
-
-        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel2.setText("Contract Link:");
-
-        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel5.setText("Date:");
-
-        ContractTypeLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        ContractTypeLabel1.setText("Contract Type");
-
-        buttonGroup1.add(typeRentalContract);
-        typeRentalContract.setText("Rental");
-        typeRentalContract.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                typeRentalContractActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(typeDealerContract);
-        typeDealerContract.setText("Dealer");
-        typeDealerContract.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                typeDealerContractActionPerformed(evt);
-            }
-        });
-
-        ContractTypeLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        ContractTypeLabel2.setText("Minimum refills");
-
-        minRefills.setEnabled(false);
-
-        ContractTypeLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        ContractTypeLabel3.setText("Discount rate");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         ContractTypeLabel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         ContractTypeLabel.setText("Additional fee");
 
+        contractLink.setMaximumSize(new java.awt.Dimension(68, 26));
+
         addFee.setEnabled(false);
 
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel2.setText("Contract Link:");
+
         discount.setEnabled(false);
+
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel5.setText("Date:");
 
         addContract.setBackground(new java.awt.Color(40, 75, 135));
         addContract.setForeground(new java.awt.Color(255, 255, 255));
@@ -157,17 +94,71 @@ public class addContract extends javax.swing.JFrame {
             }
         });
 
+        ContractTypeLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        ContractTypeLabel1.setText("Contract Type");
+
+        typeRentalContract.setText("Rental");
+        typeRentalContract.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeRentalContractActionPerformed(evt);
+            }
+        });
+
+        typeDealerContract.setText("Dealer");
+        typeDealerContract.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeDealerContractActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel1.setPreferredSize(new java.awt.Dimension(310, 100));
+
+        header.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo(header).png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(header)
+                .addGap(0, 78, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(header)
+                .addGap(0, 6, Short.MAX_VALUE))
+        );
+
+        ContractTypeLabel2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        ContractTypeLabel2.setText("Minimum refills");
+
+        minRefills.setEnabled(false);
+
+        selectCustomer.setBackground(new java.awt.Color(40, 75, 135));
+        selectCustomer.setForeground(new java.awt.Color(255, 255, 255));
+        selectCustomer.setText("Select Customer");
+        selectCustomer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectCustomerActionPerformed(evt);
+            }
+        });
+
+        ContractTypeLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        ContractTypeLabel3.setText("Discount rate");
+
+        customerName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerNameActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 613, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,14 +170,11 @@ public class addContract extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(typeRentalContract, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(typeDealerContract, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(ContractTypeLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(6, 6, 6)
+                                .addComponent(typeRentalContract, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(typeDealerContract, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(ContractTypeLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(37, 37, 37)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,8 +186,8 @@ public class addContract extends javax.swing.JFrame {
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(6, 6, 6)
                                                 .addComponent(addFee, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(minRefills, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(minRefills, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
@@ -213,6 +201,12 @@ public class addContract extends javax.swing.JFrame {
                             .addComponent(contractLink, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(contractDate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,46 +244,75 @@ public class addContract extends javax.swing.JFrame {
                 .addComponent(ContractTypeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(addFee, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void selectCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCustomerActionPerformed
+    private void addContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractActionPerformed
         // TODO add your handling code here:
-        customerSearch selectCustomer = new customerSearch(new contractRecords(), true,"contracts");
-        selectCustomer.setVisible(true);
-        selectCustomer.addWindowListener(new WindowAdapter(){
-         public void windowClosed(WindowEvent e)
-            {
-            customerID = "'"+selectCustomer.custID+"'";
-            String sql = "SELECT concat(last_name,', ',first_name,' ',middle_name) as name FROM customer WHERE customer_id ="+customerID+";";
-            String custName= " ";
-            try{
-                PreparedStatement pst = con.prepareStatement(sql);
-                //pst.executeUpdate();
-                ResultSet rs = pst.executeQuery();
-                
-                while(rs.next()){
-                   custName = rs.getString("name");
-                }
-            }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-            }
-             customerName.setText(custName);
-            }
-        
-        });
-    }//GEN-LAST:event_selectCustomerActionPerformed
+        //String conLink = "'"+contractLink.getText()+"'";
 
-    private void customerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerNameActionPerformed
+        String conLink = "'"+contractLink.getText()+"'";
+        SimpleDateFormat cDate = new SimpleDateFormat("yyyy-MM-dd");
+        String conDate = (contractDate.getDate() != null) ? cDate.format(contractDate.getDate()):null;
+        int additionalFee = (int) addFee.getValue();
+        int minimumRefills = (int) minRefills.getValue();
+        int dscount = (int) discount.getValue();
+
+        String conLinkCheck = "^(https?:\\/\\/)?(drive|docs)\\.google\\.com\\/(?:file\\/d\\/|open\\?id=|forms\\/d\\/e\\/)[a-zA-Z0-9_-]+.*";
+
+        boolean isValid=true;
+        if(customerName.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this,"Please select an existing customer!","Warning", JOptionPane.INFORMATION_MESSAGE);
+            isValid=false;
+        }
+        if(!contractLink.getText().matches(conLinkCheck) || contractLink.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this,"Please input a valid link!","Warning", JOptionPane.INFORMATION_MESSAGE);
+            isValid=false;
+        }
+        if (conDate==null){
+            JOptionPane.showMessageDialog(this,"Please input date!","Warning", JOptionPane.INFORMATION_MESSAGE);
+            isValid=false;
+        }else{
+            conDate ="'" +cDate.format(contractDate.getDate()) + "'";
+        }
+        // For as long as isValid is false, it will never add to the database
+        if(isValid){
+            try {
+                if (typeRentalContract.isSelected()) {
+                    // Rental: Rented items, additional fee
+                    String sql = "INSERT INTO rental_contract (customer_id, rental_contract_link, rental_contract_date, minimum_refills, additional_fee) VALUES(" + customerID + ", " + conLink + "," + conDate + "," + minimumRefills + "," + additionalFee + ");";
+                    System.out.println("Rental is selected");
+                    System.out.println(additionalFee + ", " + conLink);
+                    PreparedStatement pst = con.prepareStatement(sql);
+                    pst.executeUpdate();
+                } else if (typeDealerContract.isSelected()) {
+                    // Dealer: Minimum refills, discount
+                    String sql = "INSERT INTO dealer_contract (customer_id, dealer_contract_link, contract_date, discount_rate) VALUES(" + customerID + ", " + conLink + "," + conDate + "," + discount + ");";
+                    System.out.println("Dealer is selected");
+                    System.out.println(minimumRefills + ", " + conLink);
+                    PreparedStatement pst = con.prepareStatement(sql);
+                    pst.executeUpdate();
+                }
+                JOptionPane.showMessageDialog(this, "New Contract Added!", "Message", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+            } catch (Exception ex) {
+                System.out.println("Error: " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_addContractActionPerformed
+
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_customerNameActionPerformed
+
+    }//GEN-LAST:event_backButtonActionPerformed
 
     private void typeRentalContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeRentalContractActionPerformed
         // TODO add your handling code here:
@@ -309,65 +332,36 @@ public class addContract extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_typeDealerContractActionPerformed
 
-    private void addContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractActionPerformed
+    private void selectCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectCustomerActionPerformed
         // TODO add your handling code here:
-        //String conLink = "'"+contractLink.getText()+"'";
-        
-        String conLink = "'"+contractLink.getText()+"'";
-        SimpleDateFormat cDate = new SimpleDateFormat("yyyy-MM-dd");
-        String conDate = (contractDate.getDate() != null) ? cDate.format(contractDate.getDate()):null;
-        int additionalFee = (int) addFee.getValue();
-        int minimumRefills = (int) minRefills.getValue();
-        int dscount = (int) discount.getValue();
-        
-        
-        String conLinkCheck = "^(https?:\\/\\/)?(drive|docs)\\.google\\.com\\/(?:file\\/d\\/|open\\?id=|forms\\/d\\/e\\/)[a-zA-Z0-9_-]+.*";
-        
-        boolean isValid=true;
-        if(customerName.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this,"Please select an existing customer!","Warning", JOptionPane.INFORMATION_MESSAGE);
-                    isValid=false;
-        }
-        if(!contractLink.getText().matches(conLinkCheck) || contractLink.getText().isEmpty()){
-                JOptionPane.showMessageDialog(this,"Please input a valid link!","Warning", JOptionPane.INFORMATION_MESSAGE);
-                    isValid=false;
-            }
-        if (conDate==null){
-                JOptionPane.showMessageDialog(this,"Please input date!","Warning", JOptionPane.INFORMATION_MESSAGE);
-                    isValid=false;
-            }else{
-                conDate ="'" +cDate.format(contractDate.getDate()) + "'";
-            }
-            // For as long as isValid is false, it will never add to the database
-            if(isValid){ 
-            try {   
-                if (typeRentalContract.isSelected()) {
-                    // Rental: Rented items, additional fee
-                    String sql = "INSERT INTO rental_contract (customer_id, rental_contract_link, rental_contract_date, minimum_refills, additional_fee) VALUES(" + customerID + ", " + conLink + "," + conDate + "," + minimumRefills + "," + additionalFee + ");";
-                    System.out.println("Rental is selected");
-                    System.out.println(additionalFee + ", " + conLink);
+        customerSearch selectCustomer = new customerSearch(new contractRecords(), true,"contracts");
+        selectCustomer.setVisible(true);
+        selectCustomer.addWindowListener(new WindowAdapter(){
+            public void windowClosed(WindowEvent e)
+            {
+                customerID = "'"+selectCustomer.custID+"'";
+                String sql = "SELECT concat(last_name,', ',first_name,' ',middle_name) as name FROM customer WHERE customer_id ="+customerID+";";
+                String custName= " ";
+                try{
                     PreparedStatement pst = con.prepareStatement(sql);
-                    pst.executeUpdate();
-               } else if (typeDealerContract.isSelected()) {
-                        // Dealer: Minimum refills, discount
-                        String sql = "INSERT INTO dealer_contract (customer_id, dealer_contract_link, contract_date, discount_rate) VALUES(" + customerID + ", " + conLink + "," + conDate + "," + discount + ");";
-                        System.out.println("Dealer is selected");
-                        System.out.println(minimumRefills + ", " + conLink);
-                        PreparedStatement pst = con.prepareStatement(sql);
-                        pst.executeUpdate();
-                    }
-                    JOptionPane.showMessageDialog(this, "New Contract Added!", "Message", JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                    } catch (Exception ex) {
-                    System.out.println("Error: " + ex.getMessage());
-    }
-            }
-    }//GEN-LAST:event_addContractActionPerformed
+                    //pst.executeUpdate();
+                    ResultSet rs = pst.executeQuery();
 
-    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+                    while(rs.next()){
+                        custName = rs.getString("name");
+                    }
+                }catch(Exception ex){
+                    System.out.println("Error: "+ex.getMessage());
+                }
+                customerName.setText(custName);
+            }
+
+        });
+    }//GEN-LAST:event_selectCustomerActionPerformed
+
+    private void customerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerNameActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_backButtonActionPerformed
+    }//GEN-LAST:event_customerNameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -396,10 +390,17 @@ public class addContract extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new addContract().setVisible(true);
+                addContract dialog = new addContract(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
@@ -412,7 +413,6 @@ public class addContract extends javax.swing.JFrame {
     private javax.swing.JButton addContract;
     private javax.swing.JSpinner addFee;
     private javax.swing.JButton backButton;
-    private javax.swing.ButtonGroup buttonGroup1;
     private com.toedter.calendar.JDateChooser contractDate;
     private javax.swing.JTextField contractLink;
     private javax.swing.JTextField customerName;

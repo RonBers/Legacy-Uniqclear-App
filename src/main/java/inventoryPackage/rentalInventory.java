@@ -42,7 +42,15 @@ public class rentalInventory extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         itemsTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        rentOutButton = new javax.swing.JButton();
+        homeButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        returnItemButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        availabilityFilter = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -91,41 +99,121 @@ public class rentalInventory extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(itemsTable);
-
-        jButton1.setText("Add New Item");
-
-        jButton2.setText("Rent out");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        itemsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemsTableMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(itemsTable);
+
+        jButton1.setBackground(new java.awt.Color(40, 75, 135));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Add New Item");
+
+        rentOutButton.setText("Rent Item");
+        rentOutButton.setEnabled(false);
+        rentOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rentOutButtonActionPerformed(evt);
+            }
+        });
+
+        homeButton.setBackground(new java.awt.Color(40, 75, 135));
+        homeButton.setForeground(new java.awt.Color(255, 255, 255));
+        homeButton.setText("Home");
+        homeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setText("Rental Items");
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo.png"))); // NOI18N
+
+        returnItemButton.setText("Return Item");
+        returnItemButton.setEnabled(false);
+        returnItemButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                returnItemButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Search:");
+
+        availabilityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Rented Out" }));
+
+        jLabel5.setText("Filter by availability:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 758, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                            .addGap(636, 636, 636)
+                            .addComponent(returnItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(rentOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(69, 69, 69)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(availabilityFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1025, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(78, Short.MAX_VALUE))
+                        .addGap(42, 42, 42)
+                        .addComponent(homeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(homeButton)))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)
+                        .addComponent(availabilityFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(19, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rentOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(returnItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(79, 79, 79))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -147,12 +235,22 @@ public class rentalInventory extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void rentOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentOutButtonActionPerformed
+        DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
+        
+        
+        
+        
         rentOutItem rentOut = new rentOutItem(new javax.swing.JFrame(),true);
-        
+        if(itemsTable.getSelectedRow()> -1){
+            int row = itemsTable.getSelectedRow();
+            rentOut.itemId.setText(itemsTable.getValueAt(row, 0).toString());
+            rentOut.itemName.setText(itemsTable.getValueAt(row,1).toString());
+            rentOut.dispenserLife.setText(itemsTable.getValueAt(row, 3).toString());
+        }
+       
         rentOut.setVisible(true);
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_rentOutButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
@@ -164,8 +262,7 @@ public class rentalInventory extends javax.swing.JDialog {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime today = LocalDateTime.now();
             String itemID, itemName, branchID, dateCreated;
-            
-            
+
             while (rs.next()){
                 itemID = rs.getString("rental_item_id");
                 itemName = rs.getString("rental_item_name");
@@ -177,7 +274,10 @@ public class rentalInventory extends javax.swing.JDialog {
                 long daysBetween = Duration.between(today,createdAt).toDays();
                 
                 String tempDays = Math.abs(daysBetween) + " days";
-                items.addRow(new String[]{itemID, itemName, null, tempDays});
+                
+                
+                
+                items.addRow(new String[]{itemID, itemName, checkAvailability(itemID), tempDays});
             }
         }catch(Exception ex){
             System.out.println("Error: " + ex.getMessage());
@@ -185,6 +285,78 @@ public class rentalInventory extends javax.swing.JDialog {
         
         
     }//GEN-LAST:event_formWindowOpened
+
+    
+    private String checkAvailability(String id){
+        String availability ="";
+        
+        String getRentedOut = "SELECT * FROM rented_out WHERE rental_item_id = "+id+" ORDER BY out_datetime DESC LIMIT 1;";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime today = LocalDateTime.now();
+                String dateTime = "";
+                String rentedOutId = "";
+                String returnTime = "";
+                
+                try{
+                    PreparedStatement pst2 = con.prepareStatement(getRentedOut);
+                    ResultSet rs2 = pst2.executeQuery();
+                    
+                    while(rs2.next()){
+                        dateTime = rs2.getString("out_datetime");
+                        rentedOutId = rs2.getString("");
+                    }
+                    
+                }catch(Exception ex){
+                    System.out.println("Error:"+ ex.getMessage());
+                }
+                if(rentedOutId == null){
+                    availability = "Available";
+                }
+                
+                String getRentedIn = "SELECT rented_in_id, rented_out_id,in_datetime FROM rented_in WHERE rented_out_id = "+rentedOutId+";";
+                
+                try{
+                    PreparedStatement pst3 = con.prepareStatement(getRentedIn);
+                    ResultSet rs3 = pst3.executeQuery();
+                    
+                    while(rs3.next()){
+                        returnTime = rs3.getString("in_datetime");
+                    }
+                }catch(Exception ex){
+                    System.out.println("Error: " + ex.getMessage());
+                }
+        
+        return availability;
+    }
+    
+    
+    
+    private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        
+    }//GEN-LAST:event_homeButtonActionPerformed
+
+    private void returnItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnItemButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_returnItemButtonActionPerformed
+
+    private void itemsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemsTableMouseClicked
+        // TODO add your handling code here:
+        if (itemsTable.getSelectedRow() > -1){
+            rentOutButton.setEnabled(true);
+            returnItemButton.setEnabled(true);
+        }else{
+            rentOutButton.setEnabled(false);
+            returnItemButton.setEnabled(false);
+        }
+        
+        
+    }//GEN-LAST:event_itemsTableMouseClicked
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,12 +402,20 @@ public class rentalInventory extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> availabilityFilter;
+    private javax.swing.JButton homeButton;
     private javax.swing.JTable itemsTable;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton rentOutButton;
+    private javax.swing.JButton returnItemButton;
     // End of variables declaration//GEN-END:variables
 }
