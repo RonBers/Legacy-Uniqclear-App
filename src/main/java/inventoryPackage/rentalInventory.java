@@ -3,17 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package inventoryPackage;
-
+import connectionSql.mysqlConnection;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 /**
  *
  * @author ronjoshual.bersabal
  */
-public class rentDispenser extends javax.swing.JDialog {
+public class rentalInventory extends javax.swing.JDialog {
 
     /**
-     * Creates new form rentDispenser
+     * Creates new form rentalInventory
      */
-    public rentDispenser(java.awt.Frame parent, boolean modal) {
+    Connection con = new mysqlConnection().getCon();
+    public rentalInventory(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -31,12 +40,17 @@ public class rentDispenser extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        itemsTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(205, 205, 205));
 
@@ -61,18 +75,23 @@ public class rentDispenser extends javax.swing.JDialog {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        itemsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "ID", "Item", "Availability", "Life Span"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(itemsTable);
 
         jButton1.setText("Add New Item");
 
@@ -125,6 +144,7 @@ public class rentDispenser extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -133,6 +153,38 @@ public class rentDispenser extends javax.swing.JDialog {
         rentOut.setVisible(true);
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        String sql = "SELECT rental_item_id, rental_item_name, branch_id, created_at FROM rental_item";
+        DefaultTableModel items = (DefaultTableModel)itemsTable.getModel();
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime today = LocalDateTime.now();
+            String itemID, itemName, branchID, dateCreated;
+            
+            
+            while (rs.next()){
+                itemID = rs.getString("rental_item_id");
+                itemName = rs.getString("rental_item_name");
+                branchID = rs.getString("branch_id");
+                dateCreated= rs.getString("created_at");
+           
+                LocalDateTime createdAt = LocalDateTime.parse(dateCreated, dtf);
+                
+                long daysBetween = Duration.between(today,createdAt).toDays();
+                
+                String tempDays = Math.abs(daysBetween) + " days";
+                items.addRow(new String[]{itemID, itemName, null, tempDays});
+            }
+        }catch(Exception ex){
+            System.out.println("Error: " + ex.getMessage());
+        }
+        
+        
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -151,20 +203,21 @@ public class rentDispenser extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(rentDispenser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(rentalInventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(rentDispenser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(rentalInventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(rentDispenser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(rentalInventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(rentDispenser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(rentalInventory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                rentDispenser dialog = new rentDispenser(new javax.swing.JFrame(), true);
+                rentalInventory dialog = new rentalInventory(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -177,12 +230,12 @@ public class rentDispenser extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable itemsTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
