@@ -24,7 +24,8 @@ public class addContract extends javax.swing.JDialog {
      * Creates new form tempAdd
      */
     Connection con = new mysqlConnection().getCon();
-    public String customerID;
+    public String customerID;   
+    public boolean addedContract;
     public addContract(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -306,12 +307,15 @@ public class addContract extends javax.swing.JDialog {
             } catch (Exception ex) {
                 System.out.println("Error: " + ex.getMessage());
             }
+            
+            addedContract = true;
         }
     }//GEN-LAST:event_addContractActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
-
+        addedContract = false;
+        this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
     private void typeRentalContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeRentalContractActionPerformed

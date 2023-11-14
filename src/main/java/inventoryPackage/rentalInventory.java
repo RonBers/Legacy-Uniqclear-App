@@ -4,6 +4,8 @@
  */
 package inventoryPackage;
 import connectionSql.mysqlConnection;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -12,6 +14,8 @@ import javax.swing.table.DefaultTableModel;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author ronjoshual.bersabal
@@ -41,11 +45,11 @@ public class rentalInventory extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         itemsTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        addItemButton = new javax.swing.JButton();
         rentOutButton = new javax.swing.JButton();
         homeButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        searchBox = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         returnItemButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -106,9 +110,14 @@ public class rentalInventory extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(itemsTable);
 
-        jButton1.setBackground(new java.awt.Color(40, 75, 135));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Add New Item");
+        addItemButton.setBackground(new java.awt.Color(40, 75, 135));
+        addItemButton.setForeground(new java.awt.Color(255, 255, 255));
+        addItemButton.setText("Add New Item");
+        addItemButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addItemButtonActionPerformed(evt);
+            }
+        });
 
         rentOutButton.setText("Rent Item");
         rentOutButton.setEnabled(false);
@@ -130,9 +139,14 @@ public class rentalInventory extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Rental Items");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        searchBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                searchBoxActionPerformed(evt);
+            }
+        });
+        searchBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchBoxKeyTyped(evt);
             }
         });
 
@@ -148,7 +162,12 @@ public class rentalInventory extends javax.swing.JDialog {
 
         jLabel4.setText("Search:");
 
-        availabilityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Rented Out" }));
+        availabilityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Available", "Unavailable" }));
+        availabilityFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                availabilityFilterActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Filter by availability:");
 
@@ -165,7 +184,7 @@ public class rentalInventory extends javax.swing.JDialog {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(rentOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGap(69, 69, 69)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -178,7 +197,7 @@ public class rentalInventory extends javax.swing.JDialog {
                                     .addGap(18, 18, 18)
                                     .addComponent(jLabel4)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1025, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(42, 42, 42)
@@ -201,7 +220,7 @@ public class rentalInventory extends javax.swing.JDialog {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel4)
                         .addComponent(availabilityFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5)))
@@ -209,7 +228,7 @@ public class rentalInventory extends javax.swing.JDialog {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(addItemButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(rentOutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(returnItemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -237,25 +256,40 @@ public class rentalInventory extends javax.swing.JDialog {
 
     private void rentOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentOutButtonActionPerformed
         DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
+        int row = itemsTable.getSelectedRow();
         
-        
-        
-        
-        rentOutItem rentOut = new rentOutItem(new javax.swing.JFrame(),true);
-        if(itemsTable.getSelectedRow()> -1){
-            int row = itemsTable.getSelectedRow();
-            rentOut.itemId.setText(itemsTable.getValueAt(row, 0).toString());
-            rentOut.itemName.setText(itemsTable.getValueAt(row,1).toString());
-            rentOut.dispenserLife.setText(itemsTable.getValueAt(row, 3).toString());
+        boolean available = itemsTable.getValueAt(row,2).toString().equalsIgnoreCase("Available");
+        if(available){
+            rentOutItem rentOut = new rentOutItem(new javax.swing.JFrame(),true);
+            if(itemsTable.getSelectedRow() > -1){
+
+                rentOut.itemId.setText(itemsTable.getValueAt(row, 0).toString());
+                rentOut.itemName.setText(itemsTable.getValueAt(row,1).toString());
+                rentOut.dispenserLife.setText(itemsTable.getValueAt(row, 3).toString());
+                rentOut.rentalItemID = itemsTable.getValueAt(row, 0).toString();
+            }
+
+            rentOut.setVisible(true);
+            rentOut.addWindowListener(new WindowAdapter (){
+                public void WindowClosed(WindowEvent e){
+                    model.setRowCount(0);
+                    loadTable();
+                }
+            });
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select an \"available\" item!", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
-       
-        rentOut.setVisible(true);
     }//GEN-LAST:event_rentOutButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        loadTable();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void loadTable(){
         String sql = "SELECT rental_item_id, rental_item_name, branch_id, created_at FROM rental_item";
         DefaultTableModel items = (DefaultTableModel)itemsTable.getModel();
+        items.setRowCount(0);
         try{
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
@@ -274,18 +308,13 @@ public class rentalInventory extends javax.swing.JDialog {
                 long daysBetween = Duration.between(today,createdAt).toDays();
                 
                 String tempDays = Math.abs(daysBetween) + " days";
-                
-                
-                
                 items.addRow(new String[]{itemID, itemName, checkAvailability(itemID), tempDays});
             }
         }catch(Exception ex){
             System.out.println("Error: " + ex.getMessage());
         }
-        
-        
-    }//GEN-LAST:event_formWindowOpened
-
+    }
+    
     
     private String checkAvailability(String id){
         String availability ="";
@@ -301,31 +330,49 @@ public class rentalInventory extends javax.swing.JDialog {
                     PreparedStatement pst2 = con.prepareStatement(getRentedOut);
                     ResultSet rs2 = pst2.executeQuery();
                     
-                    while(rs2.next()){
+                    if(!rs2.next()){
+                         availability = "Available";
+                    }else{
                         dateTime = rs2.getString("out_datetime");
-                        rentedOutId = rs2.getString("");
+                        rentedOutId = rs2.getString("rented_out_id");
+                      
+                        String getRentedIn = "SELECT rented_in_id,in_datetime FROM rented_in WHERE rented_out_id = "+rentedOutId+" ORDER BY in_datetime DESC LIMIT 1;";
+
+                            try{
+                                PreparedStatement pst3 = con.prepareStatement(getRentedIn);
+                                ResultSet rs3 = pst3.executeQuery();
+
+                                if (!rs3.next()){
+                                    availability = "Unavailable";
+                                }else{
+                                    returnTime = rs3.getString("in_datetime");
+
+                                    LocalDateTime latestReturn = LocalDateTime.parse(returnTime,dtf);
+                                    LocalDateTime latestRent = LocalDateTime.parse(dateTime, dtf);
+
+                                    int knowLatest = latestReturn.compareTo(latestRent);
+
+                                    if (knowLatest > 0){
+                                        availability = "Available";
+                                    }else{
+                                        availability = "Unavailable";
+                                    }
+                                }
+                            }catch(Exception ex){
+                                System.out.println("Error: " + ex.getMessage());
+                            }
+                        
+ 
                     }
                     
+               
+                    
+
                 }catch(Exception ex){
                     System.out.println("Error:"+ ex.getMessage());
                 }
-                if(rentedOutId == null){
-                    availability = "Available";
-                }
-                
-                String getRentedIn = "SELECT rented_in_id, rented_out_id,in_datetime FROM rented_in WHERE rented_out_id = "+rentedOutId+";";
-                
-                try{
-                    PreparedStatement pst3 = con.prepareStatement(getRentedIn);
-                    ResultSet rs3 = pst3.executeQuery();
-                    
-                    while(rs3.next()){
-                        returnTime = rs3.getString("in_datetime");
-                    }
-                }catch(Exception ex){
-                    System.out.println("Error: " + ex.getMessage());
-                }
-        
+
+        //System.out.println(availability);
         return availability;
     }
     
@@ -339,6 +386,27 @@ public class rentalInventory extends javax.swing.JDialog {
 
     private void returnItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnItemButtonActionPerformed
         // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
+        int row = itemsTable.getSelectedRow();
+        boolean unavailable = (itemsTable.getValueAt(row,2).toString().trim().equalsIgnoreCase("Unavailable"));
+        if (unavailable){
+            rentInItem returnPage = new rentInItem(new javax.swing.JFrame(), true);
+            returnPage.rental_item_id = itemsTable.getValueAt(row,0).toString();
+            returnPage.setVisible(true);
+            
+            returnPage.addWindowListener(new WindowAdapter(){
+                public void WindowClosed(WindowEvent e){
+                    //function to reload tables;
+                    model.setRowCount(0);
+                    loadTable();
+  
+                }});
+            
+        }else{
+            JOptionPane.showMessageDialog(this, "Please select an \"unavailable\" item!", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        
     }//GEN-LAST:event_returnItemButtonActionPerformed
 
     private void itemsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemsTableMouseClicked
@@ -354,9 +422,44 @@ public class rentalInventory extends javax.swing.JDialog {
         
     }//GEN-LAST:event_itemsTableMouseClicked
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void searchBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_searchBoxActionPerformed
+
+    private void searchBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyTyped
+        // TODO add your handling code here:
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) itemsTable.getModel()));
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchBox.getText()));
+        itemsTable.setRowSorter(sorter);
+    }//GEN-LAST:event_searchBoxKeyTyped
+
+    private void availabilityFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_availabilityFilterActionPerformed
+        // TODO add your handling code here:
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) itemsTable.getModel()));
+        String filter = availabilityFilter.getSelectedItem().toString().trim();
+        
+        if (!filter.equalsIgnoreCase("All")){
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filter));
+        }else{
+            String tempFilter = "";
+              sorter.setRowFilter(RowFilter.regexFilter("(?i)" + tempFilter));
+        }
+  
+        itemsTable.setRowSorter(sorter);
+    }//GEN-LAST:event_availabilityFilterActionPerformed
+
+    private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
+        // TODO add your handling code here:
+        
+        addItem newItem = new addItem(new javax.swing.JFrame(),true);
+        newItem.setVisible(true);
+        newItem.addWindowListener(new WindowAdapter(){
+            public void WindowClosed(WindowEvent e){
+                loadTable();
+            }
+        });
+        
+    }//GEN-LAST:event_addItemButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -402,10 +505,10 @@ public class rentalInventory extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addItemButton;
     private javax.swing.JComboBox<String> availabilityFilter;
     private javax.swing.JButton homeButton;
     private javax.swing.JTable itemsTable;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -414,8 +517,8 @@ public class rentalInventory extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton rentOutButton;
     private javax.swing.JButton returnItemButton;
+    private javax.swing.JTextField searchBox;
     // End of variables declaration//GEN-END:variables
 }
