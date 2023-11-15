@@ -259,14 +259,14 @@ public class dashboardPage extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order No.", "Customer", "Status", "Order Type", "Contact Number"
+                "Order No.", "Customer", "Order Type", "Contact Number"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -365,7 +365,7 @@ public class dashboardPage extends javax.swing.JFrame {
                         String name = rs.getString("customer_name");
                         String orderstatus = rs.getString("order_status");
                         String orderType = rs.getString("order_type");
-                       model.addRow(new String[]{orderId,name, orderstatus, orderType, contactNum});
+                       model.addRow(new String[]{orderId,name, orderType, contactNum});
                    
                     }
                     
@@ -437,10 +437,19 @@ public class dashboardPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         orderDetails viewOrder = new orderDetails(this,true);
         
+        if(orderList.getRowCount()>0){
+            int row = orderList.getSelectedRow();
+            String tempOrderId = orderList.getValueAt(row, 0).toString();
+            viewOrder.setOrderId(tempOrderId);
+             viewOrder.setVisible(true);
+        }else{
+            if (orderList.getSelectedRow()<=0){
+                JOptionPane.showMessageDialog(this,"Please select an order item.", "Error!", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
         
         
-        
-        viewOrder.setVisible(true);
+       
       
     }//GEN-LAST:event_viewOrderActionPerformed
 

@@ -434,7 +434,7 @@ public class orderAdjustments extends javax.swing.JDialog {
          //This line needs work
          
          if(contractFee>0){
-             
+             feeTable.addRow(new String[]{""});
          }
          
          if (deliveryFee >0 ){
