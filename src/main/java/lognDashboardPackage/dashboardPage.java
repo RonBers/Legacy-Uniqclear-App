@@ -259,14 +259,14 @@ public class dashboardPage extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order No.", "Customer", "Total Amount", "Status", "Order Type", "Contact Number"
+                "Order No.", "Customer", "Status", "Order Type", "Contact Number"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -349,10 +349,9 @@ public class dashboardPage extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-      /*  String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
+    private void getTable(){
+        
+        String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
                 try{
                     DefaultTableModel model = (DefaultTableModel)orderList.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);
@@ -365,16 +364,20 @@ public class dashboardPage extends javax.swing.JFrame {
                         String contactNum = rs.getString("contact_num");
                         String name = rs.getString("customer_name");
                         String orderstatus = rs.getString("order_status");
-                        String amount = rs.getString("amount");
                         String orderType = rs.getString("order_type");
-                       model.addRow(new String[]{orderId,name,amount, orderstatus, orderType, contactNum});
+                       model.addRow(new String[]{orderId,name, orderstatus, orderType, contactNum});
                    
                     }
                     
                         
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
-                }*/
+                }
+        
+    }
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        getTable();
     }//GEN-LAST:event_formWindowOpened
 
     private void salesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesButtonActionPerformed
@@ -412,27 +415,8 @@ public class dashboardPage extends javax.swing.JFrame {
             @Override
             public void windowClosed(WindowEvent e)
             {
-                /*
                 model.setRowCount(0);
-                String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
-                try{
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    ResultSet rs = pst.executeQuery();
-
-                    while(rs.next()){
-                        //String priceTable = rs.getString("item_price");
-                        String orderId = rs.getString("order_id");
-                        String contactNum = rs.getString("contact_num");
-                        String name = rs.getString("customer_name");
-                        String orderstatus = rs.getString("order_status");
-                        String amount = rs.getString("amount");
-                        model.addRow(new String[]{orderId,name,amount, orderstatus, "Delivery", contactNum});
-
-                    }
-
-                }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-                }*/
+                getTable();
             }
         });
 
@@ -484,7 +468,7 @@ public class dashboardPage extends javax.swing.JFrame {
         
         rightAlign.setHorizontalAlignment(JLabel.RIGHT);
         orderList.getColumnModel().getColumn(2).setCellRenderer(rightAlign);
-        orderList.getColumnModel().getColumn(5).setCellRenderer(rightAlign); 
+        orderList.getColumnModel().getColumn(4).setCellRenderer(rightAlign); 
     }
     /**
      * @param args the command line arguments

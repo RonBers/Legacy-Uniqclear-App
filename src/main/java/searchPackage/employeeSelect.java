@@ -32,7 +32,7 @@ public class employeeSelect extends javax.swing.JDialog {
      */
     Connection con = new mysqlConnection().getCon();
     
-    private String empID, empName;
+    private String empID, empName, branchID;
     
     public employeeSelect(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -193,12 +193,13 @@ public class employeeSelect extends javax.swing.JDialog {
 
     public void loadTable(){
          DefaultTableModel empTable = (DefaultTableModel)employeeTable.getModel();
-        String sql = "SELECT concat(last_name, ', ',first_name,' ' ,middle_name) as name, employee_id, contact_num, employee_role, branch.branch_name FROM employee JOIN branch USING (branch_id); ";
+        String sql = "SELECT concat(last_name, ', ',first_name,' ' ,middle_name) as name, employee_id, contact_num, employee_role, employee.branch_id, branch.branch_name FROM employee JOIN branch USING (branch_id); ";
         try{
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while(rs.next()){
                 empTable.addRow(new Object[]{rs.getString("employee_id"), rs.getString("name"), rs.getString("contact_num"), rs.getString("employee_role"), rs.getString("branch_name")});   
+                this.branchID=rs.getString("branch_id");
             }
         }catch(Exception ex){
             System.out.println("Error: "+ ex.getMessage());
@@ -217,6 +218,9 @@ public class employeeSelect extends javax.swing.JDialog {
         return this.empName;
     }
     
+    public String getBranch(){
+        return this.branchID;
+    }
     public String getID (){
         return this.empID;
     }

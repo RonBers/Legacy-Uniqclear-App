@@ -273,7 +273,7 @@
               <StringArray count="3">
                 <StringItem index="0" value="All"/>
                 <StringItem index="1" value="Available"/>
-                <StringItem index="2" value="Unavailable"/>
+                <StringItem index="2" value="Rented Out"/>
               </StringArray>
             </Property>
           </Properties>

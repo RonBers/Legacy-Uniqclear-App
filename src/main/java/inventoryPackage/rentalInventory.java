@@ -163,7 +163,7 @@ public class rentalInventory extends javax.swing.JDialog {
 
         jLabel4.setText("Search:");
 
-        availabilityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Available", "Unavailable" }));
+        availabilityFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Available", "Rented Out" }));
         availabilityFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 availabilityFilterActionPerformed(evt);
@@ -367,7 +367,7 @@ public class rentalInventory extends javax.swing.JDialog {
                                 ResultSet rs3 = pst3.executeQuery();
 
                                 if (!rs3.next()){
-                                    availability = "Unavailable";
+                                    availability = "Rented out";
                                 }else{
                                     returnTime = rs3.getString("in_datetime");
 
@@ -379,7 +379,7 @@ public class rentalInventory extends javax.swing.JDialog {
                                     if (knowLatest > 0){
                                         availability = "Available";
                                     }else{
-                                        availability = "Unavailable";
+                                        availability = "Rented out";
                                     }
                                 }
                             }catch(Exception ex){
@@ -489,7 +489,7 @@ public class rentalInventory extends javax.swing.JDialog {
         
         rentalItemInfo viewItem = new rentalItemInfo(new javax.swing.JFrame(), true);
         
-        if (itemsTable.getSelectedRow() > 0){
+        if (itemsTable.getSelectedRow() >= 0){
            int row = itemsTable.getSelectedRow();
            viewItem.setItemID(itemsTable.getValueAt(row, 0).toString()); 
            viewItem.setLifeSpan(itemsTable.getValueAt(row, 3).toString());

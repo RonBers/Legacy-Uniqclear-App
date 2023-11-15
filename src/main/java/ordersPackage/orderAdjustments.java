@@ -39,7 +39,7 @@ public class orderAdjustments extends javax.swing.JDialog {
     //public boolean forDelivery;
     public boolean addedCustomDisc = false, addedCustomFee = false, cancelPressed;// tenPlusOne;
     public double custFee, custDisc;
-    public double feesTotal, discountsTotal, deliveryFee;
+    public double feesTotal, discountsTotal, deliveryFee, contractFee, dealerDiscount;
     
     
     public orderAdjustments(java.awt.Frame parent, boolean modal) {
@@ -432,6 +432,10 @@ public class orderAdjustments extends javax.swing.JDialog {
          
          
          //This line needs work
+         
+         if(contractFee>0){
+             
+         }
          
          if (deliveryFee >0 ){
              if (feesTable.getRowCount() > 0){

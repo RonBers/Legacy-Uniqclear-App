@@ -35,6 +35,7 @@ public class newOrderPage extends javax.swing.JFrame {
     public int newBottlesQuantity;
     public String itemOne;
     public String customerID, customerName, customerContact, points, customerType, customerAddress;
+    private double contractFee=0, dealerDiscount=0, totalContractFee=  0, totalDealerDiscount=0;
     
     
     
@@ -667,6 +668,8 @@ public class newOrderPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         orderAdjustments discAddFee = new orderAdjustments(this,true);
         discAddFee.deliveryFee = this.deliveryFee;
+        discAddFee.contractFee = this.totalContractFee;
+        discAddFee.dealerDiscount=this.totalDealerDiscount;
         
         if (!feesTable.isEmpty()){
             discAddFee.setActives(feesTable, null); 
@@ -733,10 +736,45 @@ public class newOrderPage extends javax.swing.JFrame {
               }else{
                     addPayment.setEnabled(false);
               }
+              checkType(searchCust.customerType,searchCust.custID);
             }
           });
     }//GEN-LAST:event_searchCustomerActionPerformed
-    
+    private void checkType(String type, String id){
+        
+        if (type.equalsIgnoreCase("contract")){
+            String getContractFee = "SELECT additional_fee FROM rental_contract WHERE customer_id = " +id+";";
+            try{
+                PreparedStatement pst = con.prepareStatement(getContractFee);
+                ResultSet rs = pst.executeQuery();
+                
+                while(rs.next()){
+                    this.contractFee = Double.parseDouble(rs.getString(1));
+                }
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+            
+            subTotalCalc();
+            
+        }else if (type.equalsIgnoreCase("dealer")){
+            String getDealerDiscount = "SELECT discount_rate FROM dealer_contract WHERE customer_id = "+id+";";
+            try{
+                PreparedStatement pst = con.prepareStatement(getDealerDiscount);
+                ResultSet rs = pst.executeQuery();
+                
+                while(rs.next()){
+                    this.dealerDiscount = Double.parseDouble(rs.getString(1));
+                }
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+            
+            
+            subTotalCalc();
+        }
+ 
+    }
     public double getPrice(String item){
         double selectedItemPrice = 0;
         String sql = "SELECT non_rental_item_price FROM non_rental_item WHERE item_name LIKE('"+item+"');";
@@ -776,23 +814,19 @@ public class newOrderPage extends javax.swing.JFrame {
     }//GEN-LAST:event_quantity1StateChanged
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-      /* String sql = "SELECT non_rental_item.item_quantity FROM non_rental_item JOIN item ON item.item_id=non_rental_item.item_id WHERE item.item_name LIKE ('New Water Bottle');";
+     
+        
+        String getStock = "SELECT quantity FROM non_rental_item WHERE non_rental_item_name = 'New Water Bottle';";
         
         try{
-            PreparedStatement pst = con.prepareStatement(sql);
+            PreparedStatement pst = con.prepareStatement(getStock);
             ResultSet rs = pst.executeQuery();
-            
             while(rs.next()){
-                
-                String num = rs.getString("item_quantity");
-                newBottles.setText(num);
-                newBottlesQuantity = Integer.parseInt(num);
+                newBottles.setText(rs.getString("quantity"));
             }
-            
         }catch(Exception ex){
-            System.out.println("Error: "+ ex.getMessage());
-        }*/
+            System.out.println("Error:" +ex.getMessage());
+        }
     }//GEN-LAST:event_formWindowOpened
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
@@ -868,6 +902,8 @@ public class newOrderPage extends javax.swing.JFrame {
             discount = 0;
             total = 0;
             deliveryFee = 0;
+            totalDealerDiscount=0;
+            totalContractFee=0;
             forDeliveryButton.setSelected(false);
         }
         subTotalCalc();
@@ -925,7 +961,22 @@ public class newOrderPage extends javax.swing.JFrame {
             subTotalCalc();
         }
     }//GEN-LAST:event_forWalkInButtonActionPerformed
-
+    public int getQuantity(){
+        int quantity = 0;
+        if (itemsTable.getRowCount() > 0){
+                for(int i = 0; i<itemsTable.getRowCount();i++){
+                    String tempItem = itemsTable.getValueAt(i,0).toString();
+                    
+                    if (tempItem.equalsIgnoreCase("Refill") || tempItem.equalsIgnoreCase("New Water Bottle")){
+                       quantity += Integer.parseInt(itemsTable.getValueAt(i,1).toString());
+                    }
+                } 
+              
+           }
+        return quantity;
+    }
+    
+    
     private void moreDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moreDetailsActionPerformed
        JOptionPane.showMessageDialog(this, "Customer Address: "+customerAddress, "Customer Address", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_moreDetailsActionPerformed
@@ -938,19 +989,25 @@ public class newOrderPage extends javax.swing.JFrame {
             subtotal= subtotal + Double.parseDouble(rowData.toString());
         }
          
+         System.out.println("Contact Fee: "+(contractFee > 0));
+         if (contractFee > 0){
+             fees -= totalContractFee;
+             int feeQuantity = getQuantity();
+             totalContractFee = feeQuantity * contractFee;
+             fees += totalContractFee;
+         }
+         
+         
+         if (dealerDiscount > 0){
+             int discQuantity = getQuantity();
+             totalDealerDiscount = discQuantity * dealerDiscount;
+             discount += totalDealerDiscount;
+         }
+         
        
          if (forDeliveryButton.isSelected()){
-            int tempQuantity = 0;
-            if (itemsTable.getRowCount() > 0){
-                for(int i = 0; i<itemsTable.getRowCount();i++){
-                    String tempItem = itemsTable.getValueAt(i,0).toString();
-                    
-                    if (tempItem.equalsIgnoreCase("Refill") || tempItem.equalsIgnoreCase("New Water Bottle")){
-                       tempQuantity += Integer.parseInt(itemsTable.getValueAt(i,1).toString());
-                    }
-                } 
+            int deliQuantity =  getQuantity();
               
-            }
             
            
             if (deliveryFee > 0 ){
@@ -958,7 +1015,7 @@ public class newOrderPage extends javax.swing.JFrame {
             }
             
            
-            deliveryFee = tempQuantity * 5;
+            deliveryFee = deliQuantity * 5;
             fees += deliveryFee;
          }
          
