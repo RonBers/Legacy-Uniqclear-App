@@ -22,8 +22,11 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 public class nonRentalInventory extends javax.swing.JFrame {
 
@@ -50,7 +53,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         nonRentalTable = new javax.swing.JTable();
         addItemBTN = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        searchItem = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         logo = new javax.swing.JLabel();
@@ -104,7 +107,12 @@ public class nonRentalInventory extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setToolTipText("Search");
+        searchItem.setToolTipText("Search");
+        searchItem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchItemKeyTyped(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(40, 75, 135));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
@@ -143,42 +151,41 @@ public class nonRentalInventory extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 779, Short.MAX_VALUE)
-                        .addComponent(logo)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 839, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(addItemBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(20, 20, 20))))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(editNonRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(delNonRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(293, 293, 293))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(logo)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 839, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(addItemBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                            .addComponent(searchItem, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(logo))
+                    .addComponent(logo)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jButton3)))
                 .addGap(29, 29, 29)
                 .addComponent(jLabel2)
                 .addGap(6, 6, 6)
@@ -191,7 +198,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
                             .addComponent(delNonRentalItem))
                         .addGap(129, 129, 129))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchItem, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
                         .addComponent(addItemBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -243,14 +250,13 @@ public class nonRentalInventory extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
-        addItem addItemWindow = new addItem(this, true);
+        addItem addItemWindow = new addItem(this, true, "nonRental");
         addItemWindow.setVisible(true);
 
         addItemWindow.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)
             {  
                itemsList();
-                    
             }
           });
         
@@ -263,7 +269,27 @@ public class nonRentalInventory extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     public void itemsList(){
-   
+        DefaultTableModel itemsTable = (DefaultTableModel)nonRentalTable.getModel();
+        itemsTable.setRowCount(0);
+        
+        
+        String sql = "SELECT * FROM non_rental_item WHERE NOT non_rental_item_name = 'Refill'";
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            
+            while(rs.next()){
+                
+                itemsTable.addRow(new String[]{rs.getString("non_rental_item_id"), rs.getString("non_rental_item_name"), rs.getString("quantity"), rs.getString("non_rental_item_price")});
+            }
+            
+        }catch (Exception ex){
+            System.out.println("Error: " +ex.getMessage());
+        }
+        
+        
+        
+        
        alignValues();
     }
     
@@ -306,54 +332,18 @@ public class nonRentalInventory extends javax.swing.JFrame {
         editRental.editItemQuantity.setValue(Double.parseDouble(toeditItemPrice));
         
         
-        /*
-         editRental.selectedID = selectedID;
-         editRental.editFirstName.setText(toeditFirstName);
-         editRental.editLastName.setText(toeditLastName);
-         editCustomer.editMiddleName.setText(toeditMiddleName);
-         editCustomer.editContactNumber.setText(toeditContact);
-         editCustomer.editCustomerType.setSelectedItem(toeditCType);*/
-         
-          String sql = "SELECT customer_address,birthdate,sex FROM customer WHERE "
-                  + "customer_id =" +selectedID+";";
-        //try{
-            //PreparedStatement pst = con.prepareStatement(sql);
-           // ResultSet rs = pst.executeQuery();
-            //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
-            /*
-            while(rs.next()){
-                String address = rs.getString("customer_address");
-                String address2[] = address.split(",");
-                String findAddressLine[] = address.split(address2[address2.length-3].trim());
-                editCustomer.editBarangay.setSelectedItem(address2[address2.length-3].trim());                
-                String adl1 = findAddressLine[0].trim();
-                String oldAddress1 = adl1;
-                if (oldAddress1.endsWith(",")) {
-                    oldAddress1 = oldAddress1.substring(0, oldAddress1.length() - 1);
-                }
-               
-                editCustomer.editLine1Address.setText(oldAddress1);
-     
-                char sex = rs.getString( "sex").charAt(0);
-              
-                switch (sex) {
-                    case 'M' -> editCustomer.editSM.setSelected(true);
-                    case 'F' -> editCustomer.editSF.setSelected(true);
-                    default -> editCustomer.editSO.setSelected(true);
-                }
-                String birthdate = rs.getString("birthdate");
-                SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date edDate = formatDate.parse(birthdate);
-                editCustomer.editBdate.setDate(edDate);
-            }
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }*/
-        
-        
         
         editRental.setVisible(true);
     }//GEN-LAST:event_editNonRentalItemActionPerformed
+
+    private void searchItemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchItemKeyTyped
+        // TODO add your handling code here:
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) nonRentalTable.getModel()));
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchItem.getText()));
+        nonRentalTable.setRowSorter(sorter);
+        
+        
+    }//GEN-LAST:event_searchItemKeyTyped
 
     /**
      * @param args the command line arguments
@@ -403,8 +393,8 @@ public class nonRentalInventory extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel logo;
     private javax.swing.JTable nonRentalTable;
+    private javax.swing.JTextField searchItem;
     // End of variables declaration//GEN-END:variables
 }

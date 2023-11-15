@@ -7,33 +7,19 @@ import connectionSql.mysqlConnection;
 import searchPackage.customerSearch;
 //import com.uniqclear.uniqclearapp.ordersPackage.orderAdjustments;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 /**
  *

@@ -412,6 +412,7 @@ public class dashboardPage extends javax.swing.JFrame {
             @Override
             public void windowClosed(WindowEvent e)
             {
+                /*
                 model.setRowCount(0);
                 String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
                 try{
@@ -431,7 +432,7 @@ public class dashboardPage extends javax.swing.JFrame {
 
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
-                }
+                }*/
             }
         });
 
