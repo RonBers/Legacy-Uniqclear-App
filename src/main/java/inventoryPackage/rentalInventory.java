@@ -280,12 +280,24 @@ public class rentalInventory extends javax.swing.JDialog {
             }
 
             rentOut.setVisible(true);
-            rentOut.addWindowListener(new WindowAdapter (){
+            System.out.println("Hello6");
+           /* rentOut.addWindowListener(new WindowAdapter (){
                 public void WindowClosed(WindowEvent e){
+                    System.out.println("Hello5");
                     model.setRowCount(0);
                     loadTable();
+                    System.out.println("Hello5");
                 }
-            });
+            });*/
+            
+            rentOut.addWindowListener(new WindowAdapter(){
+            public void windowClosed(WindowEvent e)
+            {
+              loadTable();
+            }
+          });
+            
+            
         }else{
             JOptionPane.showMessageDialog(this, "Please select an \"available\" item!", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -377,8 +389,6 @@ public class rentalInventory extends javax.swing.JDialog {
  
                     }
                     
-               
-                    
 
                 }catch(Exception ex){
                     System.out.println("Error:"+ ex.getMessage());
@@ -407,7 +417,7 @@ public class rentalInventory extends javax.swing.JDialog {
             returnPage.setVisible(true);
             
             returnPage.addWindowListener(new WindowAdapter(){
-                public void WindowClosed(WindowEvent e){
+                public void windowClosed(WindowEvent e){
                     //function to reload tables;
                     model.setRowCount(0);
                     loadTable();
@@ -466,36 +476,10 @@ public class rentalInventory extends javax.swing.JDialog {
         addItem newItem = new addItem(new javax.swing.JFrame(),true, "rental");
         newItem.setVisible(true);
         newItem.addWindowListener(new WindowAdapter(){
-            public void WindowClosed(WindowEvent e){
-               // loadTable();
-                DefaultTableModel items = (DefaultTableModel)itemsTable.getModel();
-                items.setRowCount(0);
-
-                String sql = "SELECT rental_item_id, rental_item_name, branch_id, created_at FROM rental_item";
-                try{
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    ResultSet rs = pst.executeQuery();
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                    LocalDateTime today = LocalDateTime.now();
-                    String itemID, itemName, branchID, dateCreated;
-                    items.setRowCount(0);
-                    while (rs.next()){
-                        itemID = rs.getString("rental_item_id");
-                        itemName = rs.getString("rental_item_name");
-                        branchID = rs.getString("branch_id");
-                        dateCreated= rs.getString("created_at");
-
-                        LocalDateTime createdAt = LocalDateTime.parse(dateCreated, dtf);
-
-                        long daysBetween = Duration.between(today,createdAt).toDays();
-
-                        String tempDays = Math.abs(daysBetween) + " days";
-                        items.addRow(new String[]{itemID, itemName, checkAvailability(itemID), tempDays});
-                    }
-                }catch(Exception ex){
-                    System.out.println("Error: " + ex.getMessage());
-                }
-                    }
+            public void windowClosed(WindowEvent e){
+                loadTable();
+                
+            }
         });
         
     }//GEN-LAST:event_addItemButtonActionPerformed
