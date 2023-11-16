@@ -8,6 +8,7 @@ import connectionSql.mysqlConnection;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JLabel;
@@ -387,7 +388,7 @@ public class paymentWindow extends javax.swing.JDialog {
         LocalDateTime now = LocalDateTime.now();  
         String date = "'"+dtf.format(now)+"'";
         
-        String sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time, branch_id, amount) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+",3, "+total+");";  
+        String sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+");";  
         
         try{
                 PreparedStatement pst = con.prepareStatement(sql);
@@ -397,7 +398,56 @@ public class paymentWindow extends javax.swing.JDialog {
             }
            
         JOptionPane.showMessageDialog(this, "Added a new Order", "Message", JOptionPane.INFORMATION_MESSAGE);
+        
+        String sql2 = "SELECT order_id FROM orders WHERE order_date_time = "+date+";";
+        String tempOrderid ="";
+        try{
+            PreparedStatement pst = con.prepareStatement(sql2);
+            ResultSet rs = pst.executeQuery(sql2);
+            
+            while(rs.next()){
+                tempOrderid=rs.getString(1);
+            }
+        }catch(Exception ex){
+            System.out.println("Error: "+ex.getMessage());
+        }
+        
+        if (invoice.getRowCount()>0){
+            for (int row = 0; row < invoice.getRowCount(); row++){
+                if (invoice.getValueAt(row, 0) != null){
+                    String getItemId = "SELECT non_rental_item_id FROM non_rental_item WHERE non_rental_item_name = '"+invoice.getValueAt(row, 0).toString().trim()+"';";
+                    String tempItemId="";
+                    try{
+                        PreparedStatement pst = con.prepareStatement(getItemId);
+                        ResultSet rs = pst.executeQuery();
+
+                        while(rs.next()){
+                            tempItemId=rs.getString(1);
+                            
+                            String saveOrderLine = "INSERT INTO order_line (order_id, non_rental_item_id, item_quantity,transaction_type) VALUES("+tempOrderid+", "+tempItemId+", "+invoice.getValueAt(row, 1).toString().trim()+", '"+this.orderType+"');";
+                            PreparedStatement saveToOl = con.prepareStatement(saveOrderLine);
+                            saveToOl.executeUpdate();
+                        }
+                    }catch(Exception ex){
+                        System.out.println("Error: " + ex.getMessage());
+                    }
+
+                }
+            }
+        }
+       
+        
+        String savePayment = "INSERT INTO payment(order_id, payment_amount, payment_type, payment_date_time) VALUES ("+tempOrderid+", "+Double.parseDouble(paymentAmount.getValue().toString())+ ",'Cash'," +date+");";
+            try{
+                PreparedStatement pst = con.prepareStatement(savePayment);
+                pst.executeUpdate();
+            }catch(Exception ex){
+                  System.out.println("Error: " + ex.getMessage());
+            }
+        
         this.dispose();
+        
+        
         
     }//GEN-LAST:event_confirmPaymentActionPerformed
 

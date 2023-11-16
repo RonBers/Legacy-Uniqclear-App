@@ -319,7 +319,7 @@ public class salesTracker extends javax.swing.JFrame {
 public double totalExpensesNum = 0, totalSales = 0;
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT orders.order_id, concat(last_name,\",\", first_name) as 'customer_name', contact_num, orders.order_status, order_date_time, orders.amount FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
+        String sql = "SELECT orders.order_id, concat(last_name,\",\", first_name) as 'customer_name', contact_num, orders.order_status, order_date_time FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
             try{
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
@@ -330,12 +330,37 @@ public double totalExpensesNum = 0, totalSales = 0;
             while(rs.next()){
                 String orderID = rs.getString("order_id");
                 String custName = rs.getString("customer_name");
-                String amount = rs.getString("amount");
+                //String amount = rs.getString("amount");
                 LocalDateTime dateTimeOrder = rs.getTimestamp("order_date_time").toLocalDateTime();
                 String formattedDateTime2 = dateTimeOrder.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 
-                modelOrders.addRow(new String[]{orderID, formattedDateTime2,custName,amount});
-         
+                
+                
+                String sqlGetItems = "SELECT * FROM order_line WHERE order_id = " +orderID+";";
+                
+                
+                PreparedStatement pst2 = con.prepareStatement(sqlGetItems);
+                ResultSet rs2 = pst2.executeQuery();
+                int tmpQuantity  =0 ;
+                double amount = 0;
+                String itemId = "";
+                while(rs2.next()){
+                    tmpQuantity = Integer.parseInt(rs2.getString("item_quantity"));
+                    itemId = rs2.getString("non_rental_item_id");
+                    
+                    String sqlGetPrice = "SELECT non_rental_item_price FROM non_rental_item WHERE non_rental_item_id = " +itemId+";";
+                    
+                    PreparedStatement pst3 = con.prepareStatement(sqlGetPrice);
+                    ResultSet rs3 = pst3.executeQuery();
+                    
+                    while(rs3.next()){
+                        double itemPrice = Double.parseDouble(rs3.getString("non_rental_item_price"));
+                        amount += tmpQuantity * itemPrice;
+                    }
+                }
+                
+                modelOrders.addRow(new Object[]{orderID, formattedDateTime2,custName, amount});
+            
                
             }
             

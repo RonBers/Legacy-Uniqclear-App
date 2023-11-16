@@ -281,7 +281,9 @@ public class contractRecords extends javax.swing.JFrame {
         // TODO add your handling code here:
        // new newContract().setVisible(true);
        
-        addContract contractNew = new addContract();
+
+        addContract contractNew = new addContract(this,true);
+
         contractNew.setVisible(true);
         contractNew.addWindowListener(new WindowAdapter(){
         DefaultTableModel model = (DefaultTableModel)rentalTable.getModel();

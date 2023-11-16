@@ -39,7 +39,7 @@ public class orderAdjustments extends javax.swing.JDialog {
     //public boolean forDelivery;
     public boolean addedCustomDisc = false, addedCustomFee = false, cancelPressed;// tenPlusOne;
     public double custFee, custDisc;
-    public double feesTotal, discountsTotal, deliveryFee;
+    public double feesTotal, discountsTotal, deliveryFee, contractFee, dealerDiscount;
     
     
     public orderAdjustments(java.awt.Frame parent, boolean modal) {
@@ -433,6 +433,10 @@ public class orderAdjustments extends javax.swing.JDialog {
          
          //This line needs work
          
+         if(contractFee>0){
+             feeTable.addRow(new String[]{""});
+         }
+         
          if (deliveryFee >0 ){
              if (feesTable.getRowCount() > 0){
                  for(int i =0; i<feeTable.getRowCount();i++){
@@ -577,8 +581,21 @@ public class orderAdjustments extends javax.swing.JDialog {
         custFee = (Double)customAddFee.getValue();
         
         if ((custDisc>0 && !addedCustomDisc) && (cdEnable.isSelected())){
+            
+            if(discountTableModel.getRowCount() > 0 && cdEnable.isSelected()){
+            for(int row = 1; row<discountTableModel.getRowCount(); row++){
+                String temp = discountTableModel.getValueAt(row,0).toString().trim();
+                
+                if(temp.equalsIgnoreCase("custom")){
+                    JOptionPane.showMessageDialog(this,"Custom Discount has already been added", "Warning!", JOptionPane.INFORMATION_MESSAGE);
+                }
+   
+            }
+        }
             discountTableModel.addRow(new String[]{"Custom", Double.toString(custDisc)});
             addedCustomDisc = true;
+        }else{
+            
         }
         
         if ((custFee>0 && !addedCustomFee) && caEnable.isSelected()){
@@ -586,8 +603,31 @@ public class orderAdjustments extends javax.swing.JDialog {
             addedCustomFee = true;
         }
         
+        
+       
+        
+        
+        if(feesTableModel.getRowCount() > 0 && caEnable.isSelected()){
+            for (int row =1; row<feesTableModel.getRowCount(); row++){
+                String temp = feesTableModel.getValueAt(row,0).toString().trim();
+                
+                if (temp.equalsIgnoreCase("custom")){
+                    JOptionPane.showMessageDialog(this,"Custom additional fee has already been added" , "Warning!", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+        
+        
+       
+        
+        
+        
+        
+        
     }//GEN-LAST:event_addCustomActionPerformed
 
+    
+    
     private void removeDiscountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeDiscountActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)activeDiscounts.getModel();

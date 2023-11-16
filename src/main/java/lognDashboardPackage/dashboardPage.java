@@ -8,11 +8,11 @@ import customerPackage.customerPage;
 import ordersPackage.newOrderPage;
 import contractsPackage.contractRecords;
 import employeePackage.employeeProfile;
-import inventoryPackage.inventory;
+import inventoryPackage.nonRentalInventory;
 import expensesPackage.expenseItem;
 import salesTrackerPackage.salesTracker;
 import connectionSql.mysqlConnection;
-        
+import inventoryPackage.*;
      
 
 import java.awt.Color;
@@ -67,13 +67,14 @@ public class dashboardPage extends javax.swing.JFrame {
         jPanel13 = new javax.swing.JPanel();
         customerButton = new javax.swing.JButton();
         newOrderButton = new javax.swing.JButton();
-        inventoryButton = new javax.swing.JButton();
+        nonRentalButton = new javax.swing.JButton();
         newExpenseButton = new javax.swing.JButton();
         contractButton = new javax.swing.JButton();
         employeeButton = new javax.swing.JButton();
         salesButton = new javax.swing.JButton();
         jPanel14 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
+        rentalButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
         editOrderButton = new javax.swing.JButton();
         viewOrder = new javax.swing.JButton();
@@ -130,11 +131,11 @@ public class dashboardPage extends javax.swing.JFrame {
             }
         });
 
-        inventoryButton.setText("Inventory");
-        inventoryButton.setBorder(null);
-        inventoryButton.addActionListener(new java.awt.event.ActionListener() {
+        nonRentalButton.setText("Non-rental Items");
+        nonRentalButton.setBorder(null);
+        nonRentalButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inventoryButtonActionPerformed(evt);
+                nonRentalButtonActionPerformed(evt);
             }
         });
 
@@ -172,13 +173,20 @@ public class dashboardPage extends javax.swing.JFrame {
 
         jPanel14.setBackground(new java.awt.Color(255, 192, 0));
         jPanel14.setPreferredSize(new java.awt.Dimension(231, 15));
-        jPanel14.setLayout(new java.awt.GridLayout());
+        jPanel14.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel10.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jLabel10.setText("                     ACTIONS");
         jLabel10.setToolTipText("");
-        jLabel10.setPreferredSize(new java.awt.Dimension(147, 18));
         jPanel14.add(jLabel10);
+
+        rentalButton.setText("Rental Items");
+        rentalButton.setBorder(null);
+        rentalButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rentalButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -195,10 +203,11 @@ public class dashboardPage extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(inventoryButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(nonRentalButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(contractButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(employeeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(salesButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(salesButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rentalButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(6, 6, 6))))
             .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
@@ -206,21 +215,23 @@ public class dashboardPage extends javax.swing.JFrame {
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
                 .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newExpenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(customerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inventoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nonRentalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rentalButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(contractButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(employeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(salesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         logoutButton.setBackground(new java.awt.Color(200, 0, 0));
@@ -248,14 +259,14 @@ public class dashboardPage extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Order No.", "Customer", "Total Amount", "Status", "Order Type", "Contact Number"
+                "Order No.", "Customer", "Order Type", "Contact Number"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -270,7 +281,7 @@ public class dashboardPage extends javax.swing.JFrame {
         jScrollPane1.setViewportView(orderList);
 
         jPanel1.setBackground(new java.awt.Color(255, 192, 0));
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jLabel1.setText("  ORDERS");
@@ -282,18 +293,16 @@ public class dashboardPage extends javax.swing.JFrame {
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(979, 979, 979)
+                        .addGap(727, 727, 727)
                         .addComponent(viewOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(editOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -305,19 +314,19 @@ public class dashboardPage extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(viewOrder)
-                            .addComponent(editOrderButton))
-                        .addContainerGap())))
+                            .addComponent(editOrderButton)))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 11, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         jScrollPane2.setViewportView(jPanel11);
@@ -334,16 +343,15 @@ public class dashboardPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-      /*  String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
+    private void getTable(){
+        
+        String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
                 try{
                     DefaultTableModel model = (DefaultTableModel)orderList.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);
@@ -356,16 +364,20 @@ public class dashboardPage extends javax.swing.JFrame {
                         String contactNum = rs.getString("contact_num");
                         String name = rs.getString("customer_name");
                         String orderstatus = rs.getString("order_status");
-                        String amount = rs.getString("amount");
                         String orderType = rs.getString("order_type");
-                       model.addRow(new String[]{orderId,name,amount, orderstatus, orderType, contactNum});
+                       model.addRow(new String[]{orderId,name, orderType, contactNum});
                    
                     }
                     
                         
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
-                }*/
+                }
+        
+    }
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        getTable();
     }//GEN-LAST:event_formWindowOpened
 
     private void salesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesButtonActionPerformed
@@ -388,10 +400,10 @@ public class dashboardPage extends javax.swing.JFrame {
         new expenseItem().setVisible(true);
     }//GEN-LAST:event_newExpenseButtonActionPerformed
 
-    private void inventoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventoryButtonActionPerformed
+    private void nonRentalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonRentalButtonActionPerformed
         // TODO add your handling code here:
-        new inventory().setVisible(true);
-    }//GEN-LAST:event_inventoryButtonActionPerformed
+        new nonRentalInventory().setVisible(true);
+    }//GEN-LAST:event_nonRentalButtonActionPerformed
 
     private void newOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newOrderButtonActionPerformed
         // TODO add your handling code here:
@@ -404,25 +416,7 @@ public class dashboardPage extends javax.swing.JFrame {
             public void windowClosed(WindowEvent e)
             {
                 model.setRowCount(0);
-                String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.amount FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
-                try{
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    ResultSet rs = pst.executeQuery();
-
-                    while(rs.next()){
-                        //String priceTable = rs.getString("item_price");
-                        String orderId = rs.getString("order_id");
-                        String contactNum = rs.getString("contact_num");
-                        String name = rs.getString("customer_name");
-                        String orderstatus = rs.getString("order_status");
-                        String amount = rs.getString("amount");
-                        model.addRow(new String[]{orderId,name,amount, orderstatus, "Delivery", contactNum});
-
-                    }
-
-                }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-                }
+                getTable();
             }
         });
 
@@ -443,19 +437,47 @@ public class dashboardPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         orderDetails viewOrder = new orderDetails(this,true);
         
+        if(orderList.getRowCount()>0){
+            int row = orderList.getSelectedRow();
+            String tempOrderId = orderList.getValueAt(row, 0).toString();
+            viewOrder.setOrderId(tempOrderId);
+             viewOrder.setVisible(true);
+        }else{
+            if (orderList.getSelectedRow()<=0){
+                JOptionPane.showMessageDialog(this,"Please select an order item.", "Error!", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
         
         
-        
-        viewOrder.setVisible(true);
+       
       
     }//GEN-LAST:event_viewOrderActionPerformed
+
+    private void rentalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentalButtonActionPerformed
+        // TODO add your handling code here:
+        rentalInventory rentInventory = new rentalInventory(new javax.swing.JFrame(), true);
+        
+        
+        
+        rentInventory.setVisible(true);
+        rentInventory.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosed(WindowEvent e)
+            {
+                
+            }
+        });
+
+        
+        
+    }//GEN-LAST:event_rentalButtonActionPerformed
     
     public void alignValues(){
         DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
         
         rightAlign.setHorizontalAlignment(JLabel.RIGHT);
         orderList.getColumnModel().getColumn(2).setCellRenderer(rightAlign);
-        orderList.getColumnModel().getColumn(5).setCellRenderer(rightAlign); 
+        orderList.getColumnModel().getColumn(3).setCellRenderer(rightAlign); 
     }
     /**
      * @param args the command line arguments
@@ -499,7 +521,6 @@ public class dashboardPage extends javax.swing.JFrame {
     private javax.swing.JButton editOrderButton;
     private javax.swing.JButton employeeButton;
     private javax.swing.JLabel headerDash;
-    private javax.swing.JButton inventoryButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JPanel jPanel1;
@@ -512,7 +533,9 @@ public class dashboardPage extends javax.swing.JFrame {
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton newExpenseButton;
     private javax.swing.JButton newOrderButton;
+    private javax.swing.JButton nonRentalButton;
     private javax.swing.JTable orderList;
+    private javax.swing.JButton rentalButton;
     private javax.swing.JButton salesButton;
     private javax.swing.JButton viewOrder;
     // End of variables declaration//GEN-END:variables
