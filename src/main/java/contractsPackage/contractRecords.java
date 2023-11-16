@@ -31,7 +31,6 @@ public class contractRecords extends javax.swing.JFrame {
     /**
      * Creates new form contractRecords
      */
-    //mysqlConnection connection = new mysqlConnection();
     Connection con = new mysqlConnection().getCon();
     
     public contractRecords() {
@@ -49,16 +48,17 @@ public class contractRecords extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        contractSearch = new javax.swing.JTextField();
-        searchContract = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        contractsTable = new javax.swing.JTable();
+        rentalTable = new javax.swing.JTable();
         addContract = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        logo = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
+        jSeparator3 = new javax.swing.JSeparator();
+        viewContract = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        dealerTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         contractHeader = new javax.swing.JLabel();
 
@@ -79,19 +79,7 @@ public class contractRecords extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        searchContract.setBackground(new java.awt.Color(40, 75, 135));
-        searchContract.setForeground(new java.awt.Color(255, 255, 255));
-        searchContract.setText("Search");
-        searchContract.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchContractActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setText("Contract");
-
-        contractsTable.setModel(new javax.swing.table.DefaultTableModel(
+        rentalTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -114,11 +102,11 @@ public class contractRecords extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(contractsTable);
+        jScrollPane1.setViewportView(rentalTable);
 
         addContract.setBackground(new java.awt.Color(40, 75, 135));
         addContract.setForeground(new java.awt.Color(255, 255, 255));
-        addContract.setText("Add Contract");
+        addContract.setText("Add contract");
         addContract.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addContractActionPerformed(evt);
@@ -127,7 +115,7 @@ public class contractRecords extends javax.swing.JFrame {
 
         jButton4.setBackground(new java.awt.Color(40, 75, 135));
         jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Edit Contract");
+        jButton4.setText("Edit contract");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -143,71 +131,108 @@ public class contractRecords extends javax.swing.JFrame {
             }
         });
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel4.setText("Contract Record");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 309, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 112, Short.MAX_VALUE)
-        );
+        searchField.setText("Search here");
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchFieldKeyReleased(evt);
+            }
+        });
 
-        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/uniqclearLogo.png"))); // NOI18N
+        jSeparator3.setBackground(new java.awt.Color(0, 0, 0));
+        jSeparator3.setPreferredSize(new java.awt.Dimension(50, 15));
+
+        viewContract.setBackground(new java.awt.Color(40, 75, 135));
+        viewContract.setForeground(new java.awt.Color(255, 255, 255));
+        viewContract.setText("View contract");
+        viewContract.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewContractActionPerformed(evt);
+            }
+        });
+
+        dealerTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Contract ID", "Customer Name", "Link/File", "Discount/Additional", "Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane4.setViewportView(dealerTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(contractSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchContract, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addComponent(jButton5)
-                        .addGap(216, 216, 216)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                        .addComponent(logo))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 845, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1))))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(75, 75, 75))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(viewContract, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(73, 73, 73))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(logo)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5))
+                .addComponent(jButton5)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(contractSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchContract, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addContract)
-                    .addComponent(jButton4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton4)
+                    .addComponent(viewContract))
+                .addGap(16, 16, 16))
         );
 
         jScrollPane2.setViewportView(jPanel1);
@@ -252,21 +277,14 @@ public class contractRecords extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchContractActionPerformed
-        // TODO add your handling code here:
-        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) contractsTable.getModel()));
-        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + contractSearch.getText()));
-        contractsTable.setRowSorter(sorter);
-    }//GEN-LAST:event_searchContractActionPerformed
-
     private void addContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractActionPerformed
         // TODO add your handling code here:
        // new newContract().setVisible(true);
        
-        newContract contractNew = new newContract();
+        addContract contractNew = new addContract();
         contractNew.setVisible(true);
         contractNew.addWindowListener(new WindowAdapter(){
-        DefaultTableModel model = (DefaultTableModel)contractsTable.getModel();
+        DefaultTableModel model = (DefaultTableModel)rentalTable.getModel();
          public void windowClosed(WindowEvent e)
             {
                 model.setRowCount(0);
@@ -300,26 +318,88 @@ public class contractRecords extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel)contractsTable.getModel();
-        String sql = "SELECT concat(customer.last_name,', ', customer.first_name)as name, contract_id, contract_link, contract_date FROM contract_record JOIN customer WHERE contract_record.customer_id = customer.customer_id;";
+        DefaultTableModel forRentalContract = (DefaultTableModel)rentalTable.getModel();
+        DefaultTableModel forDealerContract = (DefaultTableModel)dealerTable.getModel();
         
+        String sqlRental = "SELECT rental_contract_id, concat(customer.last_name,', ', customer.first_name) AS name, rental_contract_link, additional_fee, rental_contract_date FROM customer JOIN rental_contract where rental_contract.customer_id = customer.customer_id";
         try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            while(rs.next()){
-                String contractID = rs.getString("contract_id");
-                String customerName = rs.getString("name");
-                String contractLink = rs.getString("contract_link");
-                String contractDate = rs.getString("contract_date");
-                
-                model.addRow(new String[]{contractID, customerName, contractLink, "20%",contractDate});
+            PreparedStatement pstRental = con.prepareStatement(sqlRental);
+            ResultSet rsRental = pstRental.executeQuery();
+            while(rsRental.next()){
+                String contractID = rsRental.getString("rental_contract_id");
+                String customerName = rsRental.getString("name");
+                String contractLink = rsRental.getString("rental_contract_link");
+                String contractDate = rsRental.getString("rental_contract_date");
+                forRentalContract.addRow(new String[]{contractID, customerName, contractLink, "20%",contractDate});
             }
+            String sqlDealer = "SELECT dealer_contract_id, concat(customer.last_name,', ', customer.first_name) AS name, dealer_contract_link, discount_rate, dealer_contract_date FROM customer JOIN dealer_contract where dealer_contract.customer_id = customer.customer_id";
+            PreparedStatement pstDealer = con.prepareStatement(sqlDealer);
+            ResultSet rsDealer = pstDealer.executeQuery();
+            while(rsDealer.next()){
+                String contractID = rsDealer.getString("dealer_contract_id");
+                String customerName = rsDealer.getString("name");
+                String contractLink = rsDealer.getString("dealer_contract_link");
+                String discountRate = rsDealer.getString("discount_rate");
+                String contractDate = rsDealer.getString("dealer_contract_date");
+                forDealerContract.addRow(new String[]{contractID, customerName, contractLink, discountRate,contractDate});
+            }
+            
         }catch(Exception ex){
             System.out.println("Error: "+ ex.getMessage());
         }
-       
-        
     }//GEN-LAST:event_formWindowOpened
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldKeyReleased
+
+    private void viewContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewContractActionPerformed
+        // TODO add your handling code here:
+        int index = dealerTable.getSelectedRow(); // Get the selected row (via ID) in Jtable 
+        
+        // For dealer
+        DefaultTableModel tableDealer = (DefaultTableModel) dealerTable.getModel(); // TableforPromo is table from GUI
+        // For rental
+        DefaultTableModel tableRental = (DefaultTableModel) rentalTable.getModel(); // TableforPromo is table from GUI   
+        
+        //From row and column, we get the values
+        String fullname = (tableDealer.getValueAt(index,1)).toString(); // Set string into a value from row, concatenated already (from other function)
+        String customerID = (tableDealer.getValueAt(index, 0)).toString();
+        String date = (tableDealer.getValueAt(index, 4).toString());
+        
+        String sql = "SELECT COALESCE(OL.item_quantity, 0) AS POINTS "
+                    + "FROM customer AS C " 
+                    + "LEFT JOIN orders AS O ON C.customer_id = O.customer_id "
+                    + "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id";
+        
+        String Points="";
+        try{
+                PreparedStatement pst;
+                pst = con.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery();
+                while(rs.next()){
+                    Points = rs.getString("POINTS");
+                    System.out.println(Points);
+                }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        
+        viewContract viewContractRec = new viewContract(this,true);
+        viewContractRec.contractName.setText(fullname);
+        viewContractRec.contractType.setText("Rental");
+        viewContractRec.contractPoints.setText(Points);
+        viewContractRec.minRefills.setText("7");
+        
+        viewContractRec.contractDate.setText(date);
+
+        viewContractRec.setVisible(true);
+    }//GEN-LAST:event_viewContractActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,17 +441,18 @@ public class contractRecords extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addContract;
     private javax.swing.JLabel contractHeader;
-    private javax.swing.JTextField contractSearch;
-    private javax.swing.JTable contractsTable;
+    private javax.swing.JTable dealerTable;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel logo;
-    private javax.swing.JButton searchContract;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JTable rentalTable;
+    private javax.swing.JTextField searchField;
+    private javax.swing.JButton viewContract;
     // End of variables declaration//GEN-END:variables
 }

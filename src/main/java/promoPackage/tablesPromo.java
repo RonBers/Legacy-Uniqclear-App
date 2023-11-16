@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.security.auth.callback.Callback;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -51,7 +52,9 @@ public class tablesPromo extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TableforPromo = new javax.swing.JTable();
+        jButton6 = new javax.swing.JButton();
         editPromo = new javax.swing.JButton();
+        applyPromo = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -92,14 +95,24 @@ public class tablesPromo extends javax.swing.JFrame {
         jLabel4.setText("Promo Record");
 
         searchField.setText("Search here");
+        searchField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                searchFieldFocusGained(evt);
+            }
+        });
+        searchField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchFieldMouseClicked(evt);
+            }
+        });
         searchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchFieldActionPerformed(evt);
             }
         });
         searchField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                searchFieldKeyReleased(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchFieldKeyTyped(evt);
             }
         });
 
@@ -120,7 +133,7 @@ public class tablesPromo extends javax.swing.JFrame {
                     .addGroup(PanelSearchBarLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 845, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         PanelSearchBarLayout.setVerticalGroup(
             PanelSearchBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,12 +155,49 @@ public class tablesPromo extends javax.swing.JFrame {
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
                 "ID", "CUSTOMER NAME", "PROMO POINTS", "STATUS"
             }
         ));
+        TableforPromo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableforPromoMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TableforPromo);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -155,17 +205,21 @@ public class tablesPromo extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1)
-                .addGap(20, 20, 20))
+                .addGap(24, 24, 24))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
+
+        jButton6.setBackground(new java.awt.Color(40, 75, 135));
+        jButton6.setForeground(new java.awt.Color(255, 255, 255));
+        jButton6.setText("Home");
 
         editPromo.setBackground(new java.awt.Color(40, 75, 135));
         editPromo.setForeground(new java.awt.Color(255, 255, 255));
@@ -173,6 +227,16 @@ public class tablesPromo extends javax.swing.JFrame {
         editPromo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editPromoActionPerformed(evt);
+            }
+        });
+
+        applyPromo.setBackground(new java.awt.Color(51, 153, 0));
+        applyPromo.setForeground(new java.awt.Color(255, 255, 255));
+        applyPromo.setText("Apply promo");
+        applyPromo.setEnabled(false);
+        applyPromo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                applyPromoActionPerformed(evt);
             }
         });
 
@@ -185,54 +249,131 @@ public class tablesPromo extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(PanelSearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton6)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 863, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(16, 16, 16)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(PanelSearchBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(4, 4, 4)))
                         .addGap(31, 31, 31))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(editPromo)
-                .addGap(70, 70, 70))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(applyPromo)
+                .addGap(58, 58, 58))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(PanelSearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(jButton6)
                 .addGap(18, 18, 18)
+                .addComponent(PanelSearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(editPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(applyPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    /*
+    public int getValue(){
+        table = (DefaultTableModel) TableforPromo.getModel(); // TableforPromo is table from GUI
+            int indexRow = TableforPromo.getSelectedRow(); // Get the selected row (via ID) in Jtable
+            int indexColumn = TableforPromo.getSelectedColumn(); 
+            return indexRow, indexColumn;
+            
+    }
+    */
     
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
     
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       // TODO add your handling code here:
+        try{
+            // item_quantity should only check the refills
+            // promo table should only generate regular customer
+            // should use promo_id instead of customer_id
+            String sql = "SELECT C.customer_id, CONCAT(C.last_name, ', ', C.first_name) AS full_name, COALESCE(OL.item_quantity, 0) AS POINTS "
+                    + "FROM customer AS C " 
+                    + "LEFT JOIN orders AS O ON C.customer_id = O.customer_id "
+                    + "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id";
+            
+                        
+            PreparedStatement pst;
+            pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery(); // Java object that represents the result of a database query, which contains the data retrieved from the database.
+            table = (DefaultTableModel) TableforPromo.getModel(); // TableforPromo - Table in ui
+            table.setRowCount(0); // To print from the top
+    
+            while(rs.next()){ // While loop to print all the information    
+                String id = rs.getString("C.customer_id"); // Set id to id from database
+                String fullName = rs.getString("full_name");
+                String POINTS = rs.getString("POINTS");
+                String status = "";
+                
+                    if(Integer.parseInt(POINTS)>=7){
+                        status = "Available";
+                    }else{
+                        status = "Not available";
+                    }
+
+                    table.addRow(new Object[]{id, fullName, POINTS, status}); // Array to add as a row in the table
+                }        
+            }      
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        
+        
+        
+        
+    }//GEN-LAST:event_formWindowOpened
+
+    private void searchFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchFieldMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldMouseClicked
+
+    private void searchFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchFieldFocusGained
+        // TODO add your handling code here:
+        boolean firstClick = true;
+        if(firstClick){
+            searchField.setText("");
+            firstClick = false;
+        }
+    }//GEN-LAST:event_searchFieldFocusGained
+
+    private void searchFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyTyped
+        // TODO add your handling code here:
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<TableModel>(((DefaultTableModel) TableforPromo.getModel()));
+        rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchField.getText()));
+        TableforPromo.setRowSorter(rowSorter);
+    }//GEN-LAST:event_searchFieldKeyTyped
+
     private void editPromoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editPromoActionPerformed
         // TODO add your handling code here:
         table = (DefaultTableModel) TableforPromo.getModel(); // TableforPromo is table from GUI
-        
         int index = TableforPromo.getSelectedRow(); // Get the selected row (via ID) in Jtable    
         
         //From row and column, we get the values
         String fullname = (table.getValueAt(index,1)).toString(); // Set string into a value from row, concatenated already (from other function)
         // customerID is just temporary, should be changed to promo_record_id
         String customerID = (table.getValueAt(index, 0)).toString();
-        
-        
+              
         String points = (table.getValueAt(index, 2)).toString();
         System.out.println(index+" "+fullname);
         
@@ -244,64 +385,51 @@ public class tablesPromo extends javax.swing.JFrame {
         // Set value of id from parent class to child class
         editRecord.id=(Integer.parseInt(customerID));
         
-        
-        editRecord.diplayPoints.setValue(Integer.valueOf(points));
+        editRecord.displayPoints.setValue(Integer.valueOf(points));
         editRecord.setVisible(true); // Make it visible
-        
-        
+          
         this.dispose();
-        
     }//GEN-LAST:event_editPromoActionPerformed
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       // TODO add your handling code here:
-        try{
-            /* 
-            String sql = "SELECT PR.promo_record_id, CONCAT(C.last_name, ', ', C.first_name) AS full_name " 
-                + "FROM customer AS C JOIN promo_record AS PR ON PR.customer_id = C.customer_id";
-            */
-            
-            // Temporary
-            String sql = "SELECT customer_id, CONCAT(last_name, ', ', first_name) AS full_name FROM customer";
-            
-
-            PreparedStatement pst;
-            pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery(); // Java object that represents the result of a database query, which contains the data retrieved from the database.
-            table = (DefaultTableModel) TableforPromo.getModel(); // TableforPromo - Table in ui
-            
-            table.setRowCount(0); // To print from the top
-            
-            while(rs.next()){ // While loop to print all the information
-                String id = rs.getString("customer_id"); // Set id to id from database
-                String fullName = rs.getString("full_name");
-                int points = 5;
-                // INSERT IF ELSE statement for points (Available or not)
-                String status = "Not available";
-                
-                table.addRow(new Object[]{id, fullName, points, status}); // Array to add as a row in the table
-            }
-            
-            
-        }catch(Exception e){
-            System.out.println(e.getMessage());
-        }
-        
-        
-        
-    }//GEN-LAST:event_formWindowOpened
-
-    private void searchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyReleased
+    private void applyPromoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyPromoActionPerformed
         // TODO add your handling code here:
-        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(TableforPromo.getModel());
-          String text = searchField.getText();
-        if (text.trim().isEmpty()) {
-            rowSorter.setRowFilter(null);
-        }     else {  
-        rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
-        TableforPromo.setRowSorter(rowSorter);
+        table = (DefaultTableModel) TableforPromo.getModel(); // TableforPromo is table from GUI
+            int indexRow = TableforPromo.getSelectedRow(); // Get the selected row (via ID) in Jtable
+            int indexColumn = TableforPromo.getSelectedColumn(); // Get the selected row (via ID) in Jtable
+            String status=(String)table.getValueAt(indexRow,indexColumn+1); 
+            String id=(String)table.getValueAt(indexRow,indexColumn-2); int ids = Integer.parseInt(id);
+            
+    
+           if(status.equals("Available")){
+            // should use promo_id instead of customer_id
+            
+            try{
+            String sql="UPDATE promo_effect_count=promo_record+1 WHERE customer_id='"+ids+"';"; 
+                PreparedStatement pst;
+                pst = con.prepareStatement(sql);
+                pst.executeQuery(); 
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+            JOptionPane.showMessageDialog(this, "Promo applied!", "Apply promo", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            
         }
-    }//GEN-LAST:event_searchFieldKeyReleased
+        
+    }//GEN-LAST:event_applyPromoActionPerformed
+
+    private void TableforPromoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableforPromoMouseClicked
+        // TODO add your handling code here:
+        table = (DefaultTableModel) TableforPromo.getModel(); // TableforPromo is table from GUI
+            int indexRow = TableforPromo.getSelectedRow(); // Get the selected row (via ID) in Jtable
+            int indexColumn = TableforPromo.getSelectedColumn(); 
+        String status=(String)table.getValueAt(indexRow,indexColumn+1);
+        if(status.equals("Available")){
+            applyPromo.setEnabled(true);
+        }else{
+            applyPromo.setEnabled(false);
+        }
+    }//GEN-LAST:event_TableforPromoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -341,8 +469,10 @@ public class tablesPromo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelSearchBar;
     private javax.swing.JTable TableforPromo;
+    private javax.swing.JButton applyPromo;
     private javax.swing.JButton editPromo;
     private javax.swing.JLabel headerlogo3;
+    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
