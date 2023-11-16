@@ -477,7 +477,7 @@ public class dashboardPage extends javax.swing.JFrame {
         
         rightAlign.setHorizontalAlignment(JLabel.RIGHT);
         orderList.getColumnModel().getColumn(2).setCellRenderer(rightAlign);
-        orderList.getColumnModel().getColumn(4).setCellRenderer(rightAlign); 
+        orderList.getColumnModel().getColumn(3).setCellRenderer(rightAlign); 
     }
     /**
      * @param args the command line arguments
