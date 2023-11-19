@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
@@ -29,6 +30,8 @@ public class salesTracker extends javax.swing.JFrame {
     /**
      * Creates new form salesTracker
      */
+    
+    private String customStartDate, customEndDate;
     Connection con = new mysqlConnection().getCon();
     public salesTracker() {
         initComponents();
@@ -63,8 +66,8 @@ public class salesTracker extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         profitDisplay = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        salesDateChooser = new com.toedter.calendar.JDateChooser();
-        setDateButton = new javax.swing.JButton();
+        dateFilter = new javax.swing.JComboBox<>();
+        dateRangeText = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -211,14 +214,14 @@ public class salesTracker extends javax.swing.JFrame {
             }
         });
 
-        setDateButton.setBackground(new java.awt.Color(40, 75, 135));
-        setDateButton.setForeground(new java.awt.Color(255, 255, 255));
-        setDateButton.setText("Set Date");
-        setDateButton.addActionListener(new java.awt.event.ActionListener() {
+        dateFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Today", "Yesterday", "Last 7 days", "Last 30 days", "Custom" }));
+        dateFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setDateButtonActionPerformed(evt);
+                dateFilterActionPerformed(evt);
             }
         });
+
+        dateRangeText.setText("dateRangeDisplay");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -231,18 +234,18 @@ public class salesTracker extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(dateRangeText, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(dateFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1032, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 721, Short.MAX_VALUE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(salesDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(setDateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -255,16 +258,13 @@ public class salesTracker extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jButton2)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(salesDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(setDateButton))))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(dateFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(dateRangeText)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                 .addGap(14, 14, 14)
@@ -317,110 +317,246 @@ public class salesTracker extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton2ActionPerformed
 public double totalExpensesNum = 0, totalSales = 0;
+
+
+
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT orders.order_id, concat(last_name,\",\", first_name) as 'customer_name', contact_num, orders.order_status, order_date_time FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
-            try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            DefaultTableModel modelOrders = (DefaultTableModel)salesTable.getModel();
-            
-            
-            
-            while(rs.next()){
-                String orderID = rs.getString("order_id");
-                String custName = rs.getString("customer_name");
-                //String amount = rs.getString("amount");
-                LocalDateTime dateTimeOrder = rs.getTimestamp("order_date_time").toLocalDateTime();
-                String formattedDateTime2 = dateTimeOrder.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                
-                
-                
-                String sqlGetItems = "SELECT * FROM order_line WHERE order_id = " +orderID+";";
-                
-                
-                PreparedStatement pst2 = con.prepareStatement(sqlGetItems);
-                ResultSet rs2 = pst2.executeQuery();
-                int tmpQuantity  =0 ;
-                double amount = 0;
-                String itemId = "";
-                while(rs2.next()){
-                    tmpQuantity = Integer.parseInt(rs2.getString("item_quantity"));
-                    itemId = rs2.getString("non_rental_item_id");
-                    
-                    String sqlGetPrice = "SELECT non_rental_item_price FROM non_rental_item WHERE non_rental_item_id = " +itemId+";";
-                    
-                    PreparedStatement pst3 = con.prepareStatement(sqlGetPrice);
-                    ResultSet rs3 = pst3.executeQuery();
-                    
-                    while(rs3.next()){
-                        double itemPrice = Double.parseDouble(rs3.getString("non_rental_item_price"));
-                        amount += tmpQuantity * itemPrice;
-                    }
-                }
-                
-                modelOrders.addRow(new Object[]{orderID, formattedDateTime2,custName, amount});
-            
-               
-            }
-            
-            //totalExpenses.setText("PHP  " + String.valueOf(totalExpensesNum));
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }
+        dateFilter.setSelectedIndex(0);
+        loadAllData(null , null);
         
-        String sql2 = "SELECT expense_amount, expense_description, expense_date_time FROM expense";
-        try{
-            PreparedStatement pst = con.prepareStatement(sql2);
-            ResultSet rs = pst.executeQuery();
-            DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
-            
-            
-            
-            while(rs.next()){
-                //String expID = rs.getString("expense_id");
-                String expDesc = rs.getString("expense_description");
-                String expAmount = rs.getString("expense_amount");
-                double expAmount2 = rs.getDouble("expense_amount");
-                LocalDateTime dateTime = rs.getTimestamp("expense_date_time").toLocalDateTime();
-                String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                
-                model.addRow(new String[]{formattedDateTime, expDesc,expAmount});
-            }
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }
         calculateAll();
         alignValues();
     }//GEN-LAST:event_formWindowOpened
 
-    private void setDateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setDateButtonActionPerformed
-        // TODO add your handling code here:
-        //Date filter feature
-        //Use salesDateChooser
-        //salesTable, expensesTable
+    private void dateFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateFilterActionPerformed
+        String dateRange = dateFilter.getSelectedItem().toString().trim();
+        DefaultTableModel salesModel = (DefaultTableModel)salesTable.getModel();
+        DefaultTableModel expenseModel = (DefaultTableModel)expensesTable.getModel();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
-        TableRowSorter<TableModel> expenseSorter = new TableRowSorter<TableModel>(((DefaultTableModel) expensesTable.getModel()));
-        TableRowSorter<TableModel> salesSorter = new TableRowSorter<TableModel>(((DefaultTableModel) salesTable.getModel()));
+        DateTimeFormatter forDisplay = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+        //Today date
+        LocalDate today = LocalDate.now();
+        String todayText = dtf.format(today);
         
-        if(salesDateChooser.getDate()!= null){
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String salesDate =dateFormat.format(salesDateChooser.getDate());
-            expenseSorter.setRowFilter(RowFilter.regexFilter("(?i)" + salesDate));
-            salesSorter.setRowFilter(RowFilter.regexFilter("(?i)" + salesDate));
-            expensesTable.setRowSorter(expenseSorter);
-            salesTable.setRowSorter(salesSorter);
-        }else{
-            expenseSorter.setRowFilter(RowFilter.regexFilter(" "));
-            salesSorter.setRowFilter(RowFilter.regexFilter(""));
-            expensesTable.setRowSorter(expenseSorter);
-            salesTable.setRowSorter(salesSorter);
-        }
-       
-        calculateAll();
-        alignValues();
-    }//GEN-LAST:event_setDateButtonActionPerformed
+        if (dateRange.equalsIgnoreCase("All")){
+            loadAllData(null,null);
+            
+            dateRangeText.setText("All sales and expenses");
+           
+        }else if(dateRange.equalsIgnoreCase("today")){
+            
+            loadAllData(todayText,null);
+            
+            
+            dateRangeText.setText(forDisplay.format(today));
+            
+        }else if(dateRange.equalsIgnoreCase("Yesterday")){
+            LocalDate yesterday = today.minusDays(1);
+            
+            String yesterdayText = dtf.format(yesterday);
+            loadAllData(yesterdayText, null);
+            
+            dateRangeText.setText(forDisplay.format(yesterday));
+            
+        }else if (dateRange.equalsIgnoreCase("Last 7 days")){
+            LocalDate lastSeven = today.minusDays(7);
+            String lastSevenText = dtf.format(lastSeven);
+            
+            loadAllData(lastSevenText,todayText);
+            dateRangeText.setText(forDisplay.format(lastSeven) +" - "+forDisplay.format(today));
+            
+            
+        }else if (dateRange.equals("Last 30 days")){
+            LocalDate lastThirty = today.minusDays(30);
+            
+            String lastThirtyText= dtf.format(lastThirty);
+            
+            loadAllData(lastThirtyText, todayText);
+            
+            
+            dateRangeText.setText(forDisplay.format(lastThirty) + " - " + forDisplay.format(today));
+            
+        }else if(dateRange.equalsIgnoreCase("Custom")){
+            dateRange customRange = new dateRange(new javax.swing.JFrame(), true);
+            
+            customRange.setVisible(true);
+            
+            customRange.addWindowListener(new WindowAdapter (){
+                public void windowClosed(WindowEvent e){
+                    String customStart = customRange.getStartDate();
+                    String customEnd = customRange.getEndDate();
 
+                    loadAllData(customStart, customEnd);
+                    
+                    LocalDate cStart = LocalDate.parse(customStart);
+                    LocalDate cEnd = LocalDate.parse(customEnd);
+                    
+                   if (customStart == customEnd){
+                       dateRangeText.setText(forDisplay.format(cStart));
+                   }else{
+                       dateRangeText.setText(forDisplay.format(cStart) + " - " + forDisplay.format(cEnd));
+                    
+                   }
+                    
+                }
+            });
+        }
+        
+    }//GEN-LAST:event_dateFilterActionPerformed
+
+    
+    private void loadAllData(String startDate, String endDate){
+    
+        DefaultTableModel salesTableModel = (DefaultTableModel)salesTable.getModel();
+        DefaultTableModel expensesTableModel = (DefaultTableModel)expensesTable.getModel();
+        
+        salesTableModel.setRowCount(0);
+        expensesTableModel.setRowCount(0);        
+        
+        String finalStartDate = "'" + startDate + "'";
+        String finalEndDate = "'" + endDate+"'";
+        
+        String sqlForSales = "";
+        
+        if (startDate == null && endDate == null){
+            
+            sqlForSales= "SELECT orders.order_id, concat(last_name,\",\", first_name) as 'customer_name', contact_num, orders.order_status, order_date_time, orders.customer_id,customer.customer_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id ORDER BY order_date_time DESC;";
+          
+        }else if ((startDate != null && endDate == null )|| startDate == endDate){
+     
+            sqlForSales = "SELECT orders.order_id, concat(last_name,\",\", first_name) as 'customer_name', contact_num, orders.order_status, order_date_time, orders.customer_id,customer.customer_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id AND DATE(order_date_time) = "+finalStartDate+" ORDER BY order_date_time DESC;";
+    
+        }else{
+            
+            sqlForSales = "SELECT orders.order_id, concat(last_name,\",\", first_name) as 'customer_name', contact_num, orders.order_status, order_date_time, orders.customer_id,customer.customer_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id AND DATE(order_date_time) BETWEEN " +finalStartDate+ "AND" +finalEndDate+" ORDER BY order_date_time DESC;";
+            
+        }
+        
+        
+        
+        
+        
+            try{
+                PreparedStatement pst = con.prepareStatement(sqlForSales);
+                ResultSet rs = pst.executeQuery();
+
+
+
+                while(rs.next()){
+                    String orderID = rs.getString("order_id");
+                    String custName = rs.getString("customer_name");
+                    String custID = rs.getString("customer_id");
+                    String custType = rs.getString("customer_type");
+                    LocalDateTime dateTimeOrder = rs.getTimestamp("order_date_time").toLocalDateTime();
+                    String formattedDateTime2 = dateTimeOrder.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+
+
+                    String sqlGetItems = "SELECT * FROM order_line WHERE order_id = " +orderID+";";
+
+                    int specialQuantity= 0;
+                    PreparedStatement pst2 = con.prepareStatement(sqlGetItems);
+                    ResultSet rs2 = pst2.executeQuery();
+                    int tmpQuantity  =0 ;
+                    double amount = 0;
+                    String itemId = "";
+                    while(rs2.next()){
+                        tmpQuantity = Integer.parseInt(rs2.getString("item_quantity"));
+                        itemId = rs2.getString("non_rental_item_id");
+
+                        String sqlGetPrice = "SELECT non_rental_item_price, non_rental_item_name FROM non_rental_item WHERE non_rental_item_id = " +itemId+";";
+
+                        PreparedStatement pst3 = con.prepareStatement(sqlGetPrice);
+                        ResultSet rs3 = pst3.executeQuery();
+
+                        while(rs3.next()){
+                            double itemPrice = Double.parseDouble(rs3.getString("non_rental_item_price"));
+                            String itemName =rs3.getString("non_rental_item_name");
+                            if (itemName.equalsIgnoreCase("Refill") || itemName.equalsIgnoreCase("New Water Bottle")){
+                                specialQuantity += tmpQuantity;
+                            }
+                            amount += tmpQuantity * itemPrice;
+                        }
+                    }
+
+
+                    double fee = 0, discount=0;
+                    if (custType.equalsIgnoreCase("Contract")){
+                        String getFee = "SELECT additional_fee FROM rental_contract WHERE customer_id = " +custID+";";
+                        PreparedStatement forFee = con.prepareStatement(getFee);
+                        ResultSet fees = forFee.executeQuery();
+
+                        while(fees.next()){
+                            fee = Double.parseDouble(fees.getString("additional_fee"));
+                        }
+
+                        amount += specialQuantity * fee;
+                    }else if (custType.equalsIgnoreCase("Dealer")){
+                        String getDiscount = "SELECT discount_rate FROM dealer_contract WHERE customer_id = " +custID+";";
+
+                        PreparedStatement forDiscount = con.prepareStatement(getDiscount);
+                        ResultSet discounts = forDiscount.executeQuery();
+
+                        while(discounts.next()){
+                            discount = Double.parseDouble(discounts.getString("discount_rate"));
+                        }
+
+                        amount -= specialQuantity * discount;
+                    }
+
+
+                   salesTableModel.addRow(new Object[]{orderID, formattedDateTime2,custName, String.format("%.2f", amount)});
+
+
+                }
+
+                //totalExpenses.setText("PHP  " + String.valueOf(totalExpensesNum));
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+
+            String sql2 = "SELECT expense_amount, expense_description, expense_date_time FROM expense";
+            
+            String sqlForExpenses = "";
+            
+            
+             if (startDate == null && endDate == null){
+            
+                sqlForExpenses= "SELECT expense_amount, expense_description, expense_date_time FROM expense ORDER BY expense_date_time DESC";
+                
+            }else if ((startDate != null && endDate == null) || startDate == endDate){
+
+                sqlForExpenses = "SELECT expense_amount, expense_description, expense_date_time FROM expense WHERE DATE(expense_date_time) = "+finalStartDate+" ORDER BY expense_date_time DESC;";
+            }else{
+
+                sqlForExpenses = "SELECT expense_amount, expense_description, expense_date_time FROM expense WHERE DATE(expense_date_time) BETWEEN "+finalStartDate+" AND "+finalEndDate+" ORDER BY expense_date_time DESC;";
+                
+            }
+            
+            try{
+                PreparedStatement pst = con.prepareStatement(sqlForExpenses);
+                ResultSet rs = pst.executeQuery();
+
+                while(rs.next()){
+                    //String expID = rs.getString("expense_id");
+                    String expDesc = rs.getString("expense_description");
+                    String expAmount = rs.getString("expense_amount");
+                    double expAmount2 = rs.getDouble("expense_amount");
+                    LocalDateTime dateTime = rs.getTimestamp("expense_date_time").toLocalDateTime();
+                    String formattedDateTime = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+
+                    expensesTableModel.addRow(new String[]{formattedDateTime, expDesc,expAmount});
+                }
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+
+     calculateAll();
+     alignValues();
+    }
     public void calculateAll(){
         
         //Column for expenses = 3 =2, 
@@ -448,9 +584,6 @@ public double totalExpensesNum = 0, totalSales = 0;
         
         double tempProfit = salesTemp-expensesTemp;
         
-        System.out.println("Profit: "+tempProfit);
-        System.out.println("Sales: "+ salesTemp);
-        System.out.println("Expenses: "+expensesTemp);
         
         
         if(tempProfit > 0){
@@ -510,6 +643,8 @@ public double totalExpensesNum = 0, totalSales = 0;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> dateFilter;
+    private javax.swing.JLabel dateRangeText;
     private javax.swing.JTable expensesTable;
     private javax.swing.JLabel headerlogo;
     private javax.swing.JButton jButton2;
@@ -527,9 +662,7 @@ public double totalExpensesNum = 0, totalSales = 0;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel profitDisplay;
-    private com.toedter.calendar.JDateChooser salesDateChooser;
     private javax.swing.JTable salesTable;
-    private javax.swing.JButton setDateButton;
     private javax.swing.JLabel totalExpenses;
     private javax.swing.JLabel totalSalesDisplay;
     // End of variables declaration//GEN-END:variables
