@@ -7,6 +7,7 @@ import java.awt.event.*;
 import searchPackage.customerSearch;
 import contractsPackage.*;
 
+
 import connectionSql.mysqlConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,6 +21,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import static java.time.temporal.TemporalQueries.localDate;
 import javax.swing.text.DateFormatter;
+import contractsPackage.addContract;
 /**
  *
  * @author ronjoshual.bersabal
@@ -122,7 +124,7 @@ public class rentOutItem extends javax.swing.JDialog {
                     .addComponent(jLabel3)
                     .addComponent(customerName))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(customerAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -357,13 +359,13 @@ public class rentOutItem extends javax.swing.JDialog {
         newContract.setVisible(true);
         newContract.addWindowListener(new WindowAdapter(){
         public void windowClosed(WindowEvent e){
-            if (newContract.addedContract){
+           /* if (newContract.addedContract){
                 confirmButton.setEnabled(true);
                 setCustomerValues(newContract.customerID);
                 
             }else{
                 confirmButton.setEnabled(false);
-            }
+            }*/
         }});
         
     }//GEN-LAST:event_addContractButtonActionPerformed

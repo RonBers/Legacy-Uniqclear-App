@@ -276,7 +276,7 @@ public class customerSearch extends javax.swing.JDialog {
             {
               System.out.println("jdialog window closed event received");
               model.setRowCount(0);
-              String sql = "SELECT customer_id, first_name, last_name, middle_name, contact_num ,customer_type FROM customer";
+              String sql = "SELECT customer_id, last_name, first_name , middle_name, contact_num, customer_type FROM customer";
                 try{
                     //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);
