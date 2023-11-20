@@ -16,6 +16,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Enumeration;
 import javax.swing.AbstractButton;
@@ -68,6 +70,9 @@ public class employeeInfo extends javax.swing.JDialog {
         updateInfoButton = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         empAddress = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        employeeBranchHistory = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -88,7 +93,7 @@ public class employeeInfo extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(headerlogo)
-                .addGap(0, 101, Short.MAX_VALUE))
+                .addGap(0, 163, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,7 +145,7 @@ public class employeeInfo extends javax.swing.JDialog {
                 backButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(backButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 480, 162, 45));
+        jPanel2.add(backButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 600, 162, 45));
 
         jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         jLabel6.setText("DOB:");
@@ -152,7 +157,7 @@ public class employeeInfo extends javax.swing.JDialog {
                 transferBranchButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(transferBranchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, 130, 40));
+        jPanel2.add(transferBranchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 130, 40));
 
         jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         jLabel7.setText("Name:");
@@ -176,7 +181,7 @@ public class employeeInfo extends javax.swing.JDialog {
                 updateInfoButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(updateInfoButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 130, 40));
+        jPanel2.add(updateInfoButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 130, 40));
 
         jLabel9.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         jLabel9.setText("Address:");
@@ -186,25 +191,63 @@ public class employeeInfo extends javax.swing.JDialog {
         empAddress.setText("Address");
         jPanel2.add(empAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 480, -1));
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Emloyee Branch History", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 1, 12))); // NOI18N
+
+        employeeBranchHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Date of Assignment", "Branch"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(employeeBranchHistory);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, 630, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 698, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 180, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 179, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 657, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 556, Short.MAX_VALUE)))
+                    .addGap(0, 657, Short.MAX_VALUE)))
         );
 
         pack();
@@ -242,8 +285,55 @@ public class employeeInfo extends javax.swing.JDialog {
             System.out.println("Error: " +ex.getMessage());
         }
         
+        updateTable();
+        
+        
+        
     }//GEN-LAST:event_formWindowOpened
 
+    private void updateTable(){
+        DefaultTableModel model = (DefaultTableModel)employeeBranchHistory.getModel();
+        model.setRowCount(0);
+        
+        String sqlGetHistory = "SELECT * FROM employee_branch_history;";
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(sqlGetHistory);
+            ResultSet rs = pst.executeQuery();
+            
+            while(rs.next()){
+                String branchID = rs.getString("branch_id");
+                String branchName ="";
+                String sqlGetBranch = "SELECT branch_name FROM branch WHERE branch_id = " +branchID+";";
+                
+                PreparedStatement pst2 = con.prepareStatement(sqlGetBranch);
+                
+                ResultSet rs2 = pst2.executeQuery();
+                
+                while (rs2.next()){
+                    branchName = rs2.getString("branch_name");
+                }
+              
+               
+                DateTimeFormatter reader = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime assignedDate = LocalDateTime.parse(rs.getString("assignment_date"),reader);
+                
+                
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMMM dd, yyyy HH:mm:ss");
+                
+                model.addRow(new String []{dtf.format(assignedDate) , branchName});
+                
+                
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: " + ex.getMessage());
+        }
+        
+        
+        
+        
+    }
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
         this.dispose();
@@ -330,6 +420,7 @@ public class employeeInfo extends javax.swing.JDialog {
     public javax.swing.JLabel empID;
     public javax.swing.JLabel empName;
     public javax.swing.JLabel empRole;
+    private javax.swing.JTable employeeBranchHistory;
     private javax.swing.JLabel headerlogo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -341,6 +432,8 @@ public class employeeInfo extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton transferBranchButton;
     private javax.swing.JButton updateInfoButton;
     // End of variables declaration//GEN-END:variables
