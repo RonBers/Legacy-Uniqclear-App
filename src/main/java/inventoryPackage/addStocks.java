@@ -366,7 +366,7 @@ public class addStocks extends javax.swing.JDialog {
                String id = items.get(itemsTable.getValueAt(row,1).toString().trim());
                
               
-               System.out.println(id);
+               
                
                
                String saveSql = "UPDATE non_rental_item SET quantity = quantity + "+quantity+" WHERE non_rental_item_id ="+id+";";

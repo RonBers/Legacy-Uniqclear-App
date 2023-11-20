@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 import searchPackage.employeeSelect;
 import connectionSql.*;
+import java.util.HashMap;
 
 import javax.swing.DefaultComboBoxModel;
 
@@ -35,6 +36,7 @@ public class expenseItem extends javax.swing.JFrame {
      * Creates new form expenseItem
      */
     Connection con = new mysqlConnection().getCon();
+    HashMap <String, String> expenses = new HashMap <String, String>();
     private String employeeName, employeeID, employeeBranch;
     
    
@@ -70,6 +72,8 @@ public class expenseItem extends javax.swing.JFrame {
         selectEmployeeButton = new javax.swing.JButton();
         employeeField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        existingExpense = new javax.swing.JComboBox<>();
+        saveExpenseInfo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Expense Item");
@@ -197,6 +201,21 @@ public class expenseItem extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel5.setText("Selected Employee:");
 
+        existingExpense.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                existingExpenseActionPerformed(evt);
+            }
+        });
+
+        saveExpenseInfo.setText("Save to list");
+        saveExpenseInfo.setToolTipText("Save this expense item information?");
+        saveExpenseInfo.setEnabled(false);
+        saveExpenseInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveExpenseInfoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -209,7 +228,7 @@ public class expenseItem extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 261, Short.MAX_VALUE)
                                 .addComponent(editExpense)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(removeButton))
@@ -223,7 +242,7 @@ public class expenseItem extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addGap(12, 12, 12))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -236,7 +255,11 @@ public class expenseItem extends javax.swing.JFrame {
                                         .addComponent(selectEmployeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(expenseAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(existingExpense, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(saveExpenseInfo))
+                            .addComponent(jScrollPane1))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -244,18 +267,22 @@ public class expenseItem extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
-                .addGap(8, 8, 8)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jLabel2))
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(existingExpense, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(saveExpenseInfo)))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(removeButton)
                         .addComponent(editExpense, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5)
+                .addGap(7, 7, 7)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
@@ -402,7 +429,84 @@ public class expenseItem extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         employeeField.setEditable(false);
         
+        
+        String sql = "SELECT * FROM predefined_expense;";
+       
+        DefaultComboBoxModel model = (DefaultComboBoxModel) existingExpense.getModel();
+        model.addElement("-");
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                
+                String tempName = rs.getString("pd_expense_name");
+                //String tempId = rs.getString("non_rental_item_id");
+               
+                String amount = rs.getString("pd_expense_amount");
+                
+                model.addElement(tempName);
+                expenses.put(tempName,amount);
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: "+ ex.getMessage());
+        }
+       
+        model.addElement("Custom");
+        
+        existingExpense.setModel(model);
+             
     }//GEN-LAST:event_formWindowOpened
+
+    private void existingExpenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_existingExpenseActionPerformed
+        // TODO add your handling code here:
+        String selected = existingExpense.getSelectedItem().toString().trim();
+      
+        if (selected.equalsIgnoreCase("Custom")){
+            expenseDescription.setText("");
+            expenseAmount.setValue(0);
+            saveExpenseInfo.setEnabled(true);
+            
+        }else if (!selected.equalsIgnoreCase("-")){
+           
+            expenseDescription.setText(selected);
+            expenseAmount.setValue(Double.parseDouble(expenses.get(selected)));
+            saveExpenseInfo.setEnabled(false);
+        }
+        
+        
+    }//GEN-LAST:event_existingExpenseActionPerformed
+
+    private void saveExpenseInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveExpenseInfoActionPerformed
+        // TODO add your handling code here:
+        String expDesc = expenseDescription.getText().trim();
+        
+        if (expenses.get(expDesc) != null){
+            JOptionPane.showMessageDialog(this,"Expense item with the same expense description already exists.","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            String desc = "'" + expDesc+"'";
+            String amount = "";
+            if (expenseAmount.getValue() != null){
+                if (expenseAmount.getValue().toString().trim().equals("0")){
+                    JOptionPane.showMessageDialog(this,"Please input an amount that is greater than zero.","Error!", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    amount = expenseAmount.getValue().toString().trim();
+                    
+                    String sql = "INSERT INTO predefined_expense (pd_expense_name, pd_expense_amount, branch_id) VALUES (" +desc+","+amount+",6);";
+                    
+                    try{
+                        PreparedStatement pst = con.prepareStatement(sql);
+                        pst.executeUpdate();
+                    }catch(Exception ex){
+                        System.out.println("Error: " +ex.getMessage());
+                    }
+                    
+                }
+            }
+        }
+        
+    }//GEN-LAST:event_saveExpenseInfoActionPerformed
     
     public void alignValues(){
        // DefaultTableModel model = (DefaultTableModel)expensesTable.getModel();
@@ -460,6 +564,7 @@ public class expenseItem extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser date;
     private javax.swing.JButton editExpense;
     private javax.swing.JTextField employeeField;
+    private javax.swing.JComboBox<String> existingExpense;
     private javax.swing.JSpinner expenseAmount;
     private javax.swing.JTextArea expenseDescription;
     private javax.swing.JTable expensesTable;
@@ -473,6 +578,7 @@ public class expenseItem extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeButton;
+    private javax.swing.JButton saveExpenseInfo;
     private javax.swing.JButton saveExpenseItem;
     private javax.swing.JButton selectEmployeeButton;
     // End of variables declaration//GEN-END:variables
