@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -117,6 +118,11 @@ public class nonRentalInventory extends javax.swing.JFrame {
         jButton2.setBackground(new java.awt.Color(40, 75, 135));
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Restock");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(40, 75, 135));
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
@@ -305,7 +311,29 @@ public class nonRentalInventory extends javax.swing.JFrame {
 
     private void delNonRentalItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delNonRentalItemActionPerformed
         // TODO add your handling code here:
-        
+         DefaultTableModel model = (DefaultTableModel)nonRentalTable.getModel();
+        if(nonRentalTable.getSelectedRow()==-1){
+            JOptionPane.showMessageDialog(this,"Please select an item first!", "Error!", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            String selectedID =  nonRentalTable.getModel().getValueAt(nonRentalTable.getSelectedRow(),0).toString();
+            
+            String sql = "DELETE FROM non_rental_item WHERE non_rental_item_id = " +selectedID+";";
+            String sql2 = "DELETE FROM item_price_history WHERE non_rental_item_id = " +selectedID+";";
+            try{
+                
+                PreparedStatement pst2 = con.prepareStatement(sql2);
+                pst2.executeUpdate();
+                
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.executeUpdate();
+                
+                
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+            model.removeRow(nonRentalTable.getSelectedRow());
+            
+        }
     }//GEN-LAST:event_delNonRentalItemActionPerformed
 
     private void editNonRentalItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editNonRentalItemActionPerformed
@@ -323,17 +351,22 @@ public class nonRentalInventory extends javax.swing.JFrame {
         String toeditQuantity = nonRentalTable.getModel().getValueAt(idRow,2).toString();
         String toeditItemPrice = nonRentalTable.getModel().getValueAt(idRow,3).toString();
         
-        
-        
+       
         editItem editRental = new editItem(this, true);
         
         editRental.editItemName.setText(toeditItemName);
-        editRental.editItemPrice.setValue(Integer.parseInt(toeditQuantity));
-        editRental.editItemQuantity.setValue(Double.parseDouble(toeditItemPrice));
+        editRental.editItemPrice.setValue(Double.parseDouble(toeditItemPrice));
+        editRental.editItemQuantity.setValue(Integer.parseInt(toeditQuantity));
         
-        
+        editRental.setID(selectedID);
         
         editRental.setVisible(true);
+        
+        editRental.addWindowListener(new WindowAdapter(){
+            public void windowClosed(WindowEvent e){
+                itemsList();
+            }
+        });
     }//GEN-LAST:event_editNonRentalItemActionPerformed
 
     private void searchItemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchItemKeyTyped
@@ -344,6 +377,20 @@ public class nonRentalInventory extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_searchItemKeyTyped
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        addStocks reStock = new addStocks(new javax.swing.JFrame(), true);
+        
+        reStock.setVisible(true);
+        
+        reStock.addWindowListener(new WindowAdapter (){
+            public void windowClosed(WindowEvent e){
+                itemsList();
+            }
+        });
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -19,6 +19,7 @@ public class editItem extends javax.swing.JDialog {
      */
     
     Connection con = new mysqlConnection().getCon();
+    private String itemId;
     boolean nonRental = false;
     public editItem(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -41,12 +42,9 @@ public class editItem extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         title2 = new javax.swing.JLabel();
-        nonRentalType = new javax.swing.JRadioButton();
-        typeRental = new javax.swing.JRadioButton();
         ItemInformationLabel = new javax.swing.JLabel();
         ItemInformationLabel1 = new javax.swing.JLabel();
         addItemBTN = new javax.swing.JButton();
-        itemNameLabel3 = new javax.swing.JLabel();
         NonRentalPanel = new javax.swing.JPanel();
         itemNameLabel = new javax.swing.JLabel();
         editItemName = new javax.swing.JTextField();
@@ -54,7 +52,6 @@ public class editItem extends javax.swing.JDialog {
         editItemQuantity = new javax.swing.JSpinner();
         editItemPrice = new javax.swing.JSpinner();
         itemNameLabel2 = new javax.swing.JLabel();
-        itemAvailability = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         cancelButton = new javax.swing.JButton();
 
@@ -93,22 +90,6 @@ public class editItem extends javax.swing.JDialog {
         title2.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         title2.setText("Add Item");
 
-        buttonGroup1.add(nonRentalType);
-        nonRentalType.setText("Non-rental");
-        nonRentalType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nonRentalTypeActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(typeRental);
-        typeRental.setText("Rental");
-        typeRental.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                typeRentalActionPerformed(evt);
-            }
-        });
-
         ItemInformationLabel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         ItemInformationLabel.setText("Item Type");
 
@@ -125,13 +106,10 @@ public class editItem extends javax.swing.JDialog {
             }
         });
 
-        itemNameLabel3.setText("Availability");
-
         NonRentalPanel.setEnabled(false);
 
         itemNameLabel.setText("Item name");
 
-        editItemName.setEnabled(false);
         editItemName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editItemNameActionPerformed(evt);
@@ -141,9 +119,6 @@ public class editItem extends javax.swing.JDialog {
         itemNameLabel1.setText("Item quantity");
 
         editItemQuantity.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
-        editItemQuantity.setEnabled(false);
-
-        editItemPrice.setEnabled(false);
 
         itemNameLabel2.setText("Item price");
 
@@ -193,9 +168,6 @@ public class editItem extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        itemAvailability.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        itemAvailability.setEnabled(false);
-
         cancelButton.setBackground(new java.awt.Color(200, 0, 0));
         cancelButton.setForeground(new java.awt.Color(255, 255, 255));
         cancelButton.setText("Cancel");
@@ -222,18 +194,11 @@ public class editItem extends javax.swing.JDialog {
                 .addContainerGap(26, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(61, 61, 61)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(typeRental, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ItemInformationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(nonRentalType, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(ItemInformationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(ItemInformationLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(itemNameLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(70, 70, 70))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -256,18 +221,9 @@ public class editItem extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(ItemInformationLabel1)
                         .addGap(12, 12, 12)
-                        .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(itemNameLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(itemAvailability, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(ItemInformationLabel)
-                        .addGap(18, 18, 18)
-                        .addComponent(typeRental)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nonRentalType)))
-                .addGap(18, 18, 18)
+                        .addComponent(NonRentalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ItemInformationLabel))
+                .addGap(98, 98, 98)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addItemBTN)
                     .addComponent(cancelButton))
@@ -302,13 +258,16 @@ public class editItem extends javax.swing.JDialog {
        
     }//GEN-LAST:event_editItemNameActionPerformed
 
+    public void setID (String id){
+        this.itemId = id;
+    }
     private void addItemBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemBTNActionPerformed
         // Getting the VALUES
         String nameItem ="'"+editItemName.getText()+"'";
         String quantItem ="'"+editItemQuantity.getValue().toString()+"'";
-        String priceItem ="'"+editItemPrice.getValue().toString()+"'";
+        String priceItem = editItemPrice.getValue().toString();
         
-        String sql = "INSERT INTO item (item_name,item_price,branch_id) values (" +nameItem +", "+priceItem+",3);";
+        String sql = "UPDATE non_rental_item SET non_rental_item_price = " +priceItem+", quantity = "+quantItem+", non_rental_item_name = "+nameItem+" WHERE non_rental_item_id = "+itemId+" ;";
         try{
             PreparedStatement pst = con.prepareStatement(sql);
             pst.executeUpdate();
@@ -322,40 +281,9 @@ public class editItem extends javax.swing.JDialog {
         int random_int = (int)Math.floor(Math.random() * (max - min + 1) + min);
         String iCode = "'"+random_int+"'";
         
-        
-        if (typeRental.isSelected()){
-            sql2= "INSERT INTO rental_item (item_code, item_id) VALUES ("+iCode+", (SELECT item_id FROM item WHERE item_name = "+nameItem+"));";
-        }else{
-            sql2 = "INSERT INTO non_rental_item VALUES ((SELECT item_id FROM item WHERE item_name = "+nameItem+"), "+quantItem+");";
-        }
-        
-        try{    
-            PreparedStatement pst = con.prepareStatement(sql2);
-            pst.executeUpdate();
-        }catch(Exception e){
-            System.out.println("Error: "+e.getMessage());
-        }
-        
+    
        this.dispose();
     }//GEN-LAST:event_addItemBTNActionPerformed
-
-    private void typeRentalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeRentalActionPerformed
-        if(typeRental.isSelected()==true){
-            editItemName.setEnabled(true);
-            editItemQuantity.setEnabled(true);
-            editItemPrice.setEnabled(true);
-            itemAvailability.setEnabled(true);
-        }
-    }//GEN-LAST:event_typeRentalActionPerformed
-
-    private void nonRentalTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonRentalTypeActionPerformed
-        if(nonRentalType.isSelected()==true){
-            editItemName.setEnabled(true);
-            editItemQuantity.setEnabled(true);
-            editItemPrice.setEnabled(true);
-            itemAvailability.setEnabled(false);
-        }
-    }//GEN-LAST:event_nonRentalTypeActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         // TODO add your handling code here:
@@ -415,19 +343,15 @@ public class editItem extends javax.swing.JDialog {
     public javax.swing.JTextField editItemName;
     public javax.swing.JSpinner editItemPrice;
     public javax.swing.JSpinner editItemQuantity;
-    private javax.swing.JComboBox<String> itemAvailability;
     private javax.swing.JLabel itemNameLabel;
     private javax.swing.JLabel itemNameLabel1;
     private javax.swing.JLabel itemNameLabel2;
-    private javax.swing.JLabel itemNameLabel3;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
-    public javax.swing.JRadioButton nonRentalType;
     private javax.swing.JLabel title1;
     private javax.swing.JLabel title2;
-    public javax.swing.JRadioButton typeRental;
     // End of variables declaration//GEN-END:variables
 }

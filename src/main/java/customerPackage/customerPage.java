@@ -269,9 +269,12 @@ public class customerPage extends javax.swing.JFrame {
         int idRow = customerTable.getSelectedRow();
         String selectedID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
         String sql = "DELETE FROM customer WHERE customer_id='"+selectedID + "'";
+        
         try{
+    
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.executeUpdate();
+            pst.executeQuery();
+            
         }catch(Exception ex){
             System.out.println("Error: "+ex.getMessage());
         }

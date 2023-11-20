@@ -295,7 +295,7 @@ public class employeeInfo extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel)employeeBranchHistory.getModel();
         model.setRowCount(0);
         
-        String sqlGetHistory = "SELECT * FROM employee_branch_history;";
+        String sqlGetHistory = "SELECT * FROM employee_branch_history WHERE employee_id = "+employeeID+" ORDER BY assignment_date DESC;";
         
         try{
             PreparedStatement pst = con.prepareStatement(sqlGetHistory);

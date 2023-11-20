@@ -275,9 +275,13 @@ public class employeeProfile extends javax.swing.JFrame {
         int idRow = employeeTable.getSelectedRow();
         String selectedID = employeeTable.getModel().getValueAt(idRow,idColumn).toString();
         String sql = "DELETE FROM employee WHERE employee_id='"+selectedID + "'";
+        String sqlHistory = "DELETE FROM employee_branch_history WHERE employee_id = " +selectedID+";";
         try{
-            PreparedStatement pst = con.prepareStatement(sql);
+            PreparedStatement pst = con.prepareStatement(sqlHistory);
             pst.executeUpdate();
+            
+            PreparedStatement pst2 = con.prepareStatement(sql);
+            pst2.executeUpdate();
         }catch(Exception ex){
             System.out.println("Error: "+ex.getMessage());
         }
