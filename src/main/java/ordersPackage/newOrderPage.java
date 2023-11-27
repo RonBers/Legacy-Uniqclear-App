@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerModel;
@@ -112,7 +113,7 @@ public class newOrderPage extends javax.swing.JFrame {
         forWalkInButton = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         title = new javax.swing.JLabel();
-        item1 = new javax.swing.JComboBox<>();
+        itemSelector = new javax.swing.JComboBox<>();
         quantity1 = new javax.swing.JSpinner();
         addItem = new javax.swing.JButton();
         removeItem = new javax.swing.JButton();
@@ -442,10 +443,9 @@ public class newOrderPage extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        item1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Refill", "New Water Bottle", "Bottle Cap" }));
-        item1.addActionListener(new java.awt.event.ActionListener() {
+        itemSelector.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                item1ActionPerformed(evt);
+                itemSelectorActionPerformed(evt);
             }
         });
 
@@ -547,7 +547,7 @@ public class newOrderPage extends javax.swing.JFrame {
                         .addComponent(logo))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(item1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(itemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4)
                         .addComponent(quantity1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
@@ -593,7 +593,7 @@ public class newOrderPage extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(item1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(itemSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(quantity1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -646,8 +646,9 @@ public class newOrderPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void getItemList(){
-        /*String sql = "SELECT item_name FROM item ORDER BY item_id LIMIT 3;";
-         try{
+        String sql = "SELECT non_rental_item_name FROM non_rental_item WHERE isForSale = TRUE ORDER BY non_rental_item_id ASC;";
+        DefaultComboBoxModel model = (DefaultComboBoxModel) itemSelector.getModel();
+            try{
                     //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);
                     ResultSet rs = pst.executeQuery();
@@ -655,14 +656,19 @@ public class newOrderPage extends javax.swing.JFrame {
 
                     while(rs.next()){
                         //String priceTable = rs.getString("item_price");
-                        String itemTemp = rs.getString("item_name"); 
-                        item1.addItem(itemTemp);
+                        String itemTemp = rs.getString("non_rental_item_name"); 
+                        model.addElement(itemTemp);
                         itemsList.add(itemTemp);
                     }
      
-                }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-                }*/
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+            
+            itemSelector.setModel(model);
+            
+         
+         
     }
     private void adjustmentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adjustmentsActionPerformed
         // TODO add your handling code here:
@@ -792,10 +798,10 @@ public class newOrderPage extends javax.swing.JFrame {
                 }
         return selectedItemPrice;
     }
-    private void item1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_item1ActionPerformed
+    private void itemSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSelectorActionPerformed
         // TODO add your handling code here:
         quantity1.setValue(0);
-        itemOne = item1.getSelectedItem().toString();
+        itemOne = itemSelector.getSelectedItem().toString();
          if (itemOne.equalsIgnoreCase("new water bottle")){
            SpinnerModel value =  new SpinnerNumberModel(0,0,/*Integer.parseInt(newBottles.getText())*/50,1);  
             quantity1.setModel(value);
@@ -805,7 +811,7 @@ public class newOrderPage extends javax.swing.JFrame {
          }
             
         
-    }//GEN-LAST:event_item1ActionPerformed
+    }//GEN-LAST:event_itemSelectorActionPerformed
 
     private void quantity1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_quantity1StateChanged
      //  if ((Integer)quantity1.getValue() > newBottlesQuantity ){
@@ -814,7 +820,7 @@ public class newOrderPage extends javax.swing.JFrame {
     }//GEN-LAST:event_quantity1StateChanged
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-     
+        getItemList();
         
         String getStock = "SELECT quantity FROM non_rental_item WHERE non_rental_item_name = 'New Water Bottle';";
         
@@ -832,7 +838,7 @@ public class newOrderPage extends javax.swing.JFrame {
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
-        String itemName =item1.getSelectedItem().toString();
+        String itemName =itemSelector.getSelectedItem().toString();
         boolean itemExists = false;
         for (int row = 0; row < model.getRowCount(); row++) {
             String existingItems = model.getValueAt(row, 0).toString();
@@ -1099,7 +1105,7 @@ public class newOrderPage extends javax.swing.JFrame {
     private javax.swing.JRadioButton forDeliveryButton;
     private javax.swing.JRadioButton forWalkInButton;
     private javax.swing.JButton homeButton;
-    private javax.swing.JComboBox<String> item1;
+    private javax.swing.JComboBox<String> itemSelector;
     private javax.swing.JTable itemsTable;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
