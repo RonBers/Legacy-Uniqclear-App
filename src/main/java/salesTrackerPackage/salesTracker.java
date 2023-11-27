@@ -4,6 +4,7 @@
  */
 package salesTrackerPackage;
 import connectionSql.mysqlConnection;
+import ordersPackage.*;
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import expensesPackage.*;
 /**
  *
  * @author rjber
@@ -68,6 +70,8 @@ public class salesTracker extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         dateFilter = new javax.swing.JComboBox<>();
         dateRangeText = new javax.swing.JLabel();
+        viewExpenseButton = new javax.swing.JButton();
+        viewSaleButton = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -202,7 +206,7 @@ public class salesTracker extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(totalExpenses))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jButton2.setBackground(new java.awt.Color(40, 75, 135));
@@ -222,6 +226,24 @@ public class salesTracker extends javax.swing.JFrame {
         });
 
         dateRangeText.setText("dateRangeDisplay");
+
+        viewExpenseButton.setBackground(new java.awt.Color(40, 75, 135));
+        viewExpenseButton.setForeground(new java.awt.Color(255, 255, 255));
+        viewExpenseButton.setText("View");
+        viewExpenseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewExpenseButtonActionPerformed(evt);
+            }
+        });
+
+        viewSaleButton.setBackground(new java.awt.Color(40, 75, 135));
+        viewSaleButton.setForeground(new java.awt.Color(255, 255, 255));
+        viewSaleButton.setText("View");
+        viewSaleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewSaleButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -250,7 +272,12 @@ public class salesTracker extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1171, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1))))
+                            .addComponent(jScrollPane1)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(viewSaleButton)
+                            .addComponent(viewExpenseButton))))
                 .addGap(30, 30, 30))
         );
         jPanel1Layout.setVerticalGroup(
@@ -258,19 +285,24 @@ public class salesTracker extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jButton2)
-                .addGap(33, 33, 33)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(dateFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
-                        .addComponent(dateRangeText)))
+                        .addComponent(dateRangeText))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(dateFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
-                .addGap(14, 14, 14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(viewSaleButton)
+                .addGap(3, 3, 3)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(viewExpenseButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(125, 125, 125))
@@ -292,7 +324,7 @@ public class salesTracker extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(headerlogo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 769, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -322,6 +354,12 @@ public double totalExpensesNum = 0, totalSales = 0;
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        salesTable.getTableHeader().setOpaque(false);
+        salesTable.getTableHeader().setBackground(new Color(255,192,0));
+        
+        expensesTable.getTableHeader().setOpaque(false);
+        expensesTable.getTableHeader().setBackground(new Color(255,192,0));
+        
         dateFilter.setSelectedIndex(0);
         loadAllData(null , null);
         
@@ -406,6 +444,55 @@ public double totalExpensesNum = 0, totalSales = 0;
         
     }//GEN-LAST:event_dateFilterActionPerformed
 
+    private void viewExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewExpenseButtonActionPerformed
+        // TODO add your handling code here:
+        if (expensesTable.getSelectedRow() == -1){
+            JOptionPane.showMessageDialog(this,"Please select a row in the expenses table first!","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            viewExpense viewExpenseInfo = new viewExpense(new javax.swing.JFrame(), true);
+            
+            //String id = expensesTable
+            int row = expensesTable.getSelectedRow();
+            String dateTime = "'" +expensesTable.getValueAt(row, 0).toString().trim()+"'";
+            String description = "'"+expensesTable.getValueAt(row, 1).toString().trim()+"'";
+            String amount = expensesTable.getValueAt(row, 2).toString().trim();
+            
+            String sqlGetExpenseID = "SELECT expense_id FROM expense WHERE DATE(expense_date_time) = "+dateTime+" AND expense_description = "+description+" AND expense_amount = "+amount+";";
+            String expenseID ="";
+            
+            try{
+                PreparedStatement pst = con.prepareStatement(sqlGetExpenseID);
+                ResultSet rs = pst.executeQuery();
+                
+                while(rs.next()){
+                    expenseID = rs.getString("expense_id");
+                }
+                
+            }catch(Exception ex){
+                System.out.println("Error: " + ex.getMessage());
+            }
+            
+            viewExpenseInfo.setID(expenseID);
+            viewExpenseInfo.setVisible(true);
+            
+        }
+                
+    }//GEN-LAST:event_viewExpenseButtonActionPerformed
+
+    private void viewSaleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewSaleButtonActionPerformed
+        // TODO add your handling code here:
+        if(salesTable.getSelectedRow() == -1){
+            JOptionPane.showMessageDialog(this,"Please select a row in the sales table first!","Error!", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            orderDetails viewOrder = new orderDetails(new javax.swing.JFrame(), true);
+            int row = salesTable.getSelectedRow();
+            
+            String id = salesTable.getValueAt(row,0).toString().trim();
+            viewOrder.setOrderId(id);
+            viewOrder.setVisible(true);
+        }  
+    }//GEN-LAST:event_viewSaleButtonActionPerformed
+
     
     private void loadAllData(String startDate, String endDate){
     
@@ -433,11 +520,7 @@ public double totalExpensesNum = 0, totalSales = 0;
             sqlForSales = "SELECT orders.order_id, concat(last_name,\",\", first_name) as 'customer_name', contact_num, orders.order_status, order_date_time, orders.customer_id,customer.customer_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id AND DATE(order_date_time) BETWEEN " +finalStartDate+ "AND" +finalEndDate+" ORDER BY order_date_time DESC;";
             
         }
-        
-        
-        
-        
-        
+ 
             try{
                 PreparedStatement pst = con.prepareStatement(sqlForSales);
                 ResultSet rs = pst.executeQuery();
@@ -665,5 +748,7 @@ public double totalExpensesNum = 0, totalSales = 0;
     private javax.swing.JTable salesTable;
     private javax.swing.JLabel totalExpenses;
     private javax.swing.JLabel totalSalesDisplay;
+    private javax.swing.JButton viewExpenseButton;
+    private javax.swing.JButton viewSaleButton;
     // End of variables declaration//GEN-END:variables
 }

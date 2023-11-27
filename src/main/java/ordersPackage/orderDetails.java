@@ -2,11 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package lognDashboardPackage;
+package ordersPackage;
 import connectionSql.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -18,7 +25,7 @@ public class orderDetails extends javax.swing.JDialog {
     /**
      * Creates new form orderDetails
      */
-    private String orderId, custName;
+    private String orderId, customerID, custName;
     
     Connection con = new mysqlConnection().getCon();
     public orderDetails(java.awt.Frame parent, boolean modal) {
@@ -66,6 +73,7 @@ public class orderDetails extends javax.swing.JDialog {
         subTotalDisplay1 = new javax.swing.JLabel();
         feesTotal1 = new javax.swing.JLabel();
         discountsTotal1 = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
 
         jLabel11.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jLabel11.setText("Subtotal:");
@@ -177,10 +185,7 @@ public class orderDetails extends javax.swing.JDialog {
 
         itemsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Item", "Quantity", "Price", "Amount"
@@ -289,6 +294,15 @@ public class orderDetails extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        backButton.setBackground(new java.awt.Color(40, 75, 135));
+        backButton.setForeground(new java.awt.Color(255, 255, 255));
+        backButton.setText("Back");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -306,13 +320,14 @@ public class orderDetails extends javax.swing.JDialog {
                                     .addComponent(jLabel6))
                                 .addGap(32, 32, 32)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(customerAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(customerName, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(164, 164, 164)
                                         .addComponent(jLabel7)
                                         .addGap(28, 28, 28)
-                                        .addComponent(orderDate, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                        .addComponent(orderDate, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(customerAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(backButton)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -324,7 +339,9 @@ public class orderDetails extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(backButton)
+                .addGap(10, 10, 10)
                 .addComponent(jLabel2)
                 .addGap(33, 33, 33)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -340,7 +357,7 @@ public class orderDetails extends javax.swing.JDialog {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(8, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -358,6 +375,11 @@ public class orderDetails extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
     
     
     public void setOrderId(String id){
@@ -369,14 +391,61 @@ public class orderDetails extends javax.swing.JDialog {
         
     }
     
+    
+    
+    
     private void setValues(){
-        String sql = "SELECT * FROM order WHERE order_id = "+this.orderId+";";
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MMMM dd, yyyy h:mm:ss a");
+        DefaultTableModel model = (DefaultTableModel)itemsTable.getModel();
+        
+        String sql = "SELECT * FROM orders WHERE order_id = "+this.orderId+";";
         
         try{
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
-            
             while(rs.next()){
+                this.customerID = rs.getString("customer_id");
+                
+                
+                String getCustIDsql = "SELECT concat(last_name,', ', first_name, ' ' ,middle_name) as name, customer_address FROM customer WHERE customer_id = "+customerID+";";
+                PreparedStatement pstCust = con.prepareStatement(getCustIDsql);
+                ResultSet rsCust = pstCust.executeQuery();
+                while (rsCust.next()){
+                    custName = rsCust.getString("name");
+                    customerName.setText(custName);
+                    
+                    customerAddress.setText(rsCust.getString("customer_address"));
+                }
+                
+                DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime date = LocalDateTime.parse(rs.getString("order_date_time"),dtf2);
+                orderDate.setText(dtf.format(date));
+                
+                String sqlOrderLine = "SELECT * FROM order_line WHERE order_id = "+this.orderId+";";
+                
+                PreparedStatement pstLine = con.prepareStatement(sqlOrderLine);
+                ResultSet rsLine = pstLine.executeQuery();
+                
+                while(rsLine.next()){
+                    String tempItemId = rsLine.getString("non_rental_item_id");
+                    String tempQuantity = rsLine.getString("item_quantity");
+                    
+                    String sqlItem = "SELECT * FROM non_rental_item WHERE non_rental_item_id = "+tempItemId+";";
+                    
+                    PreparedStatement pstItem = con.prepareStatement(sqlItem);
+                    ResultSet rsItem = pstItem.executeQuery();
+                    
+                    while(rsItem.next()){
+                        String itemName = rsItem.getString("non_rental_item_name");
+                        Double itemPrice = Double.parseDouble(rsItem.getString("non_rental_item_price"));
+                        Double amount = itemPrice * Integer.parseInt(tempQuantity);
+                        model.addRow(new Object[]{itemName,tempQuantity, String.format("%.2f", itemPrice), String.format("%.2f", amount) });
+                    }
+                }
+                
+                alignValues();
+                
+                
                 
             }
             
@@ -387,6 +456,17 @@ public class orderDetails extends javax.swing.JDialog {
         
         
         
+    }
+    
+    public void alignValues(){
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+       
+        
+        itemsTable.getColumnModel().getColumn(1).setCellRenderer(centerAlign);
+        itemsTable.getColumnModel().getColumn(2).setCellRenderer(rightAlign);
+        itemsTable.getColumnModel().getColumn(3).setCellRenderer(rightAlign);
     }
     
     /**
@@ -435,6 +515,7 @@ public class orderDetails extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backButton;
     private javax.swing.JLabel customerAddress;
     private javax.swing.JLabel customerName;
     private javax.swing.JLabel discountsTotal;

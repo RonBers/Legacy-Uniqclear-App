@@ -4,8 +4,9 @@
  */
 package lognDashboardPackage;
 
+import ordersPackage.orderDetails;
 import customerPackage.customerPage;
-import ordersPackage.newOrderPage;
+import ordersPackage.*;
 import contractsPackage.contractRecords;
 import employeePackage.employeeProfile;
 import inventoryPackage.nonRentalInventory;
@@ -76,7 +77,6 @@ public class dashboardPage extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         rentalButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
-        editOrderButton = new javax.swing.JButton();
         viewOrder = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         orderList = new javax.swing.JTable();
@@ -243,10 +243,6 @@ public class dashboardPage extends javax.swing.JFrame {
             }
         });
 
-        editOrderButton.setBackground(new java.awt.Color(40, 75, 135));
-        editOrderButton.setForeground(new java.awt.Color(255, 255, 255));
-        editOrderButton.setText("Edit");
-
         viewOrder.setText("View Order");
         viewOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -297,15 +293,15 @@ public class dashboardPage extends javax.swing.JFrame {
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(727, 727, 727)
-                        .addComponent(viewOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1)))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(753, 753, 753)
+                        .addComponent(viewOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(29, 29, 29))
         );
         jPanel11Layout.setVerticalGroup(
@@ -318,14 +314,12 @@ public class dashboardPage extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(viewOrder)
-                            .addComponent(editOrderButton)))
+                        .addComponent(viewOrder))
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 11, Short.MAX_VALUE)))
+                        .addGap(0, 13, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -343,7 +337,7 @@ public class dashboardPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
+                .addComponent(jScrollPane2))
         );
 
         pack();
@@ -518,7 +512,6 @@ public class dashboardPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton contractButton;
     private javax.swing.JButton customerButton;
-    private javax.swing.JButton editOrderButton;
     private javax.swing.JButton employeeButton;
     private javax.swing.JLabel headerDash;
     private javax.swing.JLabel jLabel1;

@@ -81,6 +81,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Non-Rental Items");
 
+        nonRentalTable.setAutoCreateRowSorter(true);
         nonRentalTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -108,7 +109,13 @@ public class nonRentalInventory extends javax.swing.JFrame {
             }
         });
 
+        searchItem.setText("Search Item...");
         searchItem.setToolTipText("Search");
+        searchItem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchItemMouseClicked(evt);
+            }
+        });
         searchItem.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 searchItemKeyTyped(evt);
@@ -175,8 +182,8 @@ public class nonRentalInventory extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 839, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 839, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(addItemBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                             .addComponent(searchItem, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -192,12 +199,12 @@ public class nonRentalInventory extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jButton3)))
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(editNonRentalItem)
@@ -306,6 +313,10 @@ public class nonRentalInventory extends javax.swing.JFrame {
     }
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        nonRentalTable.getTableHeader().setOpaque(false);
+        nonRentalTable.getTableHeader().setBackground(new Color(255,192,0));
+        nonRentalTable.getTableHeader().setReorderingAllowed(false);
+        
         itemsList();
     }//GEN-LAST:event_formWindowOpened
 
@@ -391,6 +402,15 @@ public class nonRentalInventory extends javax.swing.JFrame {
             }
         });
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private boolean searchBoxClicked = false;
+    private void searchItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchItemMouseClicked
+        // TODO add your handling code here:
+        if(!searchBoxClicked){
+            searchItem.setText("");
+            searchBoxClicked=true;
+        }
+    }//GEN-LAST:event_searchItemMouseClicked
 
     /**
      * @param args the command line arguments
