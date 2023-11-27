@@ -345,7 +345,7 @@ public class dashboardPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     private void getTable(){
         
-        String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id;";
+        String sql = "SELECT orders.order_id, concat(last_name,\",  \", first_name) as 'customer_name', contact_num, orders.order_status, orders.order_type FROM customer JOIN orders WHERE orders.customer_id = customer.customer_id ORDER BY orders.order_date_time DESC;";
                 try{
                     DefaultTableModel model = (DefaultTableModel)orderList.getModel();
                     PreparedStatement pst = con.prepareStatement(sql);

@@ -4,6 +4,7 @@
  */
 package employeePackage;
 import connectionSql.mysqlConnection;
+import java.awt.Color;
 /**
  *
  * @author rjber
@@ -295,7 +296,9 @@ public class employeeProfile extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:     
-        
+        employeeTable.getTableHeader().setOpaque(false);
+        employeeTable.getTableHeader().setBackground(new Color(255,192,0));
+        employeeTable.getTableHeader().setReorderingAllowed(false);
         setBranches();
         loadBranch();
     }//GEN-LAST:event_formWindowOpened
