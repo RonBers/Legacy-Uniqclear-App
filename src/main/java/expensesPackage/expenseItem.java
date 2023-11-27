@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import javax.swing.DefaultComboBoxModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
  *
@@ -44,6 +45,7 @@ public class expenseItem extends javax.swing.JFrame {
    
     public expenseItem() {
         initComponents();
+        AutoCompleteDecorator.decorate(existingExpense);
     }
 
     /**
@@ -481,6 +483,11 @@ public class expenseItem extends javax.swing.JFrame {
     }//GEN-LAST:event_selectEmployeeButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        expensesTable.getTableHeader().setOpaque(false);
+        expensesTable.getTableHeader().setBackground(new Color (255,182,0));
+        
+        
+        expenseDescription.setEnabled(false);
         employeeField.setEditable(false);
         
         
@@ -542,15 +549,23 @@ public class expenseItem extends javax.swing.JFrame {
         String selected = existingExpense.getSelectedItem().toString().trim();
       
         if (selected.equalsIgnoreCase("Custom")){
+            expenseDescription.setEnabled(true);
             expenseDescription.setText("");
             expenseAmount.setValue(0);
             saveExpenseInfo.setEnabled(true);
             
         }else if (!selected.equalsIgnoreCase("-")){
-           
+            expenseDescription.setEnabled(true);
             expenseDescription.setText(selected);
+            expenseDescription.setEditable(false);
             expenseAmount.setValue(Double.parseDouble(expenses.get(selected)));
             saveExpenseInfo.setEnabled(false);
+        }else{
+            expenseDescription.setText("");
+            expenseDescription.setEnabled(false);
+            saveExpenseInfo.setEnabled(false);
+            expenseAmount.setValue(0);
+            
         }
         
         
