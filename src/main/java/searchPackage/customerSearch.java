@@ -9,6 +9,7 @@ import customerPackage.createCustomerPage;
 
 //import java.awt.Color;
 import connectionSql.mysqlConnection;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -102,14 +103,14 @@ public class customerSearch extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Customer ID", "Last Name", "First Name", "Middle Name", "Contact No.", "Type", "Points"
+                "ID", "Name", "Contact No.", "Type", "Points"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -160,18 +161,18 @@ public class customerSearch extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(custSearchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(addNew, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(selectCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 724, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(selectCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(custSearchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addNew, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 770, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,14 +196,25 @@ public class customerSearch extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT customer_id, last_name, first_name , middle_name, contact_num, customer_type FROM customer";
+        customerTable.getTableHeader().setOpaque(false);
+        customerTable.getTableHeader().setBackground(new Color(255,192,0));
+        
+        
+        String sql = "SELECT customer_id, last_name , first_name, middle_name, contact_num, customer_type FROM customer";
         try{
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
             
             while(rs.next()){
-                model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3), rs.getString(4),rs.getString(5), rs.getString(6)});
+               String customerName ="";
+                if(rs.getString(3).isEmpty() && rs.getString(4).isEmpty()){
+                    customerName = rs.getString(2);
+                }else{
+                    customerName = rs.getString(2) +", " +rs.getString(3)+" "+ rs.getString(4);
+                }
+                
+                model.addRow(new String[]{rs.getString(1),customerName, rs.getString(5), rs.getString(6)});
             }
         }catch(Exception ex){
             System.out.println("Error: "+ex.getMessage());
@@ -227,12 +239,10 @@ public class customerSearch extends javax.swing.JDialog {
 
 
             
-            String custFirstName = customerTable.getModel().getValueAt(idRow,2).toString();
-            String custLastName = customerTable.getModel().getValueAt(idRow,1).toString();
-            String custMiddleName = customerTable.getModel().getValueAt(idRow,3).toString();
-            String custContact = customerTable.getModel().getValueAt(idRow,4).toString();
-
-            customerName = custLastName+", "+custFirstName+" "+custMiddleName;
+            
+            
+            String custContact = customerTable.getModel().getValueAt(idRow,3).toString();
+            customerName = customerTable.getModel().getValueAt(idRow,1).toString();
             customerContact = custContact; 
             custID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
             

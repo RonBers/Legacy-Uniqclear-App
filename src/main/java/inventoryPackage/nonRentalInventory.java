@@ -60,6 +60,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
         logo = new javax.swing.JLabel();
         delNonRentalItem = new javax.swing.JButton();
         editNonRentalItem = new javax.swing.JButton();
+        filterTable = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         headerlogo = new javax.swing.JLabel();
 
@@ -160,19 +161,27 @@ public class nonRentalInventory extends javax.swing.JFrame {
             }
         });
 
+        filterTable.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "For Sale", "Not for Sale", "Refill Items" }));
+        filterTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterTableActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(editNonRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(delNonRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(293, 293, 293))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(filterTable, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(editNonRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(delNonRentalItem, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(293, 293, 293))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -208,8 +217,9 @@ public class nonRentalInventory extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(editNonRentalItem)
-                            .addComponent(delNonRentalItem))
-                        .addGap(129, 129, 129))
+                            .addComponent(delNonRentalItem)
+                            .addComponent(filterTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(83, 83, 83))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(searchItem, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
@@ -269,7 +279,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
         addItemWindow.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)
             {  
-               itemsList();
+               itemsList(filterTable.getSelectedItem().toString().trim());
             }
           });
         
@@ -281,12 +291,23 @@ public class nonRentalInventory extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    public void itemsList(){
+    public void itemsList(String filter){
         DefaultTableModel itemsTable = (DefaultTableModel)nonRentalTable.getModel();
         itemsTable.setRowCount(0);
         
+        String sql ="";
         
-        String sql = "SELECT * FROM non_rental_item WHERE NOT non_rental_item_name = 'Refill'";
+        if(filter.equalsIgnoreCase("For sale")){
+            sql = "SELECT * FROM non_rental_item WHERE isForSale = TRUE AND NOT non_rental_item_name = 'Refill';";
+        }else if (filter.equalsIgnoreCase("Not for Sale")){
+            sql = "SELECT * FROM non_rental_item WHERE isForSale = FALSE;";
+        }else if (filter.contentEquals("Refill Items")){
+            sql = "SELECT * FROM non_rental_item WHERE non_rental_item_name REGEXP 'refill';";
+        
+        }else{
+            sql = "SELECT * FROM non_rental_item WHERE NOT non_rental_item_name = 'Refill';";
+        }
+        
         try{
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
@@ -316,10 +337,11 @@ public class nonRentalInventory extends javax.swing.JFrame {
         nonRentalTable.getTableHeader().setOpaque(false);
         nonRentalTable.getTableHeader().setBackground(new Color(255,192,0));
         nonRentalTable.getTableHeader().setReorderingAllowed(false);
-        
-        itemsList();
+        itemsList("All");
     }//GEN-LAST:event_formWindowOpened
 
+    
+    
     private void delNonRentalItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delNonRentalItemActionPerformed
         // TODO add your handling code here:
          DefaultTableModel model = (DefaultTableModel)nonRentalTable.getModel();
@@ -375,7 +397,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
         
         editRental.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e){
-                itemsList();
+                itemsList(filterTable.getSelectedItem().toString().trim());
             }
         });
     }//GEN-LAST:event_editNonRentalItemActionPerformed
@@ -398,7 +420,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
         
         reStock.addWindowListener(new WindowAdapter (){
             public void windowClosed(WindowEvent e){
-                itemsList();
+                itemsList(filterTable.getSelectedItem().toString().trim());
             }
         });
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -411,6 +433,15 @@ public class nonRentalInventory extends javax.swing.JFrame {
             searchBoxClicked=true;
         }
     }//GEN-LAST:event_searchItemMouseClicked
+
+    private void filterTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterTableActionPerformed
+        // TODO add your handling code here:
+        
+        String filter = filterTable.getSelectedItem().toString().trim();
+        
+        itemsList(filter);
+                
+    }//GEN-LAST:event_filterTableActionPerformed
 
     /**
      * @param args the command line arguments
@@ -452,6 +483,7 @@ public class nonRentalInventory extends javax.swing.JFrame {
     private javax.swing.JButton addItemBTN;
     private javax.swing.JButton delNonRentalItem;
     private javax.swing.JButton editNonRentalItem;
+    private javax.swing.JComboBox<String> filterTable;
     private javax.swing.JLabel headerlogo;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

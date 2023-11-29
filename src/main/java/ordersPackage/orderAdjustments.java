@@ -21,7 +21,9 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -240,16 +242,9 @@ public class orderAdjustments extends javax.swing.JDialog {
                 "Promo Description", "Discount Amount"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -459,24 +454,7 @@ public class orderAdjustments extends javax.swing.JDialog {
             }
          }
          
-   
-        /*for (Map.Entry<String,Double> set: discountTableValues.entrySet()){
-            if (set.getKey().equals("10+1")){
-                String sql3 = "SELECT promo_description, promo_discount_amount FROM promo WHERE promo_description LIKE ('10+1');";
-                try{
-                    PreparedStatement pst = con.prepareStatement(sql3);
-                    ResultSet rs = pst.executeQuery();
-
-                    while(rs.next()){
-                       discountTable.addRow(new String[]{rs.getString(1),rs.getString(2)});
-                    }
-
-                }catch(Exception ex){
-                    System.out.println("Error: " +ex.getMessage());
-                }
-            }
-        }*/
-        
+     
          
          custom.addItemListener(new ItemListener() {
             @Override
@@ -495,7 +473,7 @@ public class orderAdjustments extends javax.swing.JDialog {
                 }
             }
         });
-        
+        alignValues();
     }//GEN-LAST:event_formWindowOpened
    
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
@@ -504,7 +482,16 @@ public class orderAdjustments extends javax.swing.JDialog {
         cancelPressed=true;
         this.dispose();
     }//GEN-LAST:event_cancelActionPerformed
-
+    private void alignValues(){
+       
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+       
+        feesTable.getColumnModel().getColumn(1).setCellRenderer(rightAlign);
+        activeDiscounts.getColumnModel().getColumn(1).setCellRenderer(rightAlign);
+    
+    }
     private void addToActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToActiveActionPerformed
         // TODO add your handling code here:
         // TODO add your handling code here:
@@ -580,49 +567,49 @@ public class orderAdjustments extends javax.swing.JDialog {
         custDisc = (Double)customDiscount.getValue();
         custFee = (Double)customAddFee.getValue();
         
-        if ((custDisc>0 && !addedCustomDisc) && (cdEnable.isSelected())){
-            
-            if(discountTableModel.getRowCount() > 0 && cdEnable.isSelected()){
-            for(int row = 1; row<discountTableModel.getRowCount(); row++){
-                String temp = discountTableModel.getValueAt(row,0).toString().trim();
-                
-                if(temp.equalsIgnoreCase("custom")){
-                    JOptionPane.showMessageDialog(this,"Custom Discount has already been added", "Warning!", JOptionPane.INFORMATION_MESSAGE);
+        //discounts
+        if (custDisc != 0 && cdEnable.isSelected()){
+            int discRowCount = activeDiscounts.getRowCount();
+            if( discRowCount > 0){
+                for(int i = 0; i < discRowCount; i++){
+                    String temp = activeDiscounts.getValueAt(i, 0).toString().trim();
+                    if(temp.equalsIgnoreCase("custom")){
+                        JOptionPane.showMessageDialog(this,"You already have entered a custom discount! Please remove the exsisting custom discount first!", "Error", JOptionPane.INFORMATION_MESSAGE); 
+                    }else{
+                        discountTableModel.addRow(new Object[] {"Custom", String.format("%.2f", custDisc)});
+                    }
                 }
-   
+            }else{
+                discountTableModel.addRow(new Object[] {"Custom", String.format("%.2f", custDisc)});
             }
-        }
-            discountTableModel.addRow(new String[]{"Custom", Double.toString(custDisc)});
-            addedCustomDisc = true;
+          
+            
         }else{
+            JOptionPane.showMessageDialog(this,"Please input a value for your custom discount!", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        
+        //fees
+        
+        if(custFee != 0 && caEnable.isSelected()){
+            int feeRowCount = feesTable.getRowCount();
             
-        }
-        
-        if ((custFee>0 && !addedCustomFee) && caEnable.isSelected()){
-            feesTableModel.addRow(new String[]{"Custom", Double.toString(custFee)});
-            addedCustomFee = true;
-        }
-        
-        
-       
-        
-        
-        if(feesTableModel.getRowCount() > 0 && caEnable.isSelected()){
-            for (int row =1; row<feesTableModel.getRowCount(); row++){
-                String temp = feesTableModel.getValueAt(row,0).toString().trim();
-                
-                if (temp.equalsIgnoreCase("custom")){
-                    JOptionPane.showMessageDialog(this,"Custom additional fee has already been added" , "Warning!", JOptionPane.INFORMATION_MESSAGE);
+            if(feeRowCount > 0){
+                for(int i = 0; i < feeRowCount; i++){
+                    String temp = feesTable.getValueAt(i, 0).toString().trim();
+                    if(temp.equalsIgnoreCase("custom")){
+                        JOptionPane.showMessageDialog(this,"You already have entered a custom additional fee! Please remove the exsisting custom discount first!", "Error", JOptionPane.INFORMATION_MESSAGE); 
+                    }else{
+                        discountTableModel.addRow(new Object[] {"Custom", String.format("%.2f", custFee)});
+                    }
                 }
+            }else{
+                discountTableModel.addRow(new Object[] {"Custom", String.format("%.2f", custFee)});        
             }
+          
         }
         
-        
-       
-        
-        
-        
-        
+  
         
     }//GEN-LAST:event_addCustomActionPerformed
 

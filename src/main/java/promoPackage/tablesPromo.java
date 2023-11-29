@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.security.auth.callback.Callback;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -55,6 +56,7 @@ public class tablesPromo extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         editPromo = new javax.swing.JButton();
         applyPromo = new javax.swing.JButton();
+        createPromo = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -220,10 +222,16 @@ public class tablesPromo extends javax.swing.JFrame {
         jButton6.setBackground(new java.awt.Color(40, 75, 135));
         jButton6.setForeground(new java.awt.Color(255, 255, 255));
         jButton6.setText("Home");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         editPromo.setBackground(new java.awt.Color(40, 75, 135));
         editPromo.setForeground(new java.awt.Color(255, 255, 255));
         editPromo.setText("Edit promo");
+        editPromo.setEnabled(false);
         editPromo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editPromoActionPerformed(evt);
@@ -233,10 +241,18 @@ public class tablesPromo extends javax.swing.JFrame {
         applyPromo.setBackground(new java.awt.Color(51, 153, 0));
         applyPromo.setForeground(new java.awt.Color(255, 255, 255));
         applyPromo.setText("Apply promo");
-        applyPromo.setEnabled(false);
         applyPromo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 applyPromoActionPerformed(evt);
+            }
+        });
+
+        createPromo.setBackground(new java.awt.Color(40, 75, 135));
+        createPromo.setForeground(new java.awt.Color(255, 255, 255));
+        createPromo.setText("Create promo");
+        createPromo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createPromoActionPerformed(evt);
             }
         });
 
@@ -262,6 +278,8 @@ public class tablesPromo extends javax.swing.JFrame {
                         .addGap(31, 31, 31))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(createPromo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(editPromo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(applyPromo)
@@ -280,13 +298,16 @@ public class tablesPromo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(editPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(applyPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(applyPromo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(editPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(createPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     /*
     public int getValue(){
@@ -301,19 +322,29 @@ public class tablesPromo extends javax.swing.JFrame {
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
-    
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-       // TODO add your handling code here:
-        try{
-            // item_quantity should only check the refills
-            // promo table should only generate regular customer
-            // should use promo_id instead of customer_id
-            String sql = "SELECT C.customer_id, CONCAT(C.last_name, ', ', C.first_name) AS full_name, COALESCE(OL.item_quantity, 0) AS POINTS "
-                    + "FROM customer AS C " 
+    public void generateTable(){
+                try{
+            // Should use promo_id instead of customer_id
+            String sql="SELECT C.customer_id, CONCAT(C.last_name, ', ', C.first_name) AS full_name, COUNT(COALESCE(OL.item_quantity, 0)) AS POINTS "
+                    + "FROM customer AS C "
                     + "LEFT JOIN orders AS O ON C.customer_id = O.customer_id "
-                    + "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id";
-            
-                        
+                    + "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id "
+                    + "LEFT JOIN non_rental_item AS NI ON OL.non_rental_item_id = NI.non_rental_item_id " 
+                    + "WHERE C.customer_type = 'Regular' AND (NI.non_rental_item_name = 'Refill' OR NI.non_rental_item_name = 'New water bottle') "
+                    + "GROUP BY C.customer_id, full_name";
+
+             /*
+            " "
+              String sql1 = "SELECT C.customer_id, CONCAT(C.last_name, ', ', C.first_name) AS full_name, COALESCE(SUM(OL.item_quantity), 0) AS POINTS " +
+             "FROM customer AS C " +
+             "LEFT JOIN orders AS O ON C.customer_id = O.customer_id " +
+             "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id " +
+             "LEFT JOIN non_rental_item AS NI ON OL.non_rental_item_id = NI.non_rental_item_id " +
+             "WHERE NI.non_rental_item_name = 'Refill' OR NI.non_rental_item_name='new water bottle' AND C.customer_type = 'Regular' " +
+             "GROUP BY C.customer_id, full_name";
+                + "WHERE DC.dealer_contract_id ="+contractID+" "
+                + "AND YEARWEEK(O.order_date_time) = YEARWEEK(NOW()); ";
+            */
             PreparedStatement pst;
             pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery(); // Java object that represents the result of a database query, which contains the data retrieved from the database.
@@ -326,10 +357,15 @@ public class tablesPromo extends javax.swing.JFrame {
                 String POINTS = rs.getString("POINTS");
                 String status = "";
                 
+                JLabel promoStatus = new JLabel();
                     if(Integer.parseInt(POINTS)>=7){
                         status = "Available";
+                        promoStatus.setText(status);
+                        
                     }else{
                         status = "Not available";
+                        promoStatus.setText(status);
+                        promoStatus.setForeground(Color.RED);
                     }
 
                     table.addRow(new Object[]{id, fullName, POINTS, status}); // Array to add as a row in the table
@@ -338,10 +374,12 @@ public class tablesPromo extends javax.swing.JFrame {
         catch(Exception e){
             System.out.println(e.getMessage());
         }
-        
-        
-        
-        
+    }
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       // TODO add your handling code here:
+       generateTable();
+       TableforPromo.getTableHeader().setOpaque(false);
+       TableforPromo.getTableHeader().setBackground(new Color(255,192,0));
     }//GEN-LAST:event_formWindowOpened
 
     private void searchFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchFieldMouseClicked
@@ -386,9 +424,16 @@ public class tablesPromo extends javax.swing.JFrame {
         editRecord.id=(Integer.parseInt(customerID));
         
         editRecord.displayPoints.setValue(Integer.valueOf(points));
+        
+        // Window listener
+        editRecord.addWindowListener(new java.awt.event.WindowAdapter() { @Override
+        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            // When the dialog is closed, call the generateTable() method
+            generateTable(); // Assuming this method is within the same class
+        }
+        });
         editRecord.setVisible(true); // Make it visible
-          
-        this.dispose();
+         
     }//GEN-LAST:event_editPromoActionPerformed
 
     private void applyPromoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyPromoActionPerformed
@@ -399,23 +444,38 @@ public class tablesPromo extends javax.swing.JFrame {
             String status=(String)table.getValueAt(indexRow,indexColumn+1); 
             String id=(String)table.getValueAt(indexRow,indexColumn-2); int ids = Integer.parseInt(id);
             
-    
+            String points = (String)table.getValueAt(indexRow,2);
+            int counterPoints = Integer.parseInt(points);
+            
+            
+            
+           System.out.println(points);
+           
            if(status.equals("Available")){
             // should use promo_id instead of customer_id
             
             try{
-            String sql="UPDATE promo_effect_count=promo_record+1 WHERE customer_id='"+ids+"';"; 
+            String sql="UPDATE promo_record SET promo_effect_count = promo_effect_count + 1 WHERE customer_id='"+ids+"' ";
                 PreparedStatement pst;
                 pst = con.prepareStatement(sql);
-                pst.executeQuery(); 
+                pst.executeUpdate(); 
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
             JOptionPane.showMessageDialog(this, "Promo applied!", "Apply promo", JOptionPane.INFORMATION_MESSAGE);
         }else{
-            
+            JOptionPane.showMessageDialog(null, "Promo not available");
         }
-        
+           
+        /*
+           
+           
+           
+        RECORD PROMO HISTORY
+           
+           
+           
+        */
     }//GEN-LAST:event_applyPromoActionPerformed
 
     private void TableforPromoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableforPromoMouseClicked
@@ -430,6 +490,17 @@ public class tablesPromo extends javax.swing.JFrame {
             applyPromo.setEnabled(false);
         }
     }//GEN-LAST:event_TableforPromoMouseClicked
+
+    private void createPromoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createPromoActionPerformed
+        // TODO add your handling code here:
+        createPromo createPromo = new createPromo(this, true);
+        createPromo.setVisible(true); 
+    }//GEN-LAST:event_createPromoActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -470,6 +541,7 @@ public class tablesPromo extends javax.swing.JFrame {
     private javax.swing.JPanel PanelSearchBar;
     private javax.swing.JTable TableforPromo;
     private javax.swing.JButton applyPromo;
+    private javax.swing.JButton createPromo;
     private javax.swing.JButton editPromo;
     private javax.swing.JLabel headerlogo3;
     private javax.swing.JButton jButton6;

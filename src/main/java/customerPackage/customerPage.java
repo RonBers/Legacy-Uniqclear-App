@@ -15,8 +15,12 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -49,10 +53,13 @@ public class customerPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         customerTable = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        addCustomerButton = new javax.swing.JButton();
         editCustomer = new javax.swing.JButton();
         removeCustomer = new javax.swing.JButton();
         homeButton = new javax.swing.JButton();
+        typeFilter = new javax.swing.JComboBox<>();
+        custSearchBox = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Customers");
@@ -97,14 +104,14 @@ public class customerPage extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Customer ID", "First Name", "Last Name", "Middle Name", "Contact No.", "Customer Type", "Points"
+                "Customer ID", "Name", "Contact No.", "Customer Type", "Points"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -118,12 +125,12 @@ public class customerPage extends javax.swing.JFrame {
         customerTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(customerTable);
 
-        jButton1.setBackground(new java.awt.Color(40, 75, 135));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Add new customer");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        addCustomerButton.setBackground(new java.awt.Color(40, 75, 135));
+        addCustomerButton.setForeground(new java.awt.Color(255, 255, 255));
+        addCustomerButton.setText("Add new customer");
+        addCustomerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                addCustomerButtonActionPerformed(evt);
             }
         });
 
@@ -136,7 +143,7 @@ public class customerPage extends javax.swing.JFrame {
             }
         });
 
-        removeCustomer.setBackground(new java.awt.Color(40, 75, 135));
+        removeCustomer.setBackground(new java.awt.Color(200, 0, 0));
         removeCustomer.setForeground(new java.awt.Color(255, 255, 255));
         removeCustomer.setText("Remove customer");
         removeCustomer.addActionListener(new java.awt.event.ActionListener() {
@@ -154,6 +161,21 @@ public class customerPage extends javax.swing.JFrame {
             }
         });
 
+        typeFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeFilterActionPerformed(evt);
+            }
+        });
+
+        custSearchBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                custSearchBoxKeyTyped(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 10)); // NOI18N
+        jLabel2.setText("Search:");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -165,30 +187,45 @@ public class customerPage extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addComponent(addCustomerButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(editCustomer)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(removeCustomer)))
                         .addGap(6, 6, 6))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(homeButton))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(typeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(custSearchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(homeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addGap(134, 134, 134))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(homeButton)
-                .addGap(28, 28, 28)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(homeButton))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(typeFilter, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(custSearchBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(addCustomerButton)
                     .addComponent(editCustomer)
                     .addComponent(removeCustomer))
                 .addGap(56, 56, 56))
@@ -208,15 +245,14 @@ public class customerPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void addCustomerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCustomerButtonActionPerformed
         // TODO add your handling code here:
        
         DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
@@ -225,63 +261,75 @@ public class customerPage extends javax.swing.JFrame {
         newCustomer.addWindowListener(new WindowAdapter(){
             public void windowClosed(WindowEvent e)
             {
-              model.setRowCount(0);
-              String sql = "SELECT customer_id, first_name, last_name, middle_name, contact_num ,customer_type FROM customer";
-                try{
-                    //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    ResultSet rs = pst.executeQuery();
-                   
-
-                    while(rs.next()){
-                        model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3), rs.getString(4),rs.getString(5), rs.getString(6)});
-                    }
-                }catch(Exception ex){
-                    System.out.println("Error: "+ex.getMessage());
-                }
+              loadFilter();
+              loadTable();
             }
           });
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_addCustomerButtonActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        String sql = "SELECT customer_id, first_name, last_name, middle_name, contact_num, customer_type FROM customer";
-        try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
-            
-            while(rs.next()){
-                model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3), rs.getString(4),rs.getString(5), rs.getString(6)});
-            }
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }
+        //For type filter
+        
+        loadFilter();
+
+        //for table
+        customerTable.getTableHeader().setOpaque(false);
+        customerTable.getTableHeader().setBackground(new Color(255,192,0));
+        
+        loadTable();
     }//GEN-LAST:event_formWindowOpened
 
+    
+    private void loadFilter(){
+        DefaultComboBoxModel filterModel = (DefaultComboBoxModel)typeFilter.getModel();
+        filterModel.removeAllElements();
+        String sqlCustType = "SELECT DISTINCT customer_type FROM customer;";
+        
+        filterModel.addElement("All");
+        try{
+            
+            PreparedStatement cType = con.prepareStatement(sqlCustType);
+            ResultSet rscType = cType.executeQuery();
+            
+            while (rscType.next()){
+                filterModel.addElement(rscType.getString("customer_type"));
+            }
+            
+        }catch(Exception ex){
+            System.out.println("Error: " + ex.getMessage());
+        }
+        
+        typeFilter.setModel(filterModel);
+    }
+    
+    
     private void removeCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCustomerActionPerformed
         // TODO add your handling code here:
         //customerTable.getSelectedRow();
         DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
         //customerTable.getModel()
-        int idColumn = 0;
         int idRow = customerTable.getSelectedRow();
-        String selectedID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
-        String sql = "DELETE FROM customer WHERE customer_id='"+selectedID + "'";
         
-        try{
-    
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.executeQuery();
-            
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }
-        
-        if (customerTable.getSelectedRow() != -1) {
+        if (idRow != -1) {
             // remove selected row from the model
             model.removeRow(customerTable.getSelectedRow());
+            int idColumn = 0;
+            String selectedID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
+            String sql = "DELETE FROM customer WHERE customer_id='"+selectedID + "'";
+
+            try{
+
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.executeQuery();
+
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+            loadFilter();
+        }else{
+            JOptionPane.showMessageDialog(this,"Please select a row from the table first!", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_removeCustomerActionPerformed
 
@@ -290,90 +338,131 @@ public class customerPage extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
         int idColumn = 0;
         int idRow = customerTable.getSelectedRow();
-        
-       
-        String selectedID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
-        String toeditFirstName = customerTable.getModel().getValueAt(idRow,1).toString();
-        String toeditLastName = customerTable.getModel().getValueAt(idRow,2).toString();
-        String toeditMiddleName = customerTable.getModel().getValueAt(idRow,3).toString();
-        String toeditContact = customerTable.getModel().getValueAt(idRow,4).toString();
-        String toeditCType = customerTable.getModel().getValueAt(idRow,5).toString();
-        
-        
-         editCustomerPage editCustomer = new editCustomerPage(this,true);
-         editCustomer.selectedID = selectedID;
-         editCustomer.editFirstName.setText(toeditFirstName);
-         editCustomer.editLastName.setText(toeditLastName);
-         editCustomer.editMiddleName.setText(toeditMiddleName);
-         editCustomer.editContactNumber.setText(toeditContact);
-         editCustomer.editCustomerType.setSelectedItem(toeditCType);
-         
-          String sql = "SELECT customer_address,birthdate,sex FROM customer WHERE "
-                  + "customer_id =" +selectedID+";";
-        try{
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-            //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
-            
-            while(rs.next()){
-                String address = rs.getString("customer_address");
-                String address2[] = address.split(",");
-                String findAddressLine[] = address.split(address2[address2.length-3].trim());
-                editCustomer.editBarangay.setSelectedItem(address2[address2.length-3].trim());                
-                String adl1 = findAddressLine[0].trim();
-                String oldAddress1 = adl1;
-                if (oldAddress1.endsWith(",")) {
-                    oldAddress1 = oldAddress1.substring(0, oldAddress1.length() - 1);
-                }
-               
-                editCustomer.editLine1Address.setText(oldAddress1);
-     
-                char sex = rs.getString( "sex").charAt(0);
-              
-                switch (sex) {
-                    case 'M' -> editCustomer.editSM.setSelected(true);
-                    case 'F' -> editCustomer.editSF.setSelected(true);
-                    default -> editCustomer.editSO.setSelected(true);
-                }
-                String birthdate = rs.getString("birthdate");
-                SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-                Date edDate = formatDate.parse(birthdate);
-                editCustomer.editBdate.setDate(edDate);
-            }
-        }catch(Exception ex){
-            System.out.println("Error: "+ex.getMessage());
-        }
+        if (idRow ==  -1){
+            JOptionPane.showMessageDialog(this,"Please select a row from the table first!", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            String selectedID = customerTable.getModel().getValueAt(idRow,idColumn).toString();
+            String toeditContact = customerTable.getModel().getValueAt(idRow,2).toString();
+            String toeditCType = customerTable.getModel().getValueAt(idRow,3).toString();
 
-         
-         editCustomer.setVisible(true);
-         
-         
-         editCustomer.addWindowListener(new WindowAdapter(){
-            public void windowClosed(WindowEvent e)
-            {
-              //System.out.println("jdialog window closed event received");
-              model.setRowCount(0);
-              String sql = "SELECT customer_id, first_name, last_name, middle_name, contact_num, customer_type FROM customer";
+
+             editCustomerPage editCustomer = new editCustomerPage(this,true);
+             editCustomer.selectedID = selectedID;
+             editCustomer.editContactNumber.setText(toeditContact);
+             editCustomer.editCustomerType.setSelectedItem(toeditCType);
+
+              String sql = "SELECT last_name, first_name, middle_name, customer_address,birthdate,sex FROM customer WHERE "
+                      + "customer_id =" +selectedID+";";
+            try{
+                PreparedStatement pst = con.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery();
+                //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
+
+                while(rs.next()){
+                    editCustomer.editFirstName.setText(rs.getString("first_name"));
+                    editCustomer.editMiddleName.setText(rs.getString("middle_name"));
+                    editCustomer.editLastName.setText(rs.getString("last_name"));
+                    
+                    String address = rs.getString("customer_address");
+                    String address2[] = address.split(",");
+                    String findAddressLine[] = address.split(address2[address2.length-3].trim());
+                    editCustomer.editBarangay.setSelectedItem(address2[address2.length-3].trim());                
+                    String adl1 = findAddressLine[0].trim();
+                    String oldAddress1 = adl1;
+                    if (oldAddress1.endsWith(",")) {
+                        oldAddress1 = oldAddress1.substring(0, oldAddress1.length() - 1);
+                    }
+
+                    editCustomer.editLine1Address.setText(oldAddress1);
+
+                    char sex = rs.getString( "sex").charAt(0);
+
+                    switch (sex) {
+                        case 'M' -> editCustomer.editSM.setSelected(true);
+                        case 'F' -> editCustomer.editSF.setSelected(true);
+                        default -> editCustomer.editSO.setSelected(true);
+                    }
+                    String birthdate = rs.getString("birthdate");
+                    SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+                    Date edDate = formatDate.parse(birthdate);
+                    editCustomer.editBdate.setDate(edDate);
+                }
+            }catch(Exception ex){
+                System.out.println("Error: "+ex.getMessage());
+            }
+
+
+             editCustomer.setVisible(true);
+
+
+             editCustomer.addWindowListener(new WindowAdapter(){
+                public void windowClosed(WindowEvent e)
+                {
+                  //System.out.println("jdialog window closed event received");
+                  loadFilter();
+                  loadTable();
+                }});
+        }
+       
+        
+    }//GEN-LAST:event_editCustomerActionPerformed
+    private void loadTable(){
+        DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
+         model.setRowCount(0);
+              
+              String sql = "SELECT customer_id, last_name, first_name, middle_name, contact_num, customer_type FROM customer";
                 try{
-                    //DefaultTableModel model = (DefaultTableModel)customerTable.getModel();
+                    String customerName="";
                     PreparedStatement pst = con.prepareStatement(sql);
                     ResultSet rs = pst.executeQuery();
-                   
-
+                    
                     while(rs.next()){
-                        model.addRow(new String[]{rs.getString(1),rs.getString(2),rs.getString(3), rs.getString(4),rs.getString(5),rs.getString(6)});
-                    }
+                        String lastName = rs.getString("last_name");
+                        String firstName = rs.getString("first_name");
+                        String middleName = rs.getString("middle_name");
+
+                        if(firstName.isEmpty() && middleName.isEmpty()){
+                            customerName = lastName;
+                        }else{
+                            customerName = lastName+", "+firstName+" "+middleName;
+                        }
+                            model.addRow(new String[]{rs.getString(1), customerName, rs.getString(5),rs.getString(6)});
+                        }
                 }catch(Exception ex){
                     System.out.println("Error: "+ex.getMessage());
                 }
-            }
-          });
-    }//GEN-LAST:event_editCustomerActionPerformed
-
+            
+    }
+    
+    
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_homeButtonActionPerformed
+
+    private void typeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeFilterActionPerformed
+        // TODO add your handling code here:
+        
+        if (typeFilter.getSelectedItem() != null){
+            String typeSelected = typeFilter.getSelectedItem().toString().trim();
+            TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) customerTable.getModel()));
+
+            if(!typeSelected.equalsIgnoreCase("All")){
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + typeSelected));
+                customerTable.setRowSorter(sorter);
+            }else{
+                sorter.setRowFilter(RowFilter.regexFilter(""));
+                customerTable.setRowSorter(sorter);
+            }
+        } 
+    }//GEN-LAST:event_typeFilterActionPerformed
+
+    private void custSearchBoxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custSearchBoxKeyTyped
+        // TODO add your handling code here:
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) customerTable.getModel()));
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + custSearchBox.getText()));
+        customerTable.setRowSorter(sorter);
+    }//GEN-LAST:event_custSearchBoxKeyTyped
 
     /**
      * @param args the command line arguments
@@ -413,16 +502,19 @@ public class customerPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addCustomerButton;
+    private javax.swing.JTextField custSearchBox;
     public javax.swing.JTable customerTable;
     private javax.swing.JButton editCustomer;
     private javax.swing.JLabel headerlogo;
     private javax.swing.JButton homeButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeCustomer;
+    private javax.swing.JComboBox<String> typeFilter;
     // End of variables declaration//GEN-END:variables
 }

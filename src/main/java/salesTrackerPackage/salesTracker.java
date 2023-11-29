@@ -549,13 +549,21 @@ public double totalExpensesNum = 0, totalSales = 0;
                         tmpQuantity = Integer.parseInt(rs2.getString("item_quantity"));
                         itemId = rs2.getString("non_rental_item_id");
 
-                        String sqlGetPrice = "SELECT non_rental_item_price, non_rental_item_name FROM non_rental_item WHERE non_rental_item_id = " +itemId+";";
+                        String sqlGetPrice = "SELECT i.item_price, nri.non_rental_item_name "+
+                                             "FROM item_price_history i "+
+                                             "LEFT JOIN non_rental_item nri ON i.non_rental_item_id = nri.non_rental_item_id "+
+                                             "WHERE i.non_rental_item_id = 6 AND i.price_start_date < '"+rs.getString("order_date_time")+
+                                             "' AND i.non_rental_item_id = "+itemId+" ORDER BY i.price_start_date DESC "+
+                                             "LIMIT 1;";
 
+                        //SELECT item_price, non_rental_item.non_rental_item_name FROM item_price_history LEFT JOIN non_rental_item ON  item_price_history.non_rental_item_id = non_rental_item.non_rental_item_id WHERE non_rental_item_id = " +itemId+" AND price_start_date < '"+rs.getString("order_date_time")+"' ORDER BY price_start_date DESC LIMIT 1;";
+
+                        
                         PreparedStatement pst3 = con.prepareStatement(sqlGetPrice);
                         ResultSet rs3 = pst3.executeQuery();
 
                         while(rs3.next()){
-                            double itemPrice = Double.parseDouble(rs3.getString("non_rental_item_price"));
+                            double itemPrice = Double.parseDouble(rs3.getString("item_price"));
                             String itemName =rs3.getString("non_rental_item_name");
                             if (itemName.equalsIgnoreCase("Refill") || itemName.equalsIgnoreCase("New Water Bottle")){
                                 specialQuantity += tmpQuantity;

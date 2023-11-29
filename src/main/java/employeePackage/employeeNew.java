@@ -13,6 +13,9 @@ import org.jdatepicker.impl.UtilDateModel;
 import java.util.*;
 import javax.swing.*;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  *
@@ -441,6 +444,13 @@ public class employeeNew extends javax.swing.JDialog {
             System.out.println("Error: "+ ex.getMessage());
         }
        
+        
+        LocalDate today = LocalDate.now();
+        
+        Date date = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        
+        assignmentDate.setDate(date);
         selectBranch.setModel(model);
         
     }//GEN-LAST:event_formWindowOpened

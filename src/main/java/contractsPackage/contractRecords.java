@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package contractsPackage;
+import com.mysql.cj.protocol.Resultset;
 import connectionSql.mysqlConnection;
 
 
@@ -15,6 +16,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
@@ -27,13 +29,16 @@ import javax.swing.table.TableRowSorter;
  * @author rjber
  */
 public class contractRecords extends javax.swing.JFrame {
-
+    rentIn returns = new rentIn(new javax.swing.JFrame(),true);
+    public int conID;
+    String ContractType="";
     /**
      * Creates new form contractRecords
      */
     Connection con = new mysqlConnection().getCon();
     
     public contractRecords() {
+        getContentPane().setBackground(Color.white);
         initComponents();
     }
 
@@ -49,16 +54,17 @@ public class contractRecords extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        rentalTable = new javax.swing.JTable();
+        contractTable = new javax.swing.JTable();
         addContract = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        editContract = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         searchField = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
         viewContract = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        dealerTable = new javax.swing.JTable();
+        rentIn = new javax.swing.JButton();
+        rentOut = new javax.swing.JButton();
+        contractChoice = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         contractHeader = new javax.swing.JLabel();
 
@@ -79,7 +85,7 @@ public class contractRecords extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        rentalTable.setModel(new javax.swing.table.DefaultTableModel(
+        contractTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -102,7 +108,10 @@ public class contractRecords extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(rentalTable);
+        jScrollPane1.setViewportView(contractTable);
+        if (contractTable.getColumnModel().getColumnCount() > 0) {
+            contractTable.getColumnModel().getColumn(0).setPreferredWidth(20);
+        }
 
         addContract.setBackground(new java.awt.Color(40, 75, 135));
         addContract.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,12 +122,12 @@ public class contractRecords extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setBackground(new java.awt.Color(40, 75, 135));
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Edit contract");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        editContract.setBackground(new java.awt.Color(40, 75, 135));
+        editContract.setForeground(new java.awt.Color(255, 255, 255));
+        editContract.setText("Edit contract");
+        editContract.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                editContractActionPerformed(evt);
             }
         });
 
@@ -158,30 +167,32 @@ public class contractRecords extends javax.swing.JFrame {
             }
         });
 
-        dealerTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Contract ID", "Customer Name", "Link/File", "Discount/Additional", "Date"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+        rentIn.setBackground(new java.awt.Color(40, 75, 135));
+        rentIn.setForeground(new java.awt.Color(255, 255, 255));
+        rentIn.setText("Rent in");
+        rentIn.setEnabled(false);
+        rentIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rentInActionPerformed(evt);
             }
         });
-        jScrollPane4.setViewportView(dealerTable);
+
+        rentOut.setBackground(new java.awt.Color(40, 75, 135));
+        rentOut.setForeground(new java.awt.Color(255, 255, 255));
+        rentOut.setText("Rent out");
+        rentOut.setEnabled(false);
+        rentOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rentOutActionPerformed(evt);
+            }
+        });
+
+        contractChoice.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Rental", "Dealer" }));
+        contractChoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contractChoiceActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -194,23 +205,26 @@ public class contractRecords extends javax.swing.JFrame {
                         .addComponent(jButton5))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 845, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rentOut, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(rentIn, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 897, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(75, 75, 75))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(viewContract, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73))
+                                .addComponent(addContract, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(editContract, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(viewContract, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 845, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 897, Short.MAX_VALUE)
+                                .addComponent(contractChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(33, 33, 33))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,15 +237,19 @@ public class contractRecords extends javax.swing.JFrame {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addContract)
-                    .addComponent(jButton4)
-                    .addComponent(viewContract))
+                .addGap(3, 3, 3)
+                .addComponent(contractChoice, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rentIn)
+                        .addComponent(rentOut))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(addContract)
+                        .addComponent(editContract)
+                        .addComponent(viewContract)))
                 .addGap(16, 16, 16))
         );
 
@@ -262,7 +280,7 @@ public class contractRecords extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 979, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,41 +295,110 @@ public class contractRecords extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public void ContractTypeChecker(int contractID,String name){
+        String sqlCusType = "SELECT 'Rental' AS contractType FROM rental_contract WHERE rental_contract_id = " + contractID + " "
+                            + "AND customer_id = (SELECT customer_id FROM customer WHERE CONCAT(last_name, ', ', first_name) = '" + name + "') "
+                            + "UNION "
+                            + "SELECT 'Dealer' AS contractType FROM dealer_contract WHERE dealer_contract_id = " + contractID + " "
+                            + "AND customer_id = (SELECT customer_id FROM customer WHERE CONCAT(last_name, ', ', first_name) = '" + name + "')";
+        
+        try{ PreparedStatement pst = con.prepareStatement(sqlCusType); ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+            ContractType = rs.getString("contractType");
+            System.out.println("Contract Type: " + ContractType);
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage()); }    
+    }
+    
     private void addContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addContractActionPerformed
         // TODO add your handling code here:
-       // new newContract().setVisible(true);
+       addContract newContract = new addContract(this,true);
+       newContract.setVisible(true);
        
-
-        addContract contractNew = new addContract(this,true);
-
-        contractNew.setVisible(true);
-        contractNew.addWindowListener(new WindowAdapter(){
-        DefaultTableModel model = (DefaultTableModel)rentalTable.getModel();
-         public void windowClosed(WindowEvent e)
-            {
-                model.setRowCount(0);
-                String sql = "SELECT concat(customer.last_name,', ', customer.first_name)as name, contract_id, contract_link, contract_date FROM contract_record JOIN customer WHERE contract_record.customer_id = customer.customer_id;";
-                try{
-                    PreparedStatement pst = con.prepareStatement(sql);
-                    ResultSet rs = pst.executeQuery();
-                    while(rs.next()){
-                        String contractID = rs.getString("contract_id");
-                        String customerName = rs.getString("name");
-                        String contractLink = rs.getString("contract_link");
-                        String contractDate = rs.getString("contract_date");
-                        model.addRow(new String[]{contractID, customerName, contractLink, "20%",contractDate});
-                    }
-                }catch(Exception ex){
-                    System.out.println("Error: "+ ex.getMessage());
-                }            
-            }
+        newContract.addWindowListener(new java.awt.event.WindowAdapter() { @Override
+        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            // When the dialog is closed, call the generateTable() method
+            generateContract("All"); // Assuming this method is within the same class
+        }
         });
-        
     }//GEN-LAST:event_addContractActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    
+    private void editContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editContractActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        DefaultTableModel forContract = (DefaultTableModel)contractTable.getModel();
+        editContract editCon = new editContract(this, true);
+        editContractRental editConRental = new editContractRental(this, true);
+        
+        int index = contractTable.getSelectedRow(); // Get the selected row (via ID) in Jtable
+
+        String fullname = (forContract.getValueAt(index,1)).toString(); 
+        String link = (forContract.getValueAt(index,2)).toString();
+        String addDiscFee = (forContract.getValueAt(index,3)).toString(); double FeeaddDisc=Double.parseDouble(addDiscFee);
+        String contractID = (forContract.getValueAt(index,0)).toString(); conID=Integer.parseInt(contractID);
+
+        // Contract type function
+        ContractTypeChecker(conID,fullname);
+        
+
+        // For rental
+        int minRefill=0;
+        String Refills="";
+        int addFee=0;
+        if(ContractType.equalsIgnoreCase("Rental")){
+            String sqlminRefills="SELECT minimum_refills AS minRefills FROM rental_contract AS RC "
+            + "LEFT JOIN customer as C ON RC.customer_id=C.customer_id WHERE RC.rental_contract_id="+conID+"";
+            
+            try{ PreparedStatement pst = con.prepareStatement(sqlminRefills); ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                    Refills=rs.getString("minRefills");
+                    minRefill = Integer.parseInt(Refills);
+                }
+              }catch(Exception e){
+                    System.out.println(e.getMessage());
+            }
+            editConRental.minRefillsDisplay.setValue(minRefill);
+            editConRental.customerNameDisplay.setText(fullname);
+            editConRental.contractLinkDisplay.setText(link);
+            editConRental.discountRateDisplay.setValue(FeeaddDisc); 
+            editConRental.customerID.setText(contractID);
+            editConRental.setVisible(true);
+            // Window listener
+            editConRental.addWindowListener(new java.awt.event.WindowAdapter() { @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            // When the dialog is closed, call the generateTable() method
+            generateContract("Rental"); 
+        }
+        });
+        //For dealer
+        }else{
+            Refills="";
+            String sqlminRefills="SELECT minimum_refills AS minRefills FROM dealer_contract AS DC "
+            + "LEFT JOIN customer as C ON DC.customer_id=C.customer_id WHERE DC.dealer_contract_id="+conID+"";
+            System.out.println("This is dealer");
+             try{ PreparedStatement pst = con.prepareStatement(sqlminRefills); ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                    Refills=rs.getString("minRefills");
+                    minRefill = Integer.parseInt(Refills);
+                }
+              }catch(Exception e){
+                    System.out.println(e.getMessage());
+            }
+            editCon.minRefillsDisplay.setValue(minRefill);
+            editCon.customerNameDisplay.setText(fullname);
+            editCon.contractLinkDisplay.setText(link);
+            editCon.discountRateDisplay.setValue(FeeaddDisc);
+            editCon.customerID.setText(contractID);
+            editCon.setVisible(true);
+        // Window listener
+        editCon.addWindowListener(new java.awt.event.WindowAdapter() { @Override
+        public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+            // When the dialog is closed, call the generateTable() method
+            generateContract("Dealer"); // Assuming this method is within the same class
+        }
+        });
+        }  
+    }//GEN-LAST:event_editContractActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
@@ -320,35 +407,11 @@ public class contractRecords extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        DefaultTableModel forRentalContract = (DefaultTableModel)rentalTable.getModel();
-        DefaultTableModel forDealerContract = (DefaultTableModel)dealerTable.getModel();
+        generateContract("All");
         
-        String sqlRental = "SELECT rental_contract_id, concat(customer.last_name,', ', customer.first_name) AS name, rental_contract_link, additional_fee, rental_contract_date FROM customer JOIN rental_contract where rental_contract.customer_id = customer.customer_id";
-        try{
-            PreparedStatement pstRental = con.prepareStatement(sqlRental);
-            ResultSet rsRental = pstRental.executeQuery();
-            while(rsRental.next()){
-                String contractID = rsRental.getString("rental_contract_id");
-                String customerName = rsRental.getString("name");
-                String contractLink = rsRental.getString("rental_contract_link");
-                String contractDate = rsRental.getString("rental_contract_date");
-                forRentalContract.addRow(new String[]{contractID, customerName, contractLink, "20%",contractDate});
-            }
-            String sqlDealer = "SELECT dealer_contract_id, concat(customer.last_name,', ', customer.first_name) AS name, dealer_contract_link, discount_rate, dealer_contract_date FROM customer JOIN dealer_contract where dealer_contract.customer_id = customer.customer_id";
-            PreparedStatement pstDealer = con.prepareStatement(sqlDealer);
-            ResultSet rsDealer = pstDealer.executeQuery();
-            while(rsDealer.next()){
-                String contractID = rsDealer.getString("dealer_contract_id");
-                String customerName = rsDealer.getString("name");
-                String contractLink = rsDealer.getString("dealer_contract_link");
-                String discountRate = rsDealer.getString("discount_rate");
-                String contractDate = rsDealer.getString("dealer_contract_date");
-                forDealerContract.addRow(new String[]{contractID, customerName, contractLink, discountRate,contractDate});
-            }
-            
-        }catch(Exception ex){
-            System.out.println("Error: "+ ex.getMessage());
-        }
+        contractTable.getTableHeader().setOpaque(false);
+        contractTable.getTableHeader().setBackground(new Color (255,192,0));
+        
     }//GEN-LAST:event_formWindowOpened
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
@@ -361,47 +424,240 @@ public class contractRecords extends javax.swing.JFrame {
 
     private void viewContractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewContractActionPerformed
         // TODO add your handling code here:
-        int index = dealerTable.getSelectedRow(); // Get the selected row (via ID) in Jtable 
+        // End of contract type 
         
+        int index = contractTable.getSelectedRow(); // Get the selected row (via ID) in Jtable 
         // For dealer
-        DefaultTableModel tableDealer = (DefaultTableModel) dealerTable.getModel(); // TableforPromo is table from GUI
-        // For rental
-        DefaultTableModel tableRental = (DefaultTableModel) rentalTable.getModel(); // TableforPromo is table from GUI   
+        DefaultTableModel tableContract = (DefaultTableModel) contractTable.getModel(); // TableforPromo is table from GUI
+        String fullnameCT = (tableContract.getValueAt(index,1)).toString(); 
+        String contractID = (tableContract.getValueAt(index,0)).toString(); conID=Integer.parseInt(contractID);
+        ContractTypeChecker(conID,fullnameCT);
         
         //From row and column, we get the values
-        String fullname = (tableDealer.getValueAt(index,1)).toString(); // Set string into a value from row, concatenated already (from other function)
-        String customerID = (tableDealer.getValueAt(index, 0)).toString();
-        String date = (tableDealer.getValueAt(index, 4).toString());
-        
-        String sql = "SELECT COALESCE(OL.item_quantity, 0) AS POINTS "
-                    + "FROM customer AS C " 
-                    + "LEFT JOIN orders AS O ON C.customer_id = O.customer_id "
-                    + "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id";
-        
+        String fullname="";
+        String cID = "";
+        String date = "";
+
+        if (contractTable.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please select a contract!", "Error", JOptionPane.INFORMATION_MESSAGE);
+        } 
+        /*------------------------DEALER-----------------------------------------------------------------------------------------------------------------------------*/
+        else if(ContractType.equalsIgnoreCase("Dealer")){
+            System.out.println("Selected contract: Dealer");
+                fullname = (tableContract.getValueAt(index,1)).toString(); // Set string into a value from row, concatenated already (from other function)
+                date = (tableContract.getValueAt(index, 4).toString());
+            // Count weekly points
+            String sqlPOINTS="SELECT COUNT(COALESCE(OL.item_quantity, 0)) AS POINTS "
+                + "FROM customer AS C "
+                + "LEFT JOIN orders AS O ON C.customer_id = O.customer_id "
+                + "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id "
+                + "LEFT JOIN dealer_contract AS DC ON DC.customer_id = C.customer_id "
+                + "WHERE DC.dealer_contract_id ="+contractID+" "
+                + "AND YEARWEEK(O.order_date_time) = YEARWEEK(NOW()); ";
+            
         String Points="";
         try{
                 PreparedStatement pst;
-                pst = con.prepareStatement(sql);
+                pst = con.prepareStatement(sqlPOINTS);
                 ResultSet rs = pst.executeQuery();
                 while(rs.next()){
-                    Points = rs.getString("POINTS");
-                    System.out.println(Points);
+                    Points=rs.getString("POINTS");
+                }
+                
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        String Refills="";
+        String sqlminRefills="SELECT minimum_refills AS minRefills "
+                + "FROM dealer_contract AS DC "
+                + "LEFT JOIN customer as C ON DC.customer_id=C.customer_id "
+                + "WHERE DC.dealer_contract_id="+contractID+"";
+                try{
+                PreparedStatement pst;
+                pst = con.prepareStatement(sqlminRefills);
+                ResultSet rs = pst.executeQuery();
+                while(rs.next()){
+                    Refills=rs.getString("minRefills");
+                    System.out.println(Refills);
                 }
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
-
+                viewContract viewContractRec = new viewContract(this,true);
+                viewContractRec.contractName.setText(fullname);
+                viewContractRec.contractType.setText("Dealer");
+                viewContractRec.contractPoints.setText(Points);
+                viewContractRec.minRefills.setText(Refills);
+                viewContractRec.contractDate.setText(date);
+                viewContractRec.setVisible(true);
+        }
         
-        viewContract viewContractRec = new viewContract(this,true);
-        viewContractRec.contractName.setText(fullname);
-        viewContractRec.contractType.setText("Rental");
-        viewContractRec.contractPoints.setText(Points);
-        viewContractRec.minRefills.setText("7");
+        /*------------------------RENTAL-----------------------------------------------------------------------------------------------------------------------------*/
+        else if(ContractType.equalsIgnoreCase("Rental")){
+            System.out.println("Selected contract: Rental");
+            fullname = (tableContract.getValueAt(index,1)).toString(); // Set string into a value from row, concatenated already (from other function)
+            date = (tableContract.getValueAt(index, 4).toString());
+            
+            // Count weekly points
+            String sqlPOINTS="SELECT COUNT(COALESCE(OL.item_quantity, 0)) AS POINTS "
+                + "FROM customer AS C "
+                + "LEFT JOIN orders AS O ON C.customer_id = O.customer_id "
+                + "LEFT JOIN order_line AS OL ON O.order_id = OL.order_id "
+                + "LEFT JOIN rental_contract AS RC ON RC.customer_id = C.customer_id "
+                + "WHERE RC.rental_contract_id ="+contractID+" "
+                + "AND YEARWEEK(O.order_date_time) = YEARWEEK(NOW()); ";
+        String Points="";
+        try{
+                PreparedStatement pst;
+                pst = con.prepareStatement(sqlPOINTS);
+                ResultSet rs = pst.executeQuery();
+                while(rs.next()){
+                    Points=rs.getString("POINTS");
+                }
+                
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }        String Refills="";
+        String sqlminRefills="SELECT minimum_refills AS minRefills "
+                + "FROM rental_contract AS RC "
+                + "LEFT JOIN customer as C ON RC.customer_id=C.customer_id "
+                + "WHERE RC.rental_contract_id="+contractID+"";
+                try{
+                PreparedStatement pst;
+                pst = con.prepareStatement(sqlminRefills);
+                ResultSet rs = pst.executeQuery();
+                while(rs.next()){
+                    Refills=rs.getString("minRefills");
+                    System.out.println(Refills);
+                }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        viewContractRental viewContractRecRental = new viewContractRental(this,true);
+        viewContractRecRental.contractName.setText(fullname);
+        viewContractRecRental.contractType.setText("Rental");
+        viewContractRecRental.contractPoints.setText(Points);
+        viewContractRecRental.minRefills.setText(Refills);
+        viewContractRecRental.contractDate.setText(date);
+        viewContractRecRental.contractID=conID;
+        viewContractRecRental.setVisible(true);
         
-        viewContractRec.contractDate.setText(date);
-
-        viewContractRec.setVisible(true);
+        
+        //viewContractRecRental.custID.setText(passID.toString());
+        }
     }//GEN-LAST:event_viewContractActionPerformed
+    String customerID = "";
+    private void rentInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentInActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel forContract = (DefaultTableModel)contractTable.getModel();
+        rentIn returnItemFrame = new rentIn(this,true);
+        int index = contractTable.getSelectedRow(); // Get the selected row (via ID) in Jtable
+        String fullname = (forContract.getValueAt(index,1)).toString(); 
+        String link = (forContract.getValueAt(index,2)).toString();
+        String addDiscFee = (forContract.getValueAt(index,3)).toString(); double FeeaddDisc=Double.parseDouble(addDiscFee);
+        String contractID = (forContract.getValueAt(index,0)).toString(); conID=Integer.parseInt(contractID);
+
+        returnItemFrame.rentCustomerName.setText(fullname);
+        returnItemFrame.rentCustomerID.setText(contractID);
+        returnItemFrame.setVisible(true);
+       
+    }//GEN-LAST:event_rentInActionPerformed
+    private void generateContract(String type){
+        DefaultTableModel contracts = (DefaultTableModel)contractTable.getModel();
+        contracts.setRowCount(0);
+        String sql = "";
+        
+        
+        if(type.equalsIgnoreCase("All")){
+        String sqlRental = "SELECT rental_contract_id AS contractID, concat(customer.last_name,', ', customer.first_name) AS name, "
+                    + " rental_contract_link AS link, additional_fee AS FeeDiscount, rental_contract_date AS date FROM customer "
+                    + " JOIN rental_contract ON rental_contract.customer_id = customer.customer_id "
+                    + " WHERE customer.customer_type = 'Rental' ";
+        String sqlDealer = "SELECT dealer_contract_id AS contractID, concat(customer.last_name,', ', customer.first_name) AS name, "
+                    + " dealer_contract_link AS link, discount_rate AS FeeDiscount, dealer_contract_date AS date, customer.customer_type FROM customer "
+                    + " JOIN dealer_contract ON dealer_contract.customer_id = customer.customer_id "
+                    + " WHERE customer.customer_type = 'Dealer'";
+                try{
+                    PreparedStatement pstOne, pstTwo;
+                    pstOne =con.prepareStatement(sqlRental);
+                    pstTwo =con.prepareStatement(sqlDealer);
+                    ResultSet rsOne=pstOne.executeQuery(); ResultSet rsTwo=pstTwo.executeQuery();     
+                    
+                    while(rsOne.next()){
+                        String contractID = rsOne.getString("contractID");
+                        String customerName = rsOne.getString("name");
+                        String contractLink = rsOne.getString("link");
+                        String addFeeorDiscount = rsOne.getString("FeeDiscount");
+                        String contractDate = rsOne.getString("date");
+                        contracts.addRow(new String[]{contractID, customerName, contractLink, addFeeorDiscount,contractDate});
+                        }
+                    while(rsTwo.next()){
+                        ContractType=rsTwo.getString("customer.customer_type");
+                        System.out.println("Customer type is: "+ContractType);
+                        String contractID = rsTwo.getString("contractID");
+                        String customerName = rsTwo.getString("name");
+                        String contractLink = rsTwo.getString("link");
+                        String addFeeorDiscount = rsTwo.getString("FeeDiscount");
+                        String contractDate = rsTwo.getString("date");
+                        contracts.addRow(new String[]{contractID, customerName, contractLink, addFeeorDiscount,contractDate});
+                    }
+                    }catch(Exception e){
+                        System.out.println(e.getMessage());
+        }
+        }if(type.equalsIgnoreCase("Rental")){
+            sql = "SELECT rental_contract_id AS contractID, concat(customer.last_name,', ', customer.first_name) AS name, "
+                    + " rental_contract_link AS link, additional_fee AS FeeDiscount, rental_contract_date AS date FROM customer "
+                    + " JOIN rental_contract ON rental_contract.customer_id = customer.customer_id "
+                    + " WHERE customer.customer_type = 'Rental' ";
+        }else if(type.equalsIgnoreCase("Dealer")){
+            sql = "SELECT dealer_contract_id AS contractID, concat(customer.last_name,', ', customer.first_name) AS name, "
+                    + " dealer_contract_link AS link, discount_rate AS FeeDiscount, dealer_contract_date AS date FROM customer "
+                    + " JOIN dealer_contract ON dealer_contract.customer_id = customer.customer_id "
+                    + " WHERE customer.customer_type = 'Dealer'";         
+        }           
+        try{
+            PreparedStatement pst;
+            pst =con.prepareStatement(sql);
+            ResultSet rs=pst.executeQuery();
+            
+            while(rs.next()){
+                String contractID = rs.getString("contractID");
+                String customerName = rs.getString("name");
+                String contractLink = rs.getString("link");
+                String addFeeorDiscount = rs.getString("FeeDiscount");
+                String contractDate = rs.getString("date");
+                contracts.addRow(new String[]{contractID, customerName, contractLink, addFeeorDiscount,contractDate});
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    private void rentOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentOutActionPerformed
+    
+    int index = contractTable.getSelectedRow(); // Get the selected row (via ID) in Jtable
+    rentOutExisting rentCurrentContract = new rentOutExisting(this,true);
+    DefaultTableModel selectedContract = (DefaultTableModel)contractTable.getModel();
+        String fullname = (selectedContract.getValueAt(index,1)).toString(); 
+        String contractID = (selectedContract.getValueAt(index,0)).toString(); conID=Integer.parseInt(contractID);
+        
+        rentCurrentContract.customerName.setText(fullname);
+        rentCurrentContract.contractID=conID;
+        rentCurrentContract.setVisible(true);
+    }//GEN-LAST:event_rentOutActionPerformed
+
+    private void contractChoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contractChoiceActionPerformed
+        // TODO add your handling code here:
+        String contractType=contractChoice.getSelectedItem().toString().trim();
+        System.out.println(contractType);
+        generateContract(contractType);
+        if(contractType.equalsIgnoreCase("Rental")){
+            rentOut.setEnabled(true);
+            rentIn.setEnabled(true);
+        }else{
+            rentOut.setEnabled(false);
+            rentIn.setEnabled(false);
+        }
+    }//GEN-LAST:event_contractChoiceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -442,18 +698,19 @@ public class contractRecords extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addContract;
+    private javax.swing.JComboBox<String> contractChoice;
     private javax.swing.JLabel contractHeader;
-    private javax.swing.JTable dealerTable;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JTable contractTable;
+    private javax.swing.JButton editContract;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTable rentalTable;
+    private javax.swing.JButton rentIn;
+    private javax.swing.JButton rentOut;
     private javax.swing.JTextField searchField;
     private javax.swing.JButton viewContract;
     // End of variables declaration//GEN-END:variables

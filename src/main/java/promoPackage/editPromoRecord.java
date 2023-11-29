@@ -223,7 +223,6 @@ Connection con = new mysqlConnection().getCon();
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void BTNCancelEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNCancelEditActionPerformed
@@ -253,10 +252,20 @@ Connection con = new mysqlConnection().getCon();
             //pst2.executeUpdate();
             
             
+            /*
+            
+            
+            RECORD PROMO HISTORY DISCOUNT AMOUNT
+            
+            
+            */
+            
+            
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
         JOptionPane.showMessageDialog(null, "Changes saved successfully.");
+        this.dispose();
     }//GEN-LAST:event_BTNSaveChanges1ActionPerformed
 
     private void tryNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tryNameActionPerformed

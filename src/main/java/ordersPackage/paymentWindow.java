@@ -29,6 +29,10 @@ public class paymentWindow extends javax.swing.JDialog {
     public double total;
     public boolean paymentSuccess;
     public String orderType, customerID;
+    public double customDiscount, customFee;
+    private double discounts, fees;
+    
+    
     public paymentWindow(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -454,7 +458,24 @@ public class paymentWindow extends javax.swing.JDialog {
         LocalDateTime now = LocalDateTime.now();  
         String date = "'"+dtf.format(now)+"'";
         
-        String sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+");";  
+        
+        
+         //insert to orders
+        String sql="";
+        if(customDiscount != 0 && customFee == 0){
+            sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time, custom_discount) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+", "+customDiscount+");";
+        }else if (customFee != 0 && customDiscount == 0){
+            sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time, custom_fee) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+", "+customFee+");";
+        }else if (customDiscount != 0 && customFee != 0){
+            sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time,custom_discount, custom_fee) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+", "+customDiscount+","+customFee+");";
+        }else{
+            sql = "INSERT INTO orders (customer_id, order_type, order_status, order_date_time) VALUES ('"+customerID+"','"+orderType+"','Pending',"+date+");";
+        }
+        
+        
+       
+        
+        
         
         try{
                 PreparedStatement pst = con.prepareStatement(sql);
@@ -478,11 +499,16 @@ public class paymentWindow extends javax.swing.JDialog {
             System.out.println("Error: "+ex.getMessage());
         }
         
+        //order line and quantity adjustment
         if (invoice.getRowCount()>0){
             for (int row = 0; row < invoice.getRowCount(); row++){
                 if (invoice.getValueAt(row, 0) != null){
-                    String getItemId = "SELECT non_rental_item_id FROM non_rental_item WHERE non_rental_item_name = '"+invoice.getValueAt(row, 0).toString().trim()+"';";
+                    String itemName = "'" + invoice.getValueAt(row, 0).toString().trim()+"'";
+                    String itemQuantity = invoice.getValueAt(row,1).toString().trim();
+                    
+                    String getItemId = "SELECT non_rental_item_id FROM non_rental_item WHERE non_rental_item_name = "+itemName+";";
                     String tempItemId="";
+                    
                     try{
                         PreparedStatement pst = con.prepareStatement(getItemId);
                         ResultSet rs = pst.executeQuery();
@@ -490,9 +516,16 @@ public class paymentWindow extends javax.swing.JDialog {
                         while(rs.next()){
                             tempItemId=rs.getString(1);
                             
-                            String saveOrderLine = "INSERT INTO order_line (order_id, non_rental_item_id, item_quantity,transaction_type) VALUES("+tempOrderid+", "+tempItemId+", "+invoice.getValueAt(row, 1).toString().trim()+", '"+this.orderType+"');";
+                            String saveOrderLine = "INSERT INTO order_line (order_id, non_rental_item_id, item_quantity) VALUES("+tempOrderid+", "+tempItemId+", "+itemQuantity+");";
                             PreparedStatement saveToOl = con.prepareStatement(saveOrderLine);
                             saveToOl.executeUpdate();
+                            
+                            
+                            
+                            
+                            String stockOutSql = "UPDATE non_rental_item SET quantity = quantity - "+itemQuantity+" WHERE non_rental_item_id = "+tempItemId+";";
+                            int rowsAffected = con.prepareStatement(stockOutSql).executeUpdate();
+                            System.out.println("Rows affected: "+rowsAffected);
                         }
                     }catch(Exception ex){
                         System.out.println("Error: " + ex.getMessage());

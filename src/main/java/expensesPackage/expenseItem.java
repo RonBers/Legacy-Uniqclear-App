@@ -562,7 +562,8 @@ public class expenseItem extends javax.swing.JFrame {
             saveExpenseInfo.setEnabled(false);
         }else{
             expenseDescription.setText("");
-            expenseDescription.setEnabled(false);
+            expenseDescription.setEnabled(true);
+            expenseDescription.setEditable(true);
             saveExpenseInfo.setEnabled(false);
             expenseAmount.setValue(0);
             
@@ -594,6 +595,8 @@ public class expenseItem extends javax.swing.JFrame {
                     }catch(Exception ex){
                         System.out.println("Error: " +ex.getMessage());
                     }
+                    
+                    JOptionPane.showMessageDialog(this,"Expense profile has been saved!","Notification", JOptionPane.INFORMATION_MESSAGE);
                     
                 }
             }

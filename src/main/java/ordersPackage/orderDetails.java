@@ -4,6 +4,7 @@
  */
 package ordersPackage;
 import connectionSql.*;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;
@@ -26,11 +27,15 @@ public class orderDetails extends javax.swing.JDialog {
      * Creates new form orderDetails
      */
     private String orderId, customerID, custName;
+    private double totalDiscounts, totalFees, finalAmount;    
     
     Connection con = new mysqlConnection().getCon();
     public orderDetails(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        totalDiscounts = 0;
+        totalFees= 0;
+        finalAmount = 0;
     }
 
     /**
@@ -42,15 +47,6 @@ public class orderDetails extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel5 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        totalAmount = new javax.swing.JLabel();
-        subTotalDisplay = new javax.swing.JLabel();
-        feesTotal = new javax.swing.JLabel();
-        discountsTotal = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -69,82 +65,18 @@ public class orderDetails extends javax.swing.JDialog {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        totalAmount1 = new javax.swing.JLabel();
-        subTotalDisplay1 = new javax.swing.JLabel();
-        feesTotal1 = new javax.swing.JLabel();
-        discountsTotal1 = new javax.swing.JLabel();
+        totalAmount = new javax.swing.JLabel();
+        subTotalDisplay = new javax.swing.JLabel();
+        feesTotal = new javax.swing.JLabel();
+        discountsTotal = new javax.swing.JLabel();
         backButton = new javax.swing.JButton();
 
-        jLabel11.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jLabel11.setText("Subtotal:");
-
-        jLabel12.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jLabel12.setText("Fees:");
-
-        jLabel13.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jLabel13.setText("Discount:");
-
-        jLabel14.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jLabel14.setText("Total Amount:");
-
-        totalAmount.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-
-        subTotalDisplay.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-
-        feesTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-
-        discountsTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel5Layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(feesTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(subTotalDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(discountsTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35))))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(subTotalDisplay))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(feesTotal))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addComponent(discountsTotal))
-                .addGap(32, 32, 32)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(totalAmount))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -237,13 +169,13 @@ public class orderDetails extends javax.swing.JDialog {
         jLabel18.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         jLabel18.setText("Total Amount:");
 
-        totalAmount1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        totalAmount.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 
-        subTotalDisplay1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        subTotalDisplay.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 
-        feesTotal1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        feesTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 
-        discountsTotal1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        discountsTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -262,14 +194,14 @@ public class orderDetails extends javax.swing.JDialog {
                             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel6Layout.createSequentialGroup()
                                     .addGap(6, 6, 6)
-                                    .addComponent(feesTotal1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(subTotalDisplay1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(discountsTotal1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(feesTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(subTotalDisplay, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(discountsTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(31, 31, 31))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel18)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(totalAmount1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(35, 35, 35))))
         );
         jPanel6Layout.setVerticalGroup(
@@ -278,19 +210,19 @@ public class orderDetails extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(subTotalDisplay1))
+                    .addComponent(subTotalDisplay))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(feesTotal1))
+                    .addComponent(feesTotal))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel17)
-                    .addComponent(discountsTotal1))
+                    .addComponent(discountsTotal))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel18)
-                    .addComponent(totalAmount1))
+                    .addComponent(totalAmount))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -380,18 +312,30 @@ public class orderDetails extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        
+        itemsTable.getTableHeader().setOpaque(false);
+        itemsTable.getTableHeader().setBackground(new Color(255,192,0));
+        
+    }//GEN-LAST:event_formWindowOpened
+
+    
     
     
     public void setOrderId(String id){
         this.orderId = id;
         setValues();
+        
     }
     
     public void setCustomerName(String customer){
         
     }
     
-    
+    private double totalDue = 0,
+                   customDiscount = 0,
+                   customFee = 0;
     
     
     private void setValues(){
@@ -407,11 +351,17 @@ public class orderDetails extends javax.swing.JDialog {
                 this.customerID = rs.getString("customer_id");
                 
                 
-                String getCustIDsql = "SELECT concat(last_name,', ', first_name, ' ' ,middle_name) as name, customer_address FROM customer WHERE customer_id = "+customerID+";";
+                String getCustIDsql = "SELECT last_name, first_name, middle_name, customer_address FROM customer WHERE customer_id = "+customerID+";";
                 PreparedStatement pstCust = con.prepareStatement(getCustIDsql);
                 ResultSet rsCust = pstCust.executeQuery();
                 while (rsCust.next()){
-                    custName = rsCust.getString("name");
+                    
+                    if(rsCust.getString("first_name").isEmpty() && rsCust.getString("middle_name").isEmpty()){
+                        custName = rsCust.getString("last_name");
+                    }else{
+                        custName = rsCust.getString("last_name")+", "+ rsCust.getString("first_name")+" " +rsCust.getString("middle_name");
+                    }
+                    
                     customerName.setText(custName);
                     
                     customerAddress.setText(rsCust.getString("customer_address"));
@@ -437,14 +387,37 @@ public class orderDetails extends javax.swing.JDialog {
                     
                     while(rsItem.next()){
                         String itemName = rsItem.getString("non_rental_item_name");
-                        Double itemPrice = Double.parseDouble(rsItem.getString("non_rental_item_price"));
-                        Double amount = itemPrice * Integer.parseInt(tempQuantity);
-                        model.addRow(new Object[]{itemName,tempQuantity, String.format("%.2f", itemPrice), String.format("%.2f", amount) });
+                        
+                        
+                        String getItemPriceSql = "SELECT item_price FROM item_price_history WHERE price_start_date < '"+rs.getString("order_date_time")+ "' AND non_rental_item_id = "+tempItemId+" ORDER BY price_start_date DESC LIMIT 1;"; 
+                        PreparedStatement pstItemPrice = con.prepareStatement(getItemPriceSql);
+                        ResultSet rsItemPrice = pstItemPrice.executeQuery();
+                        double itemPriceHistory = 0;
+                        while(rsItemPrice.next()){
+                            itemPriceHistory = Double.parseDouble(rsItemPrice.getString("item_price"));
+                            System.out.println(itemPriceHistory);
+                        }
+                        
+                        //double itemPrice = Double.parseDouble(rsItem.getString("non_rental_item_price"));
+                        double amount = itemPriceHistory * Integer.parseInt(tempQuantity);
+                        
+                        model.addRow(new Object[]{itemName,tempQuantity, String.format("%.2f", itemPriceHistory), String.format("%.2f", amount) });
+                        totalDue += amount;
                     }
                 }
                 
                 alignValues();
                 
+                if(rs.getString("custom_discount") != null){
+                    customDiscount += Double.parseDouble(rs.getString("custom_discount"));
+                }
+                    
+                
+                if(rs.getString("custom_fee") != null){
+                     customFee += Double.parseDouble(rs.getString("custom_fee"));
+                }
+                
+                calculate();
                 
                 
             }
@@ -462,11 +435,37 @@ public class orderDetails extends javax.swing.JDialog {
         DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
         DefaultTableCellRenderer centerAlign = new DefaultTableCellRenderer();
         rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        centerAlign.setHorizontalAlignment(JLabel.CENTER);
        
         
         itemsTable.getColumnModel().getColumn(1).setCellRenderer(centerAlign);
         itemsTable.getColumnModel().getColumn(2).setCellRenderer(rightAlign);
         itemsTable.getColumnModel().getColumn(3).setCellRenderer(rightAlign);
+    }
+    
+    
+    private void calculate(){
+       
+        //subtotal
+       subTotalDisplay.setText(String.format("%.2f",totalDue));
+       
+       //computation for fees (including contract fees) for now use custom fee;
+       
+       totalFees = totalFees + customFee;
+       
+       feesTotal.setText(String.format("%.2f", totalFees));
+       
+        //computation for discounts (including promo discounts) for now use custom discounts;
+       
+        totalDiscounts = totalDiscounts + customDiscount;
+        
+        discountsTotal.setText(String.format("%.2f",totalDiscounts));
+       
+       
+        //Final total
+        finalAmount = (totalFees + totalDue) - totalDiscounts;
+        
+        totalAmount.setText(String.format("%.2f", finalAmount));
     }
     
     /**
@@ -519,15 +518,9 @@ public class orderDetails extends javax.swing.JDialog {
     private javax.swing.JLabel customerAddress;
     private javax.swing.JLabel customerName;
     private javax.swing.JLabel discountsTotal;
-    private javax.swing.JLabel discountsTotal1;
     private javax.swing.JLabel feesTotal;
-    private javax.swing.JLabel feesTotal1;
     private javax.swing.JTable itemsTable;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -539,13 +532,10 @@ public class orderDetails extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel orderDate;
     private javax.swing.JLabel subTotalDisplay;
-    private javax.swing.JLabel subTotalDisplay1;
     private javax.swing.JLabel totalAmount;
-    private javax.swing.JLabel totalAmount1;
     // End of variables declaration//GEN-END:variables
 }

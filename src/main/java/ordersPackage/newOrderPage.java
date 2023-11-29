@@ -765,37 +765,38 @@ public class newOrderPage extends javax.swing.JFrame {
           });
     }//GEN-LAST:event_searchCustomerActionPerformed
     private void checkType(String type, String id){
-        
-        if (type.equalsIgnoreCase("contract")){
-            String getContractFee = "SELECT additional_fee FROM rental_contract WHERE customer_id = " +id+";";
-            try{
-                PreparedStatement pst = con.prepareStatement(getContractFee);
-                ResultSet rs = pst.executeQuery();
-                
-                while(rs.next()){
-                    this.contractFee = Double.parseDouble(rs.getString(1));
+        if (type != null && id != null){
+            if (type.equalsIgnoreCase("contract")){
+                String getContractFee = "SELECT additional_fee FROM rental_contract WHERE customer_id = " +id+";";
+                try{
+                    PreparedStatement pst = con.prepareStatement(getContractFee);
+                    ResultSet rs = pst.executeQuery();
+
+                    while(rs.next()){
+                        this.contractFee = Double.parseDouble(rs.getString(1));
+                    }
+                }catch(Exception ex){
+                    System.out.println("Error: "+ex.getMessage());
                 }
-            }catch(Exception ex){
-                System.out.println("Error: "+ex.getMessage());
-            }
-            
-            subTotalCalc();
-            
-        }else if (type.equalsIgnoreCase("dealer")){
-            String getDealerDiscount = "SELECT discount_rate FROM dealer_contract WHERE customer_id = "+id+";";
-            try{
-                PreparedStatement pst = con.prepareStatement(getDealerDiscount);
-                ResultSet rs = pst.executeQuery();
-                
-                while(rs.next()){
-                    this.dealerDiscount = Double.parseDouble(rs.getString(1));
+
+                subTotalCalc();
+
+            }else if (type.equalsIgnoreCase("dealer")){
+                String getDealerDiscount = "SELECT discount_rate FROM dealer_contract WHERE customer_id = "+id+";";
+                try{
+                    PreparedStatement pst = con.prepareStatement(getDealerDiscount);
+                    ResultSet rs = pst.executeQuery();
+
+                    while(rs.next()){
+                        this.dealerDiscount = Double.parseDouble(rs.getString(1));
+                    }
+                }catch(Exception ex){
+                    System.out.println("Error: "+ex.getMessage());
                 }
-            }catch(Exception ex){
-                System.out.println("Error: "+ex.getMessage());
+
+
+                subTotalCalc();
             }
-            
-            
-            subTotalCalc();
         }
  
     }
@@ -821,7 +822,7 @@ public class newOrderPage extends javax.swing.JFrame {
         quantity1.setValue(0);
         itemOne = itemSelector.getSelectedItem().toString();
          if (itemOne.equalsIgnoreCase("new water bottle")){
-           SpinnerModel value =  new SpinnerNumberModel(0,0,/*Integer.parseInt(newBottles.getText())*/50,1);  
+           SpinnerModel value =  new SpinnerNumberModel(0,0,Integer.parseInt(newBottles.getText()),1);  
             quantity1.setModel(value);
         }else{
              SpinnerModel value =  new SpinnerNumberModel(0,0,null,1);  
@@ -947,6 +948,22 @@ public class newOrderPage extends javax.swing.JFrame {
         addPayment.customerID = customerIDLabel.getText().trim();
         DefaultTableModel items= (DefaultTableModel)itemsTable.getModel(); 
         DefaultTableModel invoiceTable = (DefaultTableModel)addPayment.invoice.getModel();
+        
+        //pass customDiscount
+        Double tempCustDisc = discountsTable.get("Custom");
+        if(tempCustDisc != null){
+           addPayment.customDiscount =tempCustDisc;
+        }
+       //pass customFee
+       
+       Double tempCustFee = feesTable.get("Custom");
+       if(tempCustFee != null){
+           addPayment.customFee = tempCustFee;
+       }
+        
+        
+       
+       
         
          for (int row = 0; row < items.getRowCount(); row++) {
             Object rowItem = items.getValueAt(row, 0);

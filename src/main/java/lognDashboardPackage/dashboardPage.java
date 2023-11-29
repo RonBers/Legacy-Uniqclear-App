@@ -14,7 +14,7 @@ import expensesPackage.expenseItem;
 import salesTrackerPackage.salesTracker;
 import connectionSql.mysqlConnection;
 import inventoryPackage.*;
-     
+import promoPackage.*;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -76,6 +76,7 @@ public class dashboardPage extends javax.swing.JFrame {
         jPanel14 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         rentalButton = new javax.swing.JButton();
+        promoButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
         viewOrder = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -188,10 +189,19 @@ public class dashboardPage extends javax.swing.JFrame {
             }
         });
 
+        promoButton.setText("Promos");
+        promoButton.setBorder(null);
+        promoButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                promoButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -208,8 +218,10 @@ public class dashboardPage extends javax.swing.JFrame {
                             .addComponent(employeeButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(salesButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(rentalButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(6, 6, 6))))
-            .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                        .addComponent(promoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,7 +243,8 @@ public class dashboardPage extends javax.swing.JFrame {
                 .addComponent(employeeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(salesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(promoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         logoutButton.setBackground(new java.awt.Color(200, 0, 0));
@@ -337,7 +350,7 @@ public class dashboardPage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE))
         );
 
         pack();
@@ -465,6 +478,11 @@ public class dashboardPage extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_rentalButtonActionPerformed
+
+    private void promoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_promoButtonActionPerformed
+        // TODO add your handling code here:
+        new tablesPromo().setVisible(true);
+    }//GEN-LAST:event_promoButtonActionPerformed
     
     public void alignValues(){
         DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
@@ -528,6 +546,7 @@ public class dashboardPage extends javax.swing.JFrame {
     private javax.swing.JButton newOrderButton;
     private javax.swing.JButton nonRentalButton;
     private javax.swing.JTable orderList;
+    private javax.swing.JButton promoButton;
     private javax.swing.JButton rentalButton;
     private javax.swing.JButton salesButton;
     private javax.swing.JButton viewOrder;
