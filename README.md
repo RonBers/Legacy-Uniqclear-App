@@ -2,9 +2,8 @@
 
 <p align="center">
 <img src="./img/uniqclear-logo.png"></img>
+<br>A desktop application developed for Software Engineering 2 course.
 </p>
-
-A desktop application developed for Software Engineering 2 course.
 
 ## Objectives
 
