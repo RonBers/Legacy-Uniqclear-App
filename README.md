@@ -1,4 +1,4 @@
-# Uniqclear Water Refilling Station Integrated Business Management System
+# Uniqclear Water Refilling Station Integrated Business Management System (POC)
 
 <p align="center">
 <img src="./img/uniqclear-logo.png"></img>
